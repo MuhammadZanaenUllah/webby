@@ -34,9 +34,10 @@ CREDENTIALS_FILE="/home/.webby_credentials"
 declare -A COMPLETED_STEPS
 
 # Configuration variables
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 APP_NAME="Webby"
-WEBBY_DIR="/home/webby"
-BUILDER_DIR="/home/webby-builder"
+WEBBY_DIR="$SCRIPT_DIR"
+BUILDER_DIR="$(dirname "$SCRIPT_DIR")/Builder/prebuilt"
 DB_HOST="localhost"
 DB_PORT="3306"
 DB_NAME="webby"
@@ -46,6 +47,13 @@ ADMIN_EMAIL=""
 BUILDER_PORT="8891"
 REVERB_PORT="8892"
 REVERB_SUBDOMAIN="echo"
+
+# OS Check
+if ! grep -q "Ubuntu" /etc/os-release 2>/dev/null; then
+    echo -e "\033[0;31m[ERROR]\033[0m This automated script is highly specialized for Ubuntu environments (specifically 20.04/22.04/24.04). Your server does not appear to be Ubuntu."
+    echo -e "To find out what server you are running, type: cat /etc/os-release"
+    exit 1
+fi
 
 # Auto-generated credentials
 MYSQL_ROOT_PASSWORD=""
