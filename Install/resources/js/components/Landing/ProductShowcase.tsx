@@ -2,6 +2,7 @@ import { useState, useMemo } from 'react';
 import { useTheme } from '@/contexts/ThemeContext';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Parallax } from '@/components/ui/Parallax';
 import { cn } from '@/lib/utils';
 
 interface ShowcaseTab {
@@ -156,7 +157,10 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                         </div>
 
                         {/* Browser Frame with Premium 3D Feel */}
-                        <div className="max-w-6xl mx-auto relative group perspective-1000">
+                        <Parallax 
+                            className="max-w-6xl mx-auto relative group perspective-1000"
+                            speed={-0.03}
+                        >
                             <div className="relative rounded-[2.5rem] border border-primary/20 bg-card/60 backdrop-blur-md shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.15)] overflow-hidden transition-all duration-700 hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.25)] hover:-translate-y-2">
                                 {/* Browser Header - Matching Hero Mockup */}
                                 <div className="flex items-center justify-between px-6 py-4 bg-muted/40 border-b border-border/50">
@@ -191,7 +195,17 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                                     <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-primary/5 via-transparent to-primary/5 opacity-50" />
                                 </div>
                             </div>
-                        </div>
+
+                            {/* Decorative Background Ornaments */}
+                            <Parallax 
+                                className="absolute -top-20 -left-20 w-64 h-64 bg-primary/5 blur-3xl rounded-full -z-10"
+                                speed={0.05}
+                            />
+                            <Parallax 
+                                className="absolute -bottom-20 -right-20 w-80 h-80 bg-primary/10 blur-3xl rounded-full -z-10"
+                                speed={0.1}
+                            />
+                        </Parallax>
                     </>
                 )}
             </div>

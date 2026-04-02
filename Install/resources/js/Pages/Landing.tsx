@@ -21,6 +21,7 @@ import {
     AnimatedSection,
     ScrollToTop,
 } from '@/components/Landing';
+import { Parallax } from '@/components/ui/Parallax';
 
 // Section data structure from the backend
 interface SectionData {
@@ -254,7 +255,23 @@ export default function Landing({
             <Toaster />
             {!isPreview && <DemoIframeBlocker />}
             <Navbar auth={auth} canLogin={canLogin} canRegister={canRegister} enabledSectionTypes={enabledSectionTypes} />
-            <main>
+            <main className="relative overflow-hidden">
+                {/* Global Background Parallax Ornaments */}
+                <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
+                    <Parallax 
+                        className="absolute top-[15%] -left-64 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full"
+                        speed={-0.05}
+                    />
+                    <Parallax 
+                        className="absolute top-[45%] -right-64 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full"
+                        speed={0.08}
+                    />
+                    <Parallax 
+                        className="absolute top-[75%] -left-64 w-[400px] h-[400px] bg-primary/5 blur-[120px] rounded-full"
+                        speed={-0.04}
+                    />
+                </div>
+
                 {/* Render all sections in their database order */}
                 {enabledSections.map((section, index) => renderSection(section, index))}
             </main>

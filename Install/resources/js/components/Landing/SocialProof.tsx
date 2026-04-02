@@ -51,7 +51,7 @@ export function SocialProof({ statistics, content }: SocialProofProps) {
                                 <div className="text-5xl md:text-7xl font-black text-foreground tracking-tighter transition-all duration-700 group-hover:scale-110 group-hover:text-primary">
                                     {stat.value}
                                 </div>
-                                <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mt-6 group-hover:text-muted-foreground/60 transition-colors">
+                                <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] text-muted-foreground/70 mt-6 group-hover:text-muted-foreground/80 transition-colors">
                                     {stat.label}
                                 </div>
                                 

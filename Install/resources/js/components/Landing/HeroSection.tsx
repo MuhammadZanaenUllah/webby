@@ -7,6 +7,7 @@ import { ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useScramble } from 'use-scramble';
 import { TrustedBy } from './TrustedBy';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { Parallax } from '@/components/ui/Parallax';
 import axios from 'axios';
 
 interface HeroSectionProps {
@@ -109,24 +110,6 @@ export function HeroSection({
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isInitialMount = useRef(true);
     const prevLocale = useRef(locale);
-    const [scrollY, setScrollY] = useState(0);
-
-    // Optimized scroll listener for parallax
-    useEffect(() => {
-        let ticking = false;
-        const handleScroll = () => {
-            if (!ticking) {
-                window.requestAnimationFrame(() => {
-                    setScrollY(window.scrollY);
-                    ticking = false;
-                });
-                ticking = true;
-            }
-        };
-
-        window.addEventListener('scroll', handleScroll, { passive: true });
-        return () => window.removeEventListener('scroll', handleScroll);
-    }, []);
 
     // Update state when props change (e.g., after language switch)
     useEffect(() => {
@@ -285,18 +268,18 @@ export function HeroSection({
                                 {/* Animated placeholder overlay */}
                                 {showAnimatedPlaceholder && (
                                     <div
-                                        className="absolute inset-0 px-10 py-10 pointer-events-none text-muted-foreground/20 text-lg sm:text-xl lg:text-2xl text-center"
+                                        className="absolute inset-0 px-10 py-10 pointer-events-none text-muted-foreground/40 text-lg sm:text-xl lg:text-2xl text-center"
                                         onClick={() => textareaRef.current?.focus()}
                                     >
                                         {animatedPlaceholder}
-                                        <span className="inline-block w-0.5 h-7 bg-primary/40 ms-0.5 animate-pulse align-middle" />
+                                        <span className="inline-block w-0.5 h-7 bg-primary/60 ms-0.5 animate-pulse align-middle" />
                                     </div>
                                 )}
                             </div>
                             <div className="flex items-center justify-between gap-4 px-8 py-5 bg-muted/40 border-t border-border/50">
-                                <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground/50 transition-opacity group-focus-within:opacity-100 opacity-40">
+                                <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground/70 transition-opacity group-focus-within:opacity-100 opacity-60">
                                     <span>{t('Launch with')}</span>
-                                    <kbd className="px-2 py-1 bg-background rounded-md border border-border/50 text-[10px] uppercase font-black text-primary/60">
+                                    <kbd className="px-2 py-1 bg-background rounded-md border border-border/50 text-[10px] uppercase font-black text-primary/80">
                                         ⌘ Enter
                                     </kbd>
                                 </div>
@@ -340,12 +323,9 @@ export function HeroSection({
                 </div>
 
                 {/* Integrated Product Showcase Frame - Overlapping Hero bottom with Parallax */}
-                <div 
-                    className="relative w-full max-w-6xl mx-auto mt-12 mb-[-15%] group perspective-1000 will-change-transform"
-                    style={{ 
-                        transform: `translate3d(0, ${scrollY * -0.05}px, 0)`,
-                        transition: 'transform 0.1s ease-out'
-                    }}
+                <Parallax 
+                    className="relative w-full max-w-6xl mx-auto mt-12 mb-[-15%] group perspective-1000"
+                    speed={-0.05}
                 >
                     <div className="relative bg-card/80 backdrop-blur-xl rounded-[2.5rem] border border-primary/20 shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.2)] overflow-hidden transition-all duration-700 hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.3)] hover:-translate-y-4">
                         {/* Browser Top Bar */}
@@ -381,15 +361,15 @@ export function HeroSection({
                         </div>
                     </div>
                     {/* Floating Ornaments with Enhanced Parallax */}
-                    <div 
-                        className="absolute -top-12 -right-12 w-32 h-32 bg-primary/20 blur-3xl rounded-full will-change-transform"
-                        style={{ transform: `translate3d(0, ${scrollY * 0.15}px, 0)` }}
+                    <Parallax 
+                        className="absolute -top-12 -right-12 w-32 h-32 bg-primary/20 blur-3xl rounded-full"
+                        speed={0.15}
                     />
-                    <div 
-                        className="absolute -bottom-12 -left-12 w-48 h-48 bg-primary/10 blur-3xl rounded-full will-change-transform"
-                        style={{ transform: `translate3d(0, ${scrollY * 0.25}px, 0)` }}
+                    <Parallax 
+                        className="absolute -bottom-12 -left-12 w-48 h-48 bg-primary/10 blur-3xl rounded-full"
+                        speed={0.25}
                     />
-                </div>
+                </Parallax>
             </div>
 
                 {/* Trusted by strip */}

@@ -7,6 +7,7 @@ import { Star, ChevronLeft, ChevronRight } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { getTranslatedTestimonials, type TestimonialItem } from './data';
+import { Parallax } from '@/components/ui/Parallax';
 import { cn } from '@/lib/utils';
 
 interface TestimonialsSectionProps {
@@ -102,8 +103,18 @@ export function TestimonialsSection({ content, items, settings: _settings }: Tes
     }, [emblaApi, onSelect]);
 
     return (
-        <section className="py-16 lg:py-24 bg-muted/30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-16 lg:py-24 bg-muted/30 relative overflow-hidden">
+            {/* Background Parallax Ornaments */}
+            <Parallax 
+                className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl rounded-full -mr-32 -mt-32" 
+                speed={0.08}
+            />
+            <Parallax 
+                className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 blur-3xl rounded-full -ml-48 -mb-48" 
+                speed={-0.12}
+            />
+            
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
                 <div className="text-center mb-12">
                     <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-4">

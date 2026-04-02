@@ -2,6 +2,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { getTranslatedFeatures, getIconComponent } from './data';
 import { cn } from '@/lib/utils';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { Parallax } from '@/components/ui/Parallax';
 
 interface FeatureItem {
     title: string;
@@ -37,7 +38,10 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
     const subtitle = (content?.subtitle as string) || t("From idea to deployment, we've got you covered with powerful features designed for modern development.");
     return (
         <section id="features" className="py-24 lg:py-32 relative overflow-hidden">
-            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
+            <Parallax 
+                className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" 
+                speed={-0.05}
+            />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-20 relative z-10">
@@ -91,7 +95,10 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
                                 </CardHeader>
                                 {/* Interactive Ornament for large cards */}
                                 {index === 0 && (
-                                    <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-1000" />
+                                    <Parallax 
+                                        className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-1000" 
+                                        speed={0.1}
+                                    />
                                 )}
                             </Card>
                         );

@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { ArrowRight, ArrowLeft, AlertCircle } from 'lucide-react';
 import { useTranslation } from '@/contexts/LanguageContext';
+import { Parallax } from '@/components/ui/Parallax';
 
 interface FinalCTAProps {
     auth: {
@@ -53,7 +54,21 @@ export function FinalCTA({
 
     return (
         <section className="py-24 lg:py-32 relative overflow-hidden bg-background border-t border-primary/5">
-            <div className="absolute inset-0 bg-primary/[0.02] [mask-image:radial-gradient(100%_100%_at_50%_0%,#000_0%,transparent_100%)] pointer-events-none" />
+            <Parallax 
+                className="absolute inset-0 bg-primary/[0.02] [mask-image:radial-gradient(100%_100%_at_50%_0%,#000_0%,transparent_100%)] pointer-events-none" 
+                speed={-0.08}
+            />
+            
+            {/* Decorative Ornaments */}
+            <Parallax 
+                className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-3xl rounded-full -mr-48 -mt-48"
+                speed={0.12}
+            />
+            <Parallax 
+                className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 blur-3xl rounded-full -ml-48 -mb-48"
+                speed={0.15}
+            />
+
             <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                 {/* Headline */}
                 <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
@@ -98,11 +113,11 @@ export function FinalCTA({
                                 onKeyDown={handleKeyDown}
                                 placeholder={t('Describe what you want to build...')}
                                 disabled={isDisabled}
-                                className="w-full px-6 sm:px-10 py-6 sm:py-8 text-base sm:text-lg lg:text-xl resize-none focus:outline-none focus:ring-0 border-0 min-h-[120px] bg-transparent text-start disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-muted-foreground/40"
+                                className="w-full px-6 sm:px-10 py-6 sm:py-8 text-base sm:text-lg lg:text-xl resize-none focus:outline-none focus:ring-0 border-0 min-h-[120px] bg-transparent text-start disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-muted-foreground/60"
                                 rows={2}
                             />
                             <div className="flex items-center justify-between gap-2 px-6 sm:px-10 py-4 sm:py-6 bg-muted/30 border-t border-border/50">
-                                <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground/60 transition-opacity group-focus-within:opacity-100">
+                                <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground/80 transition-opacity group-focus-within:opacity-100">
                                     <span>{t('Press')}</span>
                                     <kbd className="px-2 py-0.5 bg-background rounded-md border border-border/50 text-[10px] uppercase font-medium">
                                         ⌘ Enter
