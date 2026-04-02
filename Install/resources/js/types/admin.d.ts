@@ -22,6 +22,7 @@ export interface AdminUser {
     created_at: string;
     // Extended fields for subscription management
     active_subscription?: Subscription | null;
+    plan_id?: number | null;
     plan?: Plan | null;
 }
 

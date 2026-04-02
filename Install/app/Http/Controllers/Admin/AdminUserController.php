@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\StoreUserRequest;
 use App\Http\Requests\Admin\UpdateUserRequest;
 use App\Http\Traits\ChecksDemoMode;
+use App\Models\Plan;
 use App\Models\User;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -36,15 +37,18 @@ class AdminUserController extends Controller
 
         $users = $query->paginate($perPage);
         $isDemo = config('app.demo');
+        $plans = Plan::active()->orderBy('sort_order')->get(['id', 'name', 'price', 'billing_period']);
 
         return Inertia::render('Admin/Users', [
             'user' => $request->user()->only('id', 'name', 'email', 'avatar', 'role'),
+            'plans' => $plans,
             'users' => $users->through(fn ($user) => [
                 'id' => $user->id,
                 'name' => $user->name,
                 'email' => $isDemo && $user->role !== 'admin' ? $this->maskEmail($user->email) : $user->email,
                 'role' => $user->role,
                 'status' => $user->status ?? 'active',
+                'plan_id' => $user->plan_id,
                 'projects_count' => $user->projects_count,
                 'created_at' => $user->created_at->toISOString(),
             ]),
@@ -91,7 +95,13 @@ class AdminUserController extends Controller
             return back()->withErrors(['role' => __('You cannot change your own admin role')]);
         }
 
+        $oldPlanId = $user->plan_id;
         $user->update($validated);
+
+        // If plan was changed manually by admin, refill credits
+        if (isset($validated['plan_id']) && $validated['plan_id'] != $oldPlanId) {
+            $user->refillBuildCredits();
+        }
 
         return back()->with('success', __('User updated successfully'));
     }

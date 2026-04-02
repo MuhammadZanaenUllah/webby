@@ -21,6 +21,7 @@ class UpdateUserRequest extends FormRequest
             'password' => ['sometimes', 'nullable', 'string', Password::defaults()],
             'role' => ['sometimes', 'in:admin,user'],
             'status' => ['sometimes', 'in:active,inactive'],
+            'plan_id' => ['sometimes', 'nullable', 'exists:plans,id'],
         ];
     }
 }

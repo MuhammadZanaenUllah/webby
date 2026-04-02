@@ -49,7 +49,7 @@ import {
 } from '@/components/ui/select';
 import { Plus, Trash2, Pencil, UserCircle, Eye } from 'lucide-react';
 import { User, PageProps } from '@/types';
-import { AdminUser, PaginationData } from '@/types/admin';
+import { AdminUser, PaginationData, Plan } from '@/types/admin';
 import { toast } from 'sonner';
 import { useTranslation } from '@/contexts/LanguageContext';
 
@@ -58,6 +58,7 @@ interface UsersProps {
     users: {
         data: AdminUser[];
     };
+    plans: Plan[];
     pagination: PaginationData;
 }
 
@@ -71,7 +72,7 @@ const skeletonColumns: TableColumnConfig[] = [
     { type: 'actions', width: 'w-12' },       // Actions
 ];
 
-export default function Users({ user, users, pagination: _pagination }: UsersProps) {
+export default function Users({ user, users, plans, pagination: _pagination }: UsersProps) {
     const { t } = useTranslation();
     const { formatDate } = useAppDate();
     const { isDemo } = usePage<PageProps>().props;
@@ -89,6 +90,7 @@ export default function Users({ user, users, pagination: _pagination }: UsersPro
         password: '',
         role: 'user' as 'admin' | 'user',
         status: 'active' as 'active' | 'inactive',
+        plan_id: '' as string | number,
     });
 
     const resetForm = () => {
@@ -98,6 +100,7 @@ export default function Users({ user, users, pagination: _pagination }: UsersPro
             password: '',
             role: 'user',
             status: 'active',
+            plan_id: '',
         });
         setFormErrors({});
     };
@@ -143,11 +146,12 @@ export default function Users({ user, users, pagination: _pagination }: UsersPro
             return;
         }
 
-        const updateData: Record<string, string> = {
+        const updateData: Record<string, any> = {
             name: formData.name,
             email: formData.email,
             role: formData.role,
             status: formData.status,
+            plan_id: formData.plan_id,
         };
 
         if (formData.password) {
@@ -210,6 +214,7 @@ export default function Users({ user, users, pagination: _pagination }: UsersPro
             password: '',
             role: adminUser.role,
             status: adminUser.status,
+            plan_id: adminUser.plan_id || '',
         });
         setIsEditDialogOpen(true);
     };
@@ -536,6 +541,27 @@ export default function Users({ user, users, pagination: _pagination }: UsersPro
                                     </SelectContent>
                                 </Select>
                             </div>
+                        </div>
+                        <div className="space-y-2">
+                            <Label htmlFor="edit-plan">{t('Plan')}</Label>
+                            <Select
+                                value={formData.plan_id?.toString()}
+                                onValueChange={(value: string) =>
+                                    setFormData({ ...formData, plan_id: value })
+                                }
+                            >
+                                <SelectTrigger>
+                                    <SelectValue placeholder={t('Select a plan')} />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="">{t('No Plan')}</SelectItem>
+                                    {plans.map((p) => (
+                                        <SelectItem key={p.id} value={p.id.toString()}>
+                                            {p.name} ({p.price > 0 ? `$${p.price}` : t('Free')})
+                                        </SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
                         </div>
                     </div>
                     <DialogFooter>
