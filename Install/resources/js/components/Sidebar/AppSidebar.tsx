@@ -139,9 +139,9 @@ export function AppSidebar({ user }: AppSidebarProps) {
     const isActive = (href: string) => url.startsWith(href);
 
     return (
-        <Sidebar className="border-r group/sidebar">
-            <SidebarHeader className="h-[60px] px-4 border-b flex-row items-center">
-                <Link href="/create" className="flex items-center">
+        <Sidebar variant="floating" collapsible="icon" className="group/sidebar">
+            <SidebarHeader className="h-[70px] px-4 flex-row items-center bg-transparent border-b border-primary/5 mb-2">
+                <Link href="/create" className="flex items-center transition-transform hover:scale-[1.02] group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
                     <ApplicationLogo showText size="lg" />
                 </Link>
             </SidebarHeader>
@@ -154,9 +154,13 @@ export function AppSidebar({ user }: AppSidebarProps) {
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 <SidebarMenuItem>
-                                    <SidebarMenuButton asChild isActive={url === '/create'}>
+                                    <SidebarMenuButton
+                                        asChild
+                                        isActive={url === '/create'}
+                                        className="h-11 px-4 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-[0.98] rounded-xl mb-4"
+                                    >
                                         <Link href="/create">
-                                            <Paintbrush className="h-4 w-4" />
+                                            <Paintbrush className="h-5 w-5" />
                                             <span>{t('Create')}</span>
                                         </Link>
                                     </SidebarMenuButton>
@@ -218,10 +222,15 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                 <SidebarMenuButton
                                                     asChild
                                                     isActive={isActive(item.href)}
+                                                    className={`h-10 px-3 transition-all rounded-lg group ${
+                                                        isActive(item.href)
+                                                            ? 'bg-primary/10 text-primary font-bold shadow-sm'
+                                                            : 'hover:bg-accent/50 text-muted-foreground hover:text-foreground'
+                                                    }`}
                                                 >
                                                     <Link href={item.href}>
-                                                        <item.icon className="h-4 w-4" />
-                                                        <span>{t(item.titleKey)}</span>
+                                                        <item.icon className={`h-4.5 w-4.5 ${isActive(item.href) ? 'text-primary' : 'text-muted-foreground/70 group-hover:text-foreground'}`} />
+                                                        <span className="ms-3">{t(item.titleKey)}</span>
                                                     </Link>
                                                 </SidebarMenuButton>
                                             </SidebarMenuItem>

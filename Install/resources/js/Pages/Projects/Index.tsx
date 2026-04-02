@@ -48,6 +48,7 @@ import { LanguageSelector } from '@/components/LanguageSelector';
 import { NotificationBell } from '@/components/Notifications/NotificationBell';
 import { GlobalCredits } from '@/components/Header/GlobalCredits';
 import { useNotifications } from '@/hooks/useNotifications';
+import { GradientBackground } from '@/components/Dashboard/GradientBackground';
 import { useUserChannel } from '@/hooks/useUserChannel';
 import { Project, ProjectsPageProps, ProjectSort, ProjectVisibility, PageProps } from '@/types';
 import type { UserCredits, UserNotification, ProjectStatusEvent } from '@/types/notifications';
@@ -106,17 +107,21 @@ function ProjectCard({
 
     return (
         <div className="group relative">
-            <Link href={isTrash ? '#' : `/project/${project.id}`} className={isTrash ? 'pointer-events-none' : ''}>
-                <div className="aspect-[4/3] rounded-xl border bg-card overflow-hidden mb-3 hover:shadow-lg transition-shadow">
+            <Link href={isTrash ? '#' : `/project/${project.id}`} className={isTrash ? 'pointer-events-none' : 'block'}>
+                <div className="aspect-[4/3] rounded-[1.5rem] border border-primary/5 bg-card/50 backdrop-blur-sm overflow-hidden mb-4 shadow-xl shadow-primary/5 group-hover:shadow-2xl group-hover:shadow-primary/10 group-hover:-translate-y-1 transition-all duration-500">
                     {thumbnailUrl ? (
-                        <img
-                            src={thumbnailUrl}
-                            alt={project.name}
-                            className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                        />
+                        <div className="relative w-full h-full overflow-hidden">
+                            <img
+                                src={thumbnailUrl}
+                                alt={project.name}
+                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                            />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                        </div>
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-muted/50">
-                            <Folder className="h-12 w-12 text-muted-foreground/30" />
+                        <div className="w-full h-full flex items-center justify-center bg-muted/30 relative">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_70%)] opacity-[0.03]" />
+                            <Folder className="h-14 w-14 text-primary/20 transition-transform duration-500 group-hover:scale-110 group-hover:text-primary/30" />
                         </div>
                     )}
                 </div>
@@ -178,7 +183,7 @@ function ProjectCard({
             )}
 
             <div>
-                <h3 className="font-medium truncate group-hover:text-primary transition-colors">
+                <h3 className="font-heading font-semibold truncate group-hover:text-primary transition-colors text-base tracking-tight">
                     {project.name}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -450,22 +455,24 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
     };
 
     return (
-        <>
+        <div className="flex min-h-screen bg-background relative overflow-hidden">
             <Head title={t('My Projects')} />
+            <GradientBackground />
 
             <TooltipProvider>
-                <SidebarProvider>
+                <SidebarProvider defaultOpen={true}>
                     <AppSidebar user={user} />
-                    <SidebarInset>
-                        <div className="min-h-screen bg-background">
-                            {/* Header */}
-                            <header className="sticky top-0 z-50 flex h-[60px] items-center justify-between border-b bg-background/80 backdrop-blur-sm px-4">
-                                <div className="flex items-center gap-2">
-                                    <SidebarTrigger />
+                    <SidebarInset className="m-2 md:m-4 lg:m-6 xl:m-8 rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] bg-card/40 backdrop-blur-3xl border border-primary/5 shadow-2xl overflow-hidden transition-all duration-500">
+                        <div className="flex flex-col h-full">
+                            {/* Header - Integrated into the floating card */}
+                            <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/20 backdrop-blur-md px-6 md:px-10">
+                                <div className="flex items-center gap-4">
+                                    <SidebarTrigger className="-ml-1" />
+                                    <div className="h-4 w-px bg-primary/10" />
                                     {credits && <GlobalCredits {...credits} />}
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-3">
                                     <LanguageSelector />
                                     <NotificationBell
                                         notifications={notifications}
@@ -477,29 +484,30 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
                                     <ThemeToggle />
 
                                     {/* User Profile */}
+                                    <div className="h-4 w-px bg-primary/10 mx-1" />
                                     <DropdownMenu>
-                                        <DropdownMenuTrigger className="outline-none flex items-center gap-2 hover:bg-muted/50 rounded-lg px-2 py-1 transition-colors">
-                                            <div className="text-end hidden sm:block">
-                                                <p className="text-sm font-medium">{user.name}</p>
-                                                <p className="text-xs text-muted-foreground">{user.email}</p>
+                                        <DropdownMenuTrigger className="outline-none flex items-center gap-3 hover:bg-primary/5 rounded-full px-2 py-1 transition-all">
+                                            <div className="text-end hidden lg:block">
+                                                <p className="text-xs font-bold tracking-tight">{user.name}</p>
+                                                <p className="text-[10px] text-muted-foreground/70 uppercase font-medium tracking-wider">{user.role}</p>
                                             </div>
-                                            <Avatar className="h-8 w-8 cursor-pointer">
+                                            <Avatar className="h-9 w-9 border-2 border-primary/10 shadow-lg group-hover:border-primary/30 transition-colors">
                                                 <AvatarImage src={user.avatar || undefined} />
-                                                <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                                                <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
                                                     {user.name.charAt(0).toUpperCase()}
                                                 </AvatarFallback>
                                             </Avatar>
                                         </DropdownMenuTrigger>
-                                        <DropdownMenuContent align="end" className="w-56">
-                                            <div className="px-2 py-1.5">
-                                                <p className="text-sm font-medium">{user.name}</p>
+                                        <DropdownMenuContent align="end" className="w-56 mt-2">
+                                            <div className="px-2 py-2">
+                                                <p className="text-sm font-bold">{user.name}</p>
                                                 <p className="text-xs text-muted-foreground">{user.email}</p>
                                             </div>
-                                            <DropdownMenuSeparator />
-                                            <DropdownMenuItem asChild>
-                                                <Link href="/logout" method="post" as="button" className="w-full">
-                                                    <LogOut className="h-4 w-4 me-2" />
-                                                    {t('Log Out')}
+                                            <DropdownMenuSeparator className="bg-primary/5" />
+                                            <DropdownMenuItem asChild className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5">
+                                                <Link href="/logout" method="post" as="button" className="w-full flex items-center">
+                                                    <LogOut className="h-4 w-4 me-2 text-destructive/70" />
+                                                    <span className="font-medium">{t('Log Out')}</span>
                                                 </Link>
                                             </DropdownMenuItem>
                                         </DropdownMenuContent>
@@ -514,8 +522,8 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
                                 ) : (
                                 <div className="max-w-7xl mx-auto">
                                     {/* Page Header */}
-                                    <div className="prose prose-sm dark:prose-invert mb-6">
-                                        <h1 className="text-2xl font-bold text-foreground">
+                                    <div className="prose prose-sm dark:prose-invert mb-8">
+                                        <h1 className="text-3xl font-bold text-foreground tracking-tight font-heading">
                                             {t('My Projects')}
                                         </h1>
                                         <p className="text-muted-foreground mt-2">
@@ -755,6 +763,6 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
             </AlertDialog>
 
             <Toaster />
-        </>
+        </div>
     );
 }

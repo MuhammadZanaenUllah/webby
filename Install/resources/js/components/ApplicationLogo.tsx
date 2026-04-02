@@ -9,88 +9,26 @@ interface ApplicationLogoProps extends HTMLAttributes<HTMLDivElement> {
     size?: 'sm' | 'md' | 'lg';
 }
 
-// Theme color mappings for the default logo icon
-const themeColors: Record<ColorTheme, {
-    gradient: string;
-    shadow: string;
-    shadowDark: string;
-    hoverShadow: string;
-    hoverShadowDark: string;
-    textGradient: string;
-    textGradientDark: string;
-}> = {
-    neutral: {
-        gradient: 'from-zinc-600 via-zinc-700 to-zinc-800',
-        shadow: 'shadow-zinc-500/30',
-        shadowDark: 'dark:shadow-zinc-500/20',
-        hoverShadow: 'group-hover:shadow-zinc-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-zinc-500/30',
-        textGradient: 'from-zinc-700 to-zinc-900',
-        textGradientDark: 'dark:from-zinc-300 dark:to-zinc-500',
-    },
-    blue: {
-        gradient: 'from-blue-500 via-blue-600 to-blue-700',
-        shadow: 'shadow-blue-500/30',
-        shadowDark: 'dark:shadow-blue-500/20',
-        hoverShadow: 'group-hover:shadow-blue-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-blue-500/30',
-        textGradient: 'from-blue-600 to-blue-800',
-        textGradientDark: 'dark:from-blue-400 dark:to-blue-600',
-    },
-    green: {
-        gradient: 'from-green-500 via-green-600 to-green-700',
-        shadow: 'shadow-green-500/30',
-        shadowDark: 'dark:shadow-green-500/20',
-        hoverShadow: 'group-hover:shadow-green-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-green-500/30',
-        textGradient: 'from-green-600 to-green-800',
-        textGradientDark: 'dark:from-green-400 dark:to-green-600',
-    },
-    orange: {
-        gradient: 'from-orange-500 via-orange-600 to-orange-700',
-        shadow: 'shadow-orange-500/30',
-        shadowDark: 'dark:shadow-orange-500/20',
-        hoverShadow: 'group-hover:shadow-orange-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-orange-500/30',
-        textGradient: 'from-orange-600 to-orange-800',
-        textGradientDark: 'dark:from-orange-400 dark:to-orange-600',
-    },
-    red: {
-        gradient: 'from-red-500 via-red-600 to-red-700',
-        shadow: 'shadow-red-500/30',
-        shadowDark: 'dark:shadow-red-500/20',
-        hoverShadow: 'group-hover:shadow-red-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-red-500/30',
-        textGradient: 'from-red-600 to-red-800',
-        textGradientDark: 'dark:from-red-400 dark:to-red-600',
-    },
-    rose: {
-        gradient: 'from-rose-500 via-rose-600 to-rose-700',
-        shadow: 'shadow-rose-500/30',
-        shadowDark: 'dark:shadow-rose-500/20',
-        hoverShadow: 'group-hover:shadow-rose-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-rose-500/30',
-        textGradient: 'from-rose-600 to-rose-800',
-        textGradientDark: 'dark:from-rose-400 dark:to-rose-600',
-    },
-    violet: {
-        gradient: 'from-violet-500 via-violet-600 to-violet-700',
-        shadow: 'shadow-violet-500/30',
-        shadowDark: 'dark:shadow-violet-500/20',
-        hoverShadow: 'group-hover:shadow-violet-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-violet-500/30',
-        textGradient: 'from-violet-600 to-violet-800',
-        textGradientDark: 'dark:from-violet-400 dark:to-violet-600',
-    },
-    yellow: {
-        gradient: 'from-yellow-500 via-yellow-600 to-yellow-700',
-        shadow: 'shadow-yellow-500/30',
-        shadowDark: 'dark:shadow-yellow-500/20',
-        hoverShadow: 'group-hover:shadow-yellow-500/50',
-        hoverShadowDark: 'dark:group-hover:shadow-yellow-500/30',
-        textGradient: 'from-yellow-600 to-yellow-800',
-        textGradientDark: 'dark:from-yellow-400 dark:to-yellow-600',
-    },
+// Theme color mappings for the default logo icon (Aligned to Websouls Brand)
+const brandColors = {
+    gradient: 'from-[#00F5AE] via-[#00E5A2] to-[#00D596]',
+    shadow: 'shadow-[#00F5AE]/30',
+    shadowDark: 'dark:shadow-[#00F5AE]/20',
+    hoverShadow: 'group-hover:shadow-[#00F5AE]/50',
+    hoverShadowDark: 'dark:group-hover:shadow-[#00F5AE]/30',
+    textGradient: 'from-[#00F5AE] to-[#00A575]',
+    textGradientDark: 'dark:from-[#00F5AE] dark:to-[#00D596]',
+};
+
+const themeColors: Record<ColorTheme, typeof brandColors> = {
+    neutral: brandColors,
+    blue: brandColors,
+    green: brandColors,
+    orange: brandColors,
+    red: brandColors,
+    rose: brandColors,
+    violet: brandColors,
+    yellow: brandColors,
 };
 
 export default function ApplicationLogo({

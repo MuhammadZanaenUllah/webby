@@ -90,11 +90,11 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
         <section className="py-16 lg:py-24 bg-muted/30">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-4">
+                <div className="text-center mb-16 relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
                         {title}
                     </h2>
-                    <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-lg md:text-xl text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed">
                         {subtitle}
                     </p>
                 </div>
@@ -155,33 +155,40 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                             </Tabs>
                         </div>
 
-                        {/* Browser Frame */}
-                        <div className="max-w-5xl mx-auto">
-                            <div className="rounded-xl border border-border bg-card shadow-2xl overflow-hidden">
-                                {/* Browser Header */}
-                                <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b border-border">
+                        {/* Browser Frame with Premium 3D Feel */}
+                        <div className="max-w-6xl mx-auto relative group perspective-1000">
+                            <div className="relative rounded-[2.5rem] border border-primary/20 bg-card/60 backdrop-blur-md shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.15)] overflow-hidden transition-all duration-700 hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.25)] hover:-translate-y-2">
+                                {/* Browser Header - Matching Hero Mockup */}
+                                <div className="flex items-center justify-between px-6 py-4 bg-muted/40 border-b border-border/50">
                                     {/* Traffic Lights */}
-                                    <div className="flex items-center gap-1.5">
-                                        <div className="w-3 h-3 rounded-full bg-red-500" />
-                                        <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                        <div className="w-3 h-3 rounded-full bg-green-500" />
+                                    <div className="flex items-center gap-2">
+                                        <div className="w-3.5 h-3.5 rounded-full bg-destructive/40" />
+                                        <div className="w-3.5 h-3.5 rounded-full bg-amber-500/40" />
+                                        <div className="w-3.5 h-3.5 rounded-full bg-primary/40" />
                                     </div>
+                                    <div className="px-6 py-1.5 rounded-xl bg-background/50 border border-border/50 text-[11px] text-muted-foreground font-black tracking-widest uppercase">
+                                        preview.webby.app
+                                    </div>
+                                    <div className="w-12" />
                                 </div>
-
+                                
                                 {/* Screenshot Area */}
-                                <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-background">
+                                <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-background/20 overflow-hidden">
                                     {tabs.map((tab) => (
                                         <img
                                             key={tab.value}
                                             src={getScreenshotUrl(tab)}
                                             alt={`${tab.label} view`}
                                             className={cn(
-                                                'absolute inset-0 w-full h-full object-cover object-top transition-opacity duration-300',
-                                                activeView === tab.value ? 'opacity-100' : 'opacity-0'
+                                                'absolute inset-0 w-full h-full object-cover object-top transition-all duration-1000 scale-100',
+                                                activeView === tab.value ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
                                             )}
                                             loading="lazy"
                                         />
                                     ))}
+                                    
+                                    {/* Glass Overlay Ornament */}
+                                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-primary/5 via-transparent to-primary/5 opacity-50" />
                                 </div>
                             </div>
                         </div>

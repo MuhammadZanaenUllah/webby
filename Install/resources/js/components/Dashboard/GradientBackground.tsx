@@ -9,7 +9,7 @@ export function GradientBackground() {
                 className="absolute -bottom-20 right-1/4 w-[500px] h-[500px] rounded-full blur-3xl animate-blob animation-delay-2000 bg-amber-200/40 dark:bg-amber-500/15"
             />
             <div
-                className="absolute -bottom-40 right-1/2 w-[550px] h-[550px] rounded-full blur-3xl animate-blob animation-delay-4000 bg-rose-100/50 dark:bg-rose-500/20"
+                className="absolute -bottom-40 right-1/2 w-[550px] h-[550px] rounded-full blur-3xl animate-blob animation-delay-4000 bg-green-100/50 dark:bg-[#00F5AE]/10"
             />
 
             {/* Subtle grid pattern - offset so first box is complete */}

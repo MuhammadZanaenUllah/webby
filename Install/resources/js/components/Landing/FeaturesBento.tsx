@@ -36,11 +36,12 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
     const title = (content?.title as string) || t('Everything you need to build');
     const subtitle = (content?.subtitle as string) || t("From idea to deployment, we've got you covered with powerful features designed for modern development.");
     return (
-        <section id="features" className="py-16 lg:py-24">
+        <section id="features" className="py-24 lg:py-32 relative overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-4">
+                <div className="text-center mb-20 relative z-10">
+                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
                         {title}
                     </h2>
                     <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
@@ -48,71 +49,50 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
                     </p>
                 </div>
 
-                {/* Bento Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                    {features.map((feature) => {
+                {/* Bento Grid - Asymmetrical Layout */}
+                <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6 lg:gap-8 relative z-10">
+                    {features.map((feature, index) => {
                         const Icon = feature.icon;
+                        // Custom asymmetrical span logic
+                        const getSpanClass = (idx: number) => {
+                            if (idx === 0) return 'md:col-span-6 lg:col-span-8 lg:row-span-2'; // Main large feature
+                            if (idx === 1) return 'md:col-span-3 lg:col-span-4'; // Medium
+                            if (idx === 2) return 'md:col-span-3 lg:col-span-4'; // Medium
+                            if (idx === 3) return 'md:col-span-6 lg:col-span-6'; // Wide
+                            if (idx === 4) return 'md:col-span-3 lg:col-span-3'; // Small
+                            if (idx === 5) return 'md:col-span-3 lg:col-span-3'; // Small
+                            return 'md:col-span-3 lg:col-span-4';
+                        };
+
                         return (
                             <Card
                                 key={feature.id}
                                 className={cn(
-                                    'group shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1',
-                                    feature.size === 'large' && 'md:col-span-2 lg:row-span-2',
-                                    feature.size === 'medium' && 'lg:col-span-2'
+                                    'group relative overflow-hidden transition-all duration-700 hover:-translate-y-2 border-primary/10 rounded-[2.5rem] bg-card/60 backdrop-blur-lg hover:bg-card hover:border-primary/30 shadow-xl hover:shadow-[0_40px_80px_-15px_rgba(var(--primary-rgb),0.15)]',
+                                    getSpanClass(index)
                                 )}
                             >
-                                <CardHeader
-                                    className={cn(
-                                        feature.size === 'large' && 'pb-0'
-                                    )}
-                                >
-                                    {feature.image_url ? (
-                                        <div className="mb-4 rounded-lg overflow-hidden">
-                                            <img
-                                                src={feature.image_url}
-                                                alt={feature.title}
-                                                className={cn(
-                                                    'w-full h-auto object-cover',
-                                                    feature.size === 'large' && 'max-h-48',
-                                                    feature.size === 'medium' && 'max-h-32',
-                                                    feature.size === 'small' && 'max-h-24'
-                                                )}
-                                            />
-                                        </div>
-                                    ) : (
-                                        <div
-                                            className={cn(
-                                                'w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4 group-hover:bg-primary/20 transition-colors',
-                                                feature.size === 'large' && 'w-16 h-16'
-                                            )}
-                                        >
-                                            <Icon
-                                                className={cn(
-                                                    'w-6 h-6 text-primary',
-                                                    feature.size === 'large' && 'w-8 h-8'
-                                                )}
-                                            />
-                                        </div>
-                                    )}
-                                    <CardTitle
-                                        className={cn(
-                                            'text-lg',
-                                            feature.size === 'large' && 'text-2xl'
-                                        )}
-                                    >
+                                <CardHeader className="p-10">
+                                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
+                                        <Icon className="w-6 h-6 shrink-0" />
+                                    </div>
+                                    <CardTitle className={cn(
+                                        "text-xl font-bold tracking-tight mb-4 transition-colors",
+                                        index === 0 && "text-3xl"
+                                    )}>
                                         {feature.title}
                                     </CardTitle>
-                                </CardHeader>
-                                <CardContent>
-                                    <CardDescription
-                                        className={cn(
-                                            'text-sm',
-                                            feature.size === 'large' && 'text-base'
-                                        )}
-                                    >
+                                    <CardDescription className={cn(
+                                        "text-sm font-medium leading-relaxed text-muted-foreground/80",
+                                        index === 0 && "text-lg"
+                                    )}>
                                         {feature.description}
                                     </CardDescription>
-                                </CardContent>
+                                </CardHeader>
+                                {/* Interactive Ornament for large cards */}
+                                {index === 0 && (
+                                    <div className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-1000" />
+                                )}
                             </Card>
                         );
                     })}

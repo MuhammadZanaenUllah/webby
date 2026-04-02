@@ -172,26 +172,26 @@ export default function Create({
     };
 
     return (
-        <>
+        <div className="flex min-h-screen bg-background relative overflow-hidden">
             <Head title={t("Create")} />
+            <GradientBackground />
             <Toaster />
             <DemoResetNotice variant={user.role === 'admin' ? 'admin' : 'user'} />
 
             <TooltipProvider>
-                <SidebarProvider>
+                <SidebarProvider defaultOpen={true}>
                     <AppSidebar user={user} />
-                    <SidebarInset className="bg-transparent">
-                        <div className="relative min-h-screen bg-background">
-                            <GradientBackground />
-
-                            {/* Header with sidebar trigger and user profile */}
-                            <header className="sticky top-0 z-50 flex h-[60px] items-center justify-between px-4">
-                                <div className="flex items-center gap-2">
-                                    <SidebarTrigger />
+                    <SidebarInset className="m-2 md:m-4 lg:m-6 xl:m-8 rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] bg-card/40 backdrop-blur-3xl border border-primary/5 shadow-2xl overflow-hidden transition-all duration-500">
+                        <div className="flex flex-col h-full relative">
+                            {/* Header - Integrated into the floating card */}
+                            <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/20 backdrop-blur-md px-6 md:px-10">
+                                <div className="flex items-center gap-4">
+                                    <SidebarTrigger className="-ml-1" />
+                                    <div className="h-4 w-px bg-primary/10" />
                                     {credits && <GlobalCredits {...credits} />}
                                 </div>
 
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-3">
                                     <LanguageSelector />
                                     <NotificationBell
                                         notifications={notifications}
@@ -203,87 +203,89 @@ export default function Create({
                                     <ThemeToggle />
 
                                     {/* User Profile */}
+                                    <div className="h-4 w-px bg-primary/10 mx-1" />
                                     <DropdownMenu>
-                                    <DropdownMenuTrigger className="outline-none flex items-center gap-2 hover:bg-muted/50 rounded-lg px-2 py-1 transition-colors">
-                                        <div className="text-end hidden sm:block">
-                                            <p className="text-sm font-medium">{user.name}</p>
-                                            <p className="text-xs text-muted-foreground">{user.email}</p>
-                                        </div>
-                                        <Avatar className="h-8 w-8 cursor-pointer">
-                                            <AvatarImage src={user.avatar || undefined} />
-                                            <AvatarFallback className="bg-primary text-primary-foreground text-sm">
-                                                {user.name.charAt(0).toUpperCase()}
-                                            </AvatarFallback>
-                                        </Avatar>
-                                    </DropdownMenuTrigger>
-                                    <DropdownMenuContent align="end" className="w-56">
-                                        <div className="px-2 py-1.5">
-                                            <p className="text-sm font-medium">{user.name}</p>
-                                            <p className="text-xs text-muted-foreground">{user.email}</p>
-                                        </div>
-                                        <DropdownMenuSeparator />
-                                        <DropdownMenuItem asChild>
-                                            <Link href="/logout" method="post" as="button" className="w-full">
-                                                <LogOut className="h-4 w-4 me-2" />
-                                                {t('Log Out')}
-                                            </Link>
-                                        </DropdownMenuItem>
-                                    </DropdownMenuContent>
+                                        <DropdownMenuTrigger className="outline-none flex items-center gap-3 hover:bg-primary/5 rounded-full px-2 py-1 transition-all">
+                                            <div className="text-end hidden lg:block">
+                                                <p className="text-xs font-bold tracking-tight">{user.name}</p>
+                                                <p className="text-[10px] text-muted-foreground/70 uppercase font-medium tracking-wider">{user.role}</p>
+                                            </div>
+                                            <Avatar className="h-9 w-9 border-2 border-primary/10 shadow-lg group-hover:border-primary/30 transition-colors">
+                                                <AvatarImage src={user.avatar || undefined} />
+                                                <AvatarFallback className="bg-primary/10 text-primary text-xs font-bold">
+                                                    {user.name.charAt(0).toUpperCase()}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                        </DropdownMenuTrigger>
+                                        <DropdownMenuContent align="end" className="w-56 mt-2">
+                                            <div className="px-2 py-2">
+                                                <p className="text-sm font-bold">{user.name}</p>
+                                                <p className="text-xs text-muted-foreground">{user.email}</p>
+                                            </div>
+                                            <DropdownMenuSeparator className="bg-primary/5" />
+                                            <DropdownMenuItem asChild className="cursor-pointer hover:bg-primary/5 focus:bg-primary/5">
+                                                <Link href="/logout" method="post" as="button" className="w-full flex items-center">
+                                                    <LogOut className="h-4 w-4 me-2 text-destructive/70" />
+                                                    <span className="font-medium">{t('Log Out')}</span>
+                                                </Link>
+                                            </DropdownMenuItem>
+                                        </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
                             </header>
 
-                            {/* Hero Section - Full viewport height */}
-                            <div className="relative flex flex-col items-center justify-center min-h-[calc(100vh-4rem)] px-4 md:px-8">
-                                {/* Greeting with scramble animation */}
-                                <div className="prose prose-lg dark:prose-invert text-center mb-8">
+                            {/* Hero Section - Centered within the inset card */}
+                            <div className="relative flex flex-col items-center justify-center flex-1 px-4 md:px-8 py-12">
+                                <div className="max-w-3xl text-center mb-12">
                                     <h1
                                         ref={greetingRef}
-                                        className="text-3xl md:text-4xl font-bold text-foreground mb-2"
+                                        className="text-4xl md:text-5xl font-bold text-foreground mb-4 tracking-tight font-heading leading-tight"
                                     />
+                                    <p className="text-muted-foreground text-lg font-medium opacity-80">
+                                        {t('What will we build today?')}
+                                    </p>
                                 </div>
 
-                                {/* Real-time not configured warning */}
-                                {!isPusherConfigured && (
-                                    <Alert variant="destructive" className="w-full max-w-3xl mb-4">
-                                        <AlertCircle className="h-4 w-4" />
-                                        <AlertDescription>
-                                            {t('Real-time features are not configured. Please configure broadcast settings in Admin Settings → Integrations.')}
-                                        </AlertDescription>
-                                    </Alert>
-                                )}
+                                {/* Warnings & Input */}
+                                <div className="w-full max-w-3xl space-y-4">
+                                    {!isPusherConfigured && (
+                                        <Alert variant="destructive" className="bg-destructive/5 border-destructive/10">
+                                            <AlertCircle className="h-4 w-4" />
+                                            <AlertDescription>
+                                                {t('Real-time features are not configured. Please configure broadcast settings in Admin Settings → Integrations.')}
+                                            </AlertDescription>
+                                        </Alert>
+                                    )}
 
-                                {/* Cannot create project warning */}
-                                {!canCreateProject && isPusherConfigured && (
-                                    <Alert variant="destructive" className="w-full max-w-3xl mb-4">
-                                        <AlertCircle className="h-4 w-4" />
-                                        <AlertDescription>
-                                            {cannotCreateReason}
-                                            {user.role !== 'admin' && (
-                                                <>
-                                                    {' '}
-                                                    <Link href="/billing/plans" className="underline font-semibold">
-                                                        {t('View Plans')}
-                                                    </Link>
-                                                </>
-                                            )}
-                                        </AlertDescription>
-                                    </Alert>
-                                )}
+                                    {!canCreateProject && isPusherConfigured && (
+                                        <Alert variant="destructive" className="bg-destructive/5 border-destructive/10">
+                                            <AlertCircle className="h-4 w-4" />
+                                            <AlertDescription>
+                                                {cannotCreateReason}
+                                                {user.role !== 'admin' && (
+                                                    <>
+                                                        {' '}
+                                                        <Link href="/billing/plans" className="underline font-semibold text-primary">
+                                                            {t('View Plans')}
+                                                        </Link>
+                                                    </>
+                                                )}
+                                            </AlertDescription>
+                                        </Alert>
+                                    )}
 
-                                {/* Prompt Input */}
-                                <div className="w-full max-w-3xl">
-                                    <PromptInput
-                                        onSubmit={handlePromptSubmit}
-                                        disabled={!isPusherConfigured || !canCreateProject}
-                                        suggestions={suggestions}
-                                        typingPrompts={typingPrompts}
-                                        isLoadingSuggestions={isLoadingAi}
-                                        templates={templates ?? []}
-                                    />
+                                    <div className="w-full">
+                                        <PromptInput
+                                            onSubmit={handlePromptSubmit}
+                                            disabled={!isPusherConfigured || !canCreateProject}
+                                            suggestions={suggestions}
+                                            typingPrompts={typingPrompts}
+                                            isLoadingSuggestions={isLoadingAi}
+                                            templates={templates ?? []}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-
                         </div>
                     </SidebarInset>
                 </SidebarProvider>
@@ -295,6 +297,6 @@ export default function Create({
                     <ChatPageSkeleton />
                 </div>
             )}
-        </>
+        </div>
     );
 }

@@ -1,13 +1,13 @@
-import { useState, useEffect, useMemo } from 'react';
-import { Link } from '@inertiajs/react';
-import { Menu, X } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { LanguageSelector } from '@/components/LanguageSelector';
-import ApplicationLogo from '@/components/ApplicationLogo';
-import { cn } from '@/lib/utils';
-import { useTranslation } from '@/contexts/LanguageContext';
+import { useState, useEffect, useMemo } from "react";
+import { Link } from "@inertiajs/react";
+import { Menu, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { ThemeToggle } from "@/components/ThemeToggle";
+import { LanguageSelector } from "@/components/LanguageSelector";
+import ApplicationLogo from "@/components/ApplicationLogo";
+import { cn } from "@/lib/utils";
+import { useTranslation } from "@/contexts/LanguageContext";
 
 interface NavbarProps {
     auth: {
@@ -18,26 +18,52 @@ interface NavbarProps {
     enabledSectionTypes?: string[];
 }
 
-const handleSmoothScroll = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+const handleSmoothScroll = (
+    e: React.MouseEvent<HTMLAnchorElement>,
+    href: string,
+) => {
     e.preventDefault();
-    const targetId = href.replace('#', '');
+    const targetId = href.replace("#", "");
     const element = document.getElementById(targetId);
     if (element) {
-        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        element.scrollIntoView({ behavior: "smooth", block: "start" });
     }
 };
 
-export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }: NavbarProps) {
+export function Navbar({
+    auth,
+    canLogin,
+    canRegister,
+    enabledSectionTypes = [],
+}: NavbarProps) {
     const { t } = useTranslation();
     const [scrolled, setScrolled] = useState(false);
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
     // Map section types to their nav links
-    const allNavLinks = useMemo(() => [
-        { label: t('Features'), href: '#features', isAnchor: true, sectionType: 'features' },
-        { label: t('Pricing'), href: '#pricing', isAnchor: true, sectionType: 'pricing' },
-        { label: t('Use Cases'), href: '#use-cases', isAnchor: true, sectionType: 'use_cases' },
-    ], [t]);
+    const allNavLinks = useMemo(
+        () => [
+            {
+                label: t("Features"),
+                href: "#features",
+                isAnchor: true,
+                sectionType: "features",
+            },
+            {
+                label: t("Pricing"),
+                href: "#pricing",
+                isAnchor: true,
+                sectionType: "pricing",
+            },
+            {
+                label: t("Use Cases"),
+                href: "#use-cases",
+                isAnchor: true,
+                sectionType: "use_cases",
+            },
+        ],
+        [t],
+    );
 
     // Filter nav links based on enabled sections
     const navLinks = useMemo(() => {
@@ -45,7 +71,9 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
         if (enabledSectionTypes.length === 0) {
             return allNavLinks;
         }
-        return allNavLinks.filter(link => enabledSectionTypes.includes(link.sectionType));
+        return allNavLinks.filter((link) =>
+            enabledSectionTypes.includes(link.sectionType),
+        );
     }, [allNavLinks, enabledSectionTypes]);
 
     useEffect(() => {
@@ -53,23 +81,29 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
             setScrolled(window.scrollY > 50);
         };
 
-        window.addEventListener('scroll', handleScroll);
-        return () => window.removeEventListener('scroll', handleScroll);
+        window.addEventListener("scroll", handleScroll);
+        return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
     return (
         <header
             className={cn(
-                'fixed top-0 left-0 right-0 z-50 transition-all duration-300',
+                "fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-700 ease-out w-[95%] max-w-7xl",
                 scrolled
-                    ? 'bg-background/80 backdrop-blur-md border-b border-border shadow-sm'
-                    : 'bg-transparent'
+                    ? "py-0"
+                    : "py-0",
             )}
         >
-            <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16">
+            <nav className={cn(
+                "mx-auto px-4 sm:px-6 lg:px-8 bg-background/50 backdrop-blur-2xl border border-primary/10 rounded-[2.5rem] shadow-2xl transition-all duration-500",
+                scrolled ? "py-2" : "py-3"
+            )}>
+                <div className="flex items-center justify-between h-14 sm:h-16">
                     {/* Logo */}
-                    <Link href="/" className="flex-shrink-0">
+                    <Link
+                        href="/"
+                        className="flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
+                    >
                         <ApplicationLogo showText size="lg" />
                     </Link>
 
@@ -80,10 +114,13 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                                 <a
                                     key={link.label}
                                     href={link.href}
-                                    onClick={(e) => handleSmoothScroll(e, link.href)}
-                                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                                    onClick={(e) =>
+                                        handleSmoothScroll(e, link.href)
+                                    }
+                                    className="text-sm font-semibold text-muted-foreground hover:text-primary transition-all relative group"
                                 >
                                     {link.label}
+                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
                                 </a>
                             ) : (
                                 <Link
@@ -93,7 +130,7 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                                 >
                                     {link.label}
                                 </Link>
-                            )
+                            ),
                         )}
                     </div>
 
@@ -102,19 +139,31 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                         <LanguageSelector />
                         <ThemeToggle />
                         {auth.user ? (
-                            <Button asChild>
-                                <Link href="/create">{t('Dashboard')}</Link>
+                            <Button
+                                asChild
+                                className="rounded-full px-6 shadow-lg shadow-primary/20"
+                            >
+                                <Link href="/create">{t("Go to App")}</Link>
                             </Button>
                         ) : (
                             <>
                                 {canLogin && (
-                                    <Button variant="ghost" asChild>
-                                        <Link href="/login">{t('Sign in')}</Link>
+                                    <Button
+                                        variant="ghost"
+                                        asChild
+                                        className="rounded-full"
+                                    >
+                                        <Link href="/login">{t("Login")}</Link>
                                     </Button>
                                 )}
                                 {canRegister && (
-                                    <Button asChild>
-                                        <Link href="/register">{t('Get started')}</Link>
+                                    <Button
+                                        asChild
+                                        className="rounded-full px-6 shadow-lg shadow-primary/20"
+                                    >
+                                        <Link href="/register">
+                                            {t("Get Started")}
+                                        </Link>
                                     </Button>
                                 )}
                             </>
@@ -125,7 +174,10 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                     <div className="flex md:hidden items-center gap-2">
                         <LanguageSelector />
                         <ThemeToggle />
-                        <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                        <Sheet
+                            open={mobileMenuOpen}
+                            onOpenChange={setMobileMenuOpen}
+                        >
                             <SheetTrigger asChild>
                                 <Button variant="ghost" size="icon">
                                     {mobileMenuOpen ? (
@@ -133,10 +185,15 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                                     ) : (
                                         <Menu className="h-5 w-5" />
                                     )}
-                                    <span className="sr-only">{t('Toggle menu')}</span>
+                                    <span className="sr-only">
+                                        {t("Toggle menu")}
+                                    </span>
                                 </Button>
                             </SheetTrigger>
-                            <SheetContent side="right" className="w-[min(85vw,280px)] sm:w-[350px] p-6">
+                            <SheetContent
+                                side="right"
+                                className="w-[min(85vw,280px)] sm:w-[350px] p-6"
+                            >
                                 <div className="flex flex-col gap-6 mt-6">
                                     {/* Mobile Nav Links */}
                                     <div className="flex flex-col gap-4">
@@ -146,8 +203,13 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                                                     key={link.label}
                                                     href={link.href}
                                                     onClick={(e) => {
-                                                        handleSmoothScroll(e, link.href);
-                                                        setMobileMenuOpen(false);
+                                                        handleSmoothScroll(
+                                                            e,
+                                                            link.href,
+                                                        );
+                                                        setMobileMenuOpen(
+                                                            false,
+                                                        );
                                                     }}
                                                     className="text-lg font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
                                                 >
@@ -158,11 +220,13 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                                                     key={link.label}
                                                     href={link.href}
                                                     className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                                                    onClick={() => setMobileMenuOpen(false)}
+                                                    onClick={() =>
+                                                        setMobileMenuOpen(false)
+                                                    }
                                                 >
                                                     {link.label}
                                                 </Link>
-                                            )
+                                            ),
                                         )}
                                     </div>
 
@@ -170,18 +234,31 @@ export function Navbar({ auth, canLogin, canRegister, enabledSectionTypes = [] }
                                     <div className="flex flex-col gap-3 pt-4 border-t">
                                         {auth.user ? (
                                             <Button asChild className="w-full">
-                                                <Link href="/create">{t('Dashboard')}</Link>
+                                                <Link href="/create">
+                                                    {t("Dashboard")}
+                                                </Link>
                                             </Button>
                                         ) : (
                                             <>
                                                 {canLogin && (
-                                                    <Button variant="outline" asChild className="w-full">
-                                                        <Link href="/login">{t('Sign in')}</Link>
+                                                    <Button
+                                                        variant="outline"
+                                                        asChild
+                                                        className="w-full"
+                                                    >
+                                                        <Link href="/login">
+                                                            {t("Sign in")}
+                                                        </Link>
                                                     </Button>
                                                 )}
                                                 {canRegister && (
-                                                    <Button asChild className="w-full">
-                                                        <Link href="/register">{t('Get started')}</Link>
+                                                    <Button
+                                                        asChild
+                                                        className="w-full"
+                                                    >
+                                                        <Link href="/register">
+                                                            {t("Get started")}
+                                                        </Link>
                                                     </Button>
                                                 )}
                                             </>

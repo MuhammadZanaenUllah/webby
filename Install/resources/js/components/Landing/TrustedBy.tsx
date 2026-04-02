@@ -23,21 +23,21 @@ interface TrustedByProps {
 
 function CompanyBadge({ company }: { company: LogoItem }) {
     return (
-        <div className="flex items-center gap-2 text-muted-foreground/50 hover:text-muted-foreground/80 transition-colors shrink-0">
+        <div className="flex items-center gap-2 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 shrink-0 cursor-default group">
             {company.image_url ? (
                 <img
                     src={company.image_url}
                     alt={company.name}
-                    className="h-5 sm:h-6 w-auto max-w-[80px] sm:max-w-[100px] object-contain"
+                    className="h-5 sm:h-7 w-auto max-w-[100px] sm:max-w-[120px] object-contain"
                 />
             ) : (
                 <>
-                    <div className={`h-5 w-5 sm:h-6 sm:w-6 rounded-full ${company.color} flex items-center justify-center`}>
-                        <span className="text-white text-xs sm:text-sm font-semibold">
+                    <div className={`h-6 w-6 sm:h-8 sm:w-8 rounded-lg ${company.color} flex items-center justify-center shadow-sm group-hover:shadow-md transition-shadow`}>
+                        <span className="text-white text-[10px] sm:text-xs font-bold leading-none">
                             {company.initial}
                         </span>
                     </div>
-                    <span className="font-medium text-xs sm:text-sm whitespace-nowrap">
+                    <span className="font-semibold text-sm sm:text-base tracking-tight whitespace-nowrap text-foreground/80 group-hover:text-foreground">
                         {company.name}
                     </span>
                 </>

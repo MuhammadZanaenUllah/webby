@@ -29,6 +29,11 @@ class UserObserver
         if ($user->plan_id && ! array_key_exists('build_credits', $user->getAttributes())) {
             $this->provisionBuildCredits($user);
         }
+
+        // Automatically verify email if verification is disabled in settings
+        if (! \App\Models\SystemSetting::get('require_email_verification', true)) {
+            $user->markEmailAsVerified();
+        }
     }
 
     /**

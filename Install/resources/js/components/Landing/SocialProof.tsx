@@ -37,17 +37,28 @@ export function SocialProof({ statistics, content }: SocialProofProps) {
     ];
 
     return (
-        <section className="py-16 lg:py-20 bg-muted/30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-24 lg:py-32 bg-background relative overflow-hidden">
+            <div className="absolute inset-0 bg-primary/[0.02] pointer-events-none" />
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Stats */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-                    {stats.map((stat) => (
-                        <div key={stat.label} className="text-center">
-                            <div className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
-                                {stat.value}
-                            </div>
-                            <div className="text-sm md:text-base text-muted-foreground mt-1">
-                                {stat.label}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-16">
+                    {stats.map((stat, index) => (
+                        <div key={stat.label} className="text-center group relative">
+                            {/* Decorative Glow */}
+                            <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            
+                            <div className="relative z-10">
+                                <div className="text-5xl md:text-7xl font-black text-foreground tracking-tighter transition-all duration-700 group-hover:scale-110 group-hover:text-primary">
+                                    {stat.value}
+                                </div>
+                                <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] text-muted-foreground/40 mt-6 group-hover:text-muted-foreground/60 transition-colors">
+                                    {stat.label}
+                                </div>
+                                
+                                {/* Divider - only for sm view and between items */}
+                                {index < stats.length - 1 && (
+                                    <div className="hidden sm:block absolute top-1/2 -right-8 w-px h-12 bg-primary/10 -translate-y-1/2" />
+                                )}
                             </div>
                         </div>
                     ))}

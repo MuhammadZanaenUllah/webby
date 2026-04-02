@@ -1,0 +1,17 @@
+{
+    "name": "Stripe",
+    "slug": "stripe",
+    "description": "Accept recurring and one-time payments via Stripe Checkout",
+    "version": "1.0.0",
+    "author": "Titan Systems",
+    "author_url": "https://titansys.dev",
+    "type": "payment_gateway",
+    "icon": "plugins/stripe/icon.svg",
+    "main_class": "src/StripePlugin.php",
+    "namespace": "App\\Plugins\\PaymentGateways\\StripePlugin",
+    "requirements": {
+        "php": ">=8.2",
+        "laravel": ">=12.0"
+    },
+    "migrations": []
+}

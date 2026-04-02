@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Outfit:wght@400;500;600;700;800&display=swap');
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "./themes.css";
@@ -106,19 +107,19 @@ body {
 
 @keyframes marquee {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
-    transform: translateX(-50%);
+    transform: translate3d(-50%, 0, 0);
   }
 }
 
 @keyframes marquee-rtl {
   0% {
-    transform: translateX(0%);
+    transform: translate3d(0%, 0, 0);
   }
   100% {
-    transform: translateX(50%);
+    transform: translate3d(50%, 0, 0);
   }
 }
 
@@ -213,6 +214,7 @@ body {
 
 @utility animate-marquee {
   animation: marquee 20s linear infinite;
+  will-change: transform;
 }
 
 @utility animate-marquee-slow {

@@ -55,9 +55,9 @@ export default function Login({
         <GuestLayout>
             <Head title={t('Log in')} />
 
-            <div className="prose prose-sm dark:prose-invert text-center mb-6">
-                <h1 className="text-2xl font-bold text-foreground mb-2">{t('Welcome back')}</h1>
-                <p className="text-muted-foreground text-sm">{t('Sign in to continue building')}</p>
+            <div className="text-center mb-10">
+                <h1 className="text-3xl font-bold text-foreground mb-3 font-heading tracking-tight">{t('Welcome back')}</h1>
+                <p className="text-muted-foreground text-base font-medium opacity-80">{t('Sign in to continue building')}</p>
             </div>
 
             {status && (
@@ -144,7 +144,7 @@ export default function Login({
                 <Button
                     type="submit"
                     disabled={processing}
-                    className="w-full"
+                    className="w-full h-11 text-base font-semibold shadow-xl shadow-primary/10 transition-all hover:scale-[1.01] active:scale-[0.99] rounded-xl"
                 >
                     {processing ? t('Signing in...') : t('Sign in')}
                 </Button>

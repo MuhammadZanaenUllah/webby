@@ -19,28 +19,32 @@ export function GlobalCredits({
     // Using own API key takes priority
     if (usingOwnKey) {
         return (
-            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/5 border border-primary/10 text-[11px] font-semibold text-primary/80 shadow-sm">
                 <Key className="h-3 w-3" />
-                {t('Using your API key')}
-            </span>
+                {t('Personal Key')}
+            </div>
         );
     }
 
     // Unlimited credits
     if (isUnlimited) {
         return (
-            <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
+            <div className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary/10 border border-primary/20 text-[11px] font-bold text-primary shadow-sm animate-pulse-subtle">
                 <InfinityIcon className="h-3 w-3" />
-                {t('Unlimited Credits')}
-            </span>
+                {t('Unlimited')}
+            </div>
         );
     }
 
     // Limited credits
     return (
-        <span className="flex items-center gap-1.5 text-xs text-muted-foreground">
-            <Coins className="h-3 w-3" />
-            {remaining.toLocaleString()} / {monthlyLimit.toLocaleString()} {t('credits')}
-        </span>
+        <div className="flex items-center gap-1.5 px-3 py-1 rounded-full bg-muted/50 border border-border/50 text-[11px] font-medium text-muted-foreground shadow-sm">
+            <Coins className="h-3 w-3 text-primary/60" />
+            <span>
+                <span className="text-foreground font-bold">{remaining.toLocaleString()}</span>
+                <span className="mx-1 opacity-40">/</span>
+                <span className="opacity-70">{monthlyLimit.toLocaleString()}</span>
+            </span>
+        </div>
     );
 }

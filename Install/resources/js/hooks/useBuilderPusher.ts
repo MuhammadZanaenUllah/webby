@@ -123,13 +123,24 @@ function getEcho(config: BroadcastConfig): InstanceType<typeof Echo> {
     // Make Pusher available globally for Echo
     (window as unknown as { Pusher: typeof Pusher }).Pusher = Pusher;
 
-    const echoInstance = new Echo({
-        broadcaster: 'pusher',
+    const echoConfig: any = {
+        broadcaster: config.provider === 'reverb' ? 'reverb' : 'pusher',
         key: config.key,
-        cluster: config.provider === 'pusher' ? config.cluster : undefined,
-        forceTLS: true,
         disableStats: true,
-    });
+    };
+
+    if (config.provider === 'pusher') {
+        echoConfig.cluster = config.cluster;
+        echoConfig.forceTLS = true;
+    } else {
+        echoConfig.wsHost = config.host;
+        echoConfig.wsPort = config.port ?? 8080;
+        echoConfig.wssPort = config.port ?? 8080;
+        echoConfig.forceTLS = (config.scheme === 'https');
+        echoConfig.enabledTransports = ['ws', 'wss'];
+    }
+
+    const echoInstance = new Echo(echoConfig);
 
     echoInstances.set(configKey, echoInstance);
     return echoInstance;

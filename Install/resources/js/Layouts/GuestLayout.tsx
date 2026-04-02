@@ -20,16 +20,15 @@ export default function Guest({ children }: PropsWithChildren) {
 
             <div className="relative z-10 w-full max-w-md">
                 {/* Logo */}
-                <Link href="/" className="flex items-center justify-center mb-8">
+                <Link href="/" className="flex items-center justify-center mb-10 transition-transform hover:scale-[1.03]">
                     <ApplicationLogo showText size="lg" />
                 </Link>
 
                 {/* Card */}
-                <Card>
-                    <CardContent>
-                        {children}
-                    </CardContent>
-                </Card>
+                <div className="bg-card/70 backdrop-blur-xl border border-primary/5 rounded-[2rem] shadow-2xl shadow-primary/5 p-8 relative overflow-hidden group">
+                    <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-50 pointer-events-none" />
+                    {children}
+                </div>
             </div>
 
             <Toaster />

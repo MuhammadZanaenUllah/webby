@@ -109,6 +109,24 @@ export function HeroSection({
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isInitialMount = useRef(true);
     const prevLocale = useRef(locale);
+    const [scrollY, setScrollY] = useState(0);
+
+    // Optimized scroll listener for parallax
+    useEffect(() => {
+        let ticking = false;
+        const handleScroll = () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    setScrollY(window.scrollY);
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        };
+
+        window.addEventListener('scroll', handleScroll, { passive: true });
+        return () => window.removeEventListener('scroll', handleScroll);
+    }, []);
 
     // Update state when props change (e.g., after language switch)
     useEffect(() => {
@@ -208,24 +226,26 @@ export function HeroSection({
     };
 
     return (
-        <section className="relative h-dvh flex flex-col items-center justify-center px-4 pt-16 pb-32 sm:pb-24 bg-background">
+        <section className="relative min-h-screen flex flex-col items-center pt-44 pb-32 sm:pb-40 bg-background overflow-hidden">
+            {/* Specialized Tech Grid Background */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
             <GradientBackground />
 
-            <div className="relative z-10 w-full max-w-4xl mx-auto text-center px-2 sm:px-0">
+            <div className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center">
                 {/* Headline with scramble animation */}
                 <h1
                     ref={headlineRef}
-                    className="text-xl xs:text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tighter mb-3 sm:mb-6"
+                    className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 leading-[1.05]"
                 />
 
                 {/* Subtitle */}
-                <p className="text-sm sm:text-base md:text-lg lg:text-xl text-muted-foreground/90 mb-6 sm:mb-10 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground/90 mb-12 max-w-3xl mx-auto leading-relaxed">
                     {subtitle}
                 </p>
 
                 {/* Cannot create project warning (for logged-in users) */}
                 {auth.user && !isPusherConfigured && (
-                    <Alert variant="destructive" className="max-w-2xl mx-auto mb-4 text-left">
+                    <Alert variant="destructive" className="max-w-2xl mb-8 mx-auto text-center">
                         <AlertCircle className="h-4 w-4" />
                         <AlertDescription>
                             {t('Real-time features are not configured. Please contact support.')}
@@ -234,21 +254,21 @@ export function HeroSection({
                 )}
 
                 {auth.user && !canCreateProject && isPusherConfigured && (
-                    <Alert variant="destructive" className="max-w-2xl mx-auto mb-4 text-left">
+                    <Alert variant="destructive" className="max-w-2xl mb-8 mx-auto text-center">
                         <AlertCircle className="h-4 w-4" />
                         <AlertDescription>
                             {cannotCreateReason}{' '}
-                            <Link href="/billing/plans" className="underline font-semibold">
+                            <Link href="/billing/plans" className="underline font-semibold text-primary">
                                 {t('View Plans')}
                             </Link>
                         </AlertDescription>
                     </Alert>
                 )}
 
-                {/* Prompt Input */}
-                <div className="max-w-2xl mx-auto">
+                {/* Prompt Input - Command Center Style */}
+                <div className="max-w-4xl mx-auto mb-24">
                     <form onSubmit={handleSubmit} className="relative">
-                        <div className="relative bg-card rounded-xl sm:rounded-2xl shadow-lg border border-border/50 overflow-hidden">
+                        <div className="relative bg-card/60 backdrop-blur-xl rounded-[3rem] shadow-[0_0_50px_-12px_rgba(var(--primary-rgb),0.3)] border border-primary/20 overflow-hidden hover:border-primary/40 transition-all duration-700 group ring-4 ring-primary/5">
                             <div className="relative">
                                 <textarea
                                     ref={textareaRef}
@@ -259,42 +279,40 @@ export function HeroSection({
                                     onKeyDown={handleKeyDown}
                                     placeholder={!showAnimatedPlaceholder ? t('I want to build...') : ""}
                                     disabled={isDisabled}
-                                    className="w-full px-3 sm:px-4 py-3 sm:py-4 text-sm sm:text-base resize-none focus:outline-none focus:ring-0 border-0 min-h-[80px] sm:min-h-[100px] bg-transparent relative z-10 text-start disabled:opacity-50 disabled:cursor-not-allowed"
-                                    rows={2}
+                                    className="w-full px-10 py-10 text-lg sm:text-xl lg:text-2xl resize-none focus:outline-none focus:ring-0 border-0 min-h-[160px] bg-transparent relative z-10 text-center disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-muted-foreground/40"
+                                    rows={1}
                                 />
                                 {/* Animated placeholder overlay */}
                                 {showAnimatedPlaceholder && (
                                     <div
-                                        className="absolute inset-0 px-3 sm:px-4 py-3 sm:py-4 pointer-events-none text-muted-foreground/60 text-sm sm:text-base text-start"
+                                        className="absolute inset-0 px-10 py-10 pointer-events-none text-muted-foreground/20 text-lg sm:text-xl lg:text-2xl text-center"
                                         onClick={() => textareaRef.current?.focus()}
                                     >
                                         {animatedPlaceholder}
-                                        <span className="inline-block w-0.5 h-5 bg-primary/50 ms-0.5 animate-pulse align-middle" />
+                                        <span className="inline-block w-0.5 h-7 bg-primary/40 ms-0.5 animate-pulse align-middle" />
                                     </div>
                                 )}
                             </div>
-                            <div className="flex items-center justify-between gap-2 px-4 py-3 bg-muted/50 border-t border-border">
-                                {/* Keyboard hint */}
-                                <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
-                                    <span>{t('Press')}</span>
-                                    <kbd className="px-2 py-0.5 bg-card rounded border text-xs">
+                            <div className="flex items-center justify-between gap-4 px-8 py-5 bg-muted/40 border-t border-border/50">
+                                <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground/50 transition-opacity group-focus-within:opacity-100 opacity-40">
+                                    <span>{t('Launch with')}</span>
+                                    <kbd className="px-2 py-1 bg-background rounded-md border border-border/50 text-[10px] uppercase font-black text-primary/60">
                                         ⌘ Enter
                                     </kbd>
-                                    <span>{t('to start')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 ms-auto">
                                     <Button
                                         type="submit"
                                         disabled={!prompt.trim() || isDisabled}
-                                        className="shrink-0 h-10 min-w-[100px] transition-all hover:scale-[1.02] hover:shadow-md"
+                                        className="shrink-0 h-14 px-12 rounded-full transition-all hover:scale-[1.02] hover:shadow-2xl active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground font-black shadow-xl shadow-primary/20"
                                     >
-                                        <span className="text-sm sm:text-base">
-                                            {auth.user ? t('Start') : t('Go')}
+                                        <span className="text-lg">
+                                            {auth.user ? t('Launch Engine') : t('Start Building')}
                                         </span>
                                         {isRtl ? (
-                                            <ArrowLeft className="h-4 w-4 me-1.5" />
+                                            <ArrowLeft className="h-6 w-6 me-3 group-hover:-translate-x-1 transition-transform" />
                                         ) : (
-                                            <ArrowRight className="h-4 w-4 ms-1.5" />
+                                            <ArrowRight className="h-6 w-6 ms-3 group-hover:translate-x-1 transition-transform" />
                                         )}
                                     </Button>
                                 </div>
@@ -302,19 +320,17 @@ export function HeroSection({
                         </div>
                     </form>
 
-                    {/* Suggestions - Marquee */}
-                    <div className="mt-4 sm:mt-6 overflow-hidden max-w-2xl relative">
-                        {/* Gradient fade on edges */}
-                        <div className="absolute start-0 top-0 bottom-0 w-6 sm:w-10 md:w-12 bg-gradient-to-r rtl:bg-gradient-to-l from-background to-transparent z-10 pointer-events-none" />
-                        <div className="absolute end-0 top-0 bottom-0 w-6 sm:w-10 md:w-12 bg-gradient-to-l rtl:bg-gradient-to-r from-background to-transparent z-10 pointer-events-none" />
-                        <div className={`flex gap-2 sm:gap-3 hover:[animation-play-state:paused] ${isRtl ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
-                            {/* Duplicate suggestions for seamless loop */}
+                    {/* Suggestions - Centered Marquee */}
+                    <div className="mt-14 overflow-hidden max-w-3xl mx-auto relative px-12">
+                        <div className="absolute start-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none" />
+                        <div className="absolute end-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none" />
+                        <div className={`flex gap-6 hover:[animation-play-state:paused] ${isRtl ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
                             {[...suggestions, ...suggestions].map((suggestion, index) => (
                                 <button
                                     key={`${suggestion}-${index}`}
                                     onClick={() => handleSuggestionClick(suggestion)}
                                     disabled={isDisabled}
-                                    className="text-xs sm:text-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-card hover:bg-accent border border-border text-muted-foreground hover:text-foreground transition-colors shadow-sm whitespace-nowrap shrink-0 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-card"
+                                    className="text-sm font-bold px-6 py-3 rounded-full bg-card/60 backdrop-blur-md hover:bg-primary hover:text-primary-foreground hover:border-primary border border-primary/10 text-muted-foreground transition-all shadow-lg whitespace-nowrap shrink-0 disabled:opacity-50"
                                 >
                                     {suggestion}
                                 </button>
@@ -322,17 +338,69 @@ export function HeroSection({
                         </div>
                     </div>
                 </div>
-            </div>
 
-            {/* Trusted by at bottom of hero */}
-            {trustedBy?.enabled !== false && (
-                <div className="absolute bottom-4 sm:bottom-8 left-0 right-0 z-10 px-4">
-                    <TrustedBy
-                        content={trustedBy?.content}
-                        items={trustedBy?.items as Array<{ name: string; initial: string; color: string; image_url?: string | null }>}
+                {/* Integrated Product Showcase Frame - Overlapping Hero bottom with Parallax */}
+                <div 
+                    className="relative w-full max-w-6xl mx-auto mt-12 mb-[-15%] group perspective-1000 will-change-transform"
+                    style={{ 
+                        transform: `translate3d(0, ${scrollY * -0.05}px, 0)`,
+                        transition: 'transform 0.1s ease-out'
+                    }}
+                >
+                    <div className="relative bg-card/80 backdrop-blur-xl rounded-[2.5rem] border border-primary/20 shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.2)] overflow-hidden transition-all duration-700 hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.3)] hover:-translate-y-4">
+                        {/* Browser Top Bar */}
+                        <div className="p-4 bg-muted/40 flex items-center justify-between border-b border-border/50">
+                            <div className="flex gap-2">
+                                <div className="w-3 h-3 rounded-full bg-destructive/40" />
+                                <div className="w-3 h-3 rounded-full bg-amber-500/40" />
+                                <div className="w-3 h-3 rounded-full bg-primary/40" />
+                            </div>
+                            <div className="px-4 py-1 rounded-lg bg-background/50 border border-border/50 text-[10px] text-muted-foreground font-black tracking-widest uppercase">
+                                yourproject.webby.app
+                            </div>
+                            <div className="w-8" />
+                        </div>
+                        {/* Mock Content */}
+                        <div className="aspect-[16/9] bg-background/30 p-8">
+                            <div className="grid grid-cols-12 gap-8 h-full">
+                                <div className="col-span-3 space-y-6">
+                                    <div className="h-40 bg-primary/5 rounded-3xl border border-primary/5 animate-pulse" />
+                                    <div className="space-y-2">
+                                        <div className="h-4 w-full bg-muted rounded-full" />
+                                        <div className="h-4 w-2/3 bg-muted rounded-full" />
+                                    </div>
+                                </div>
+                                <div className="col-span-9 space-y-8">
+                                    <div className="h-16 w-1/2 bg-primary/10 rounded-2xl" />
+                                    <div className="grid grid-cols-2 gap-8">
+                                        <div className="h-64 bg-card/40 rounded-3xl border border-primary/10" />
+                                        <div className="h-64 bg-card/40 rounded-3xl border border-primary/10" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {/* Floating Ornaments with Enhanced Parallax */}
+                    <div 
+                        className="absolute -top-12 -right-12 w-32 h-32 bg-primary/20 blur-3xl rounded-full will-change-transform"
+                        style={{ transform: `translate3d(0, ${scrollY * 0.15}px, 0)` }}
+                    />
+                    <div 
+                        className="absolute -bottom-12 -left-12 w-48 h-48 bg-primary/10 blur-3xl rounded-full will-change-transform"
+                        style={{ transform: `translate3d(0, ${scrollY * 0.25}px, 0)` }}
                     />
                 </div>
-            )}
-        </section>
-    );
-}
+            </div>
+
+                {/* Trusted by strip */}
+                <div className="pt-44 border-t border-primary/5">
+                    {trustedBy?.enabled !== false && (
+                        <TrustedBy
+                            content={trustedBy?.content}
+                            items={trustedBy?.items as Array<{ name: string; initial: string; color: string; image_url?: string | null }>}
+                        />
+                    )}
+                </div>
+            </section>
+        );
+    }

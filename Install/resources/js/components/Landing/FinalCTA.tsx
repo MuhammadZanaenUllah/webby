@@ -52,10 +52,11 @@ export function FinalCTA({
     };
 
     return (
-        <section className="py-16 lg:py-24 bg-muted/30">
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <section className="py-24 lg:py-32 relative overflow-hidden bg-background border-t border-primary/5">
+            <div className="absolute inset-0 bg-primary/[0.02] [mask-image:radial-gradient(100%_100%_at_50%_0%,#000_0%,transparent_100%)] pointer-events-none" />
+            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                 {/* Headline */}
-                <h2 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter mb-4">
+                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
                     {title}
                 </h2>
 
@@ -87,9 +88,9 @@ export function FinalCTA({
                 )}
 
                 {/* Prompt Input */}
-                <div className="max-w-2xl mx-auto">
+                <div className="max-w-3xl mx-auto">
                     <form onSubmit={handleSubmit} className="relative">
-                        <div className="relative bg-card rounded-2xl shadow-lg border border-border/50 overflow-hidden">
+                        <div className="relative bg-card rounded-3xl sm:rounded-[2rem] shadow-2xl border border-primary/10 overflow-hidden hover:border-primary/20 transition-all duration-500 group">
                             <textarea
                                 ref={textareaRef}
                                 value={prompt}
@@ -97,30 +98,30 @@ export function FinalCTA({
                                 onKeyDown={handleKeyDown}
                                 placeholder={t('Describe what you want to build...')}
                                 disabled={isDisabled}
-                                className="w-full px-4 py-4 text-base resize-none focus:outline-none focus:ring-0 border-0 min-h-[100px] bg-transparent text-start disabled:opacity-50 disabled:cursor-not-allowed"
-                                rows={3}
+                                className="w-full px-6 sm:px-10 py-6 sm:py-8 text-base sm:text-lg lg:text-xl resize-none focus:outline-none focus:ring-0 border-0 min-h-[120px] bg-transparent text-start disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-muted-foreground/40"
+                                rows={2}
                             />
-                            <div className="flex items-center justify-between gap-2 px-4 py-3 bg-muted/50 border-t border-border">
-                                <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground">
+                            <div className="flex items-center justify-between gap-2 px-6 sm:px-10 py-4 sm:py-6 bg-muted/30 border-t border-border/50">
+                                <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground/60 transition-opacity group-focus-within:opacity-100">
                                     <span>{t('Press')}</span>
-                                    <kbd className="px-2 py-0.5 bg-card rounded border text-xs">
+                                    <kbd className="px-2 py-0.5 bg-background rounded-md border border-border/50 text-[10px] uppercase font-medium">
                                         ⌘ Enter
                                     </kbd>
-                                    <span>{t('to start')}</span>
+                                    <span>{t('to deploy')}</span>
                                 </div>
                                 <div className="flex items-center gap-2 ms-auto">
                                     <Button
                                         type="submit"
                                         disabled={!prompt.trim() || isDisabled}
-                                        className="shrink-0 h-10 min-w-[100px] transition-all hover:scale-[1.02] hover:shadow-md"
+                                        className="shrink-0 h-10 sm:h-12 px-6 sm:px-8 rounded-full transition-all hover:scale-[1.05] hover:shadow-lg active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-md shadow-primary/20"
                                     >
                                         <span className="text-sm sm:text-base">
-                                            {auth.user ? t('Start') : t('Go')}
+                                            {auth.user ? t('Launch project') : t('Get started now')}
                                         </span>
                                         {isRtl ? (
-                                            <ArrowLeft className="h-4 w-4 me-1.5" />
+                                            <ArrowLeft className="h-4 w-4 me-2 group-hover:-translate-x-1 transition-transform" />
                                         ) : (
-                                            <ArrowRight className="h-4 w-4 ms-1.5" />
+                                            <ArrowRight className="h-4 w-4 ms-2 group-hover:translate-x-1 transition-transform" />
                                         )}
                                     </Button>
                                 </div>
