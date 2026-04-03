@@ -29,10 +29,11 @@ function getStoredTheme(): Theme {
 
 function applyTheme(resolvedTheme: ResolvedTheme) {
     if (typeof document === 'undefined') return;
+    const root = document.documentElement;
     if (resolvedTheme === 'dark') {
-        document.documentElement.classList.add('dark');
+        root.classList.add('dark');
     } else {
-        document.documentElement.classList.remove('dark');
+        root.classList.remove('dark');
     }
 }
 

@@ -72,7 +72,7 @@ const skeletonColumns: TableColumnConfig[] = [
     { type: 'actions', width: 'w-12' },       // Actions
 ];
 
-export default function Users({ user, users, plans, pagination: _pagination }: UsersProps) {
+export default function Users({ user, users, plans, pagination }: UsersProps) {
     const { t } = useTranslation();
     const { formatDate } = useAppDate();
     const { isDemo } = usePage<PageProps>().props;
@@ -214,7 +214,7 @@ export default function Users({ user, users, plans, pagination: _pagination }: U
             password: '',
             role: adminUser.role,
             status: adminUser.status,
-            plan_id: adminUser.plan_id || '',
+            plan_id: adminUser.plan_id?.toString() || '',
         });
         setIsEditDialogOpen(true);
     };
@@ -545,7 +545,7 @@ export default function Users({ user, users, plans, pagination: _pagination }: U
                         <div className="space-y-2">
                             <Label htmlFor="edit-plan">{t('Plan')}</Label>
                             <Select
-                                value={formData.plan_id?.toString()}
+                                value={formData.plan_id ? formData.plan_id.toString() : ''}
                                 onValueChange={(value: string) =>
                                     setFormData({ ...formData, plan_id: value })
                                 }
@@ -555,9 +555,9 @@ export default function Users({ user, users, plans, pagination: _pagination }: U
                                 </SelectTrigger>
                                 <SelectContent>
                                     <SelectItem value="">{t('No Plan')}</SelectItem>
-                                    {plans.map((p) => (
+                                    {Array.isArray(plans) && plans.map((p) => (
                                         <SelectItem key={p.id} value={p.id.toString()}>
-                                            {p.name} ({p.price > 0 ? `$${p.price}` : t('Free')})
+                                            {p.name} ({Number(p.price) > 0 ? `$${p.price}` : t('Free')})
                                         </SelectItem>
                                     ))}
                                 </SelectContent>

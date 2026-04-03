@@ -221,7 +221,7 @@ export function HeroSection({
     };
 
     return (
-        <section className="relative min-h-[110vh] flex flex-col items-center justify-center bg-[#0a0a0a] overflow-hidden">
+        <section className="relative min-h-[110vh] flex flex-col items-center justify-center bg-background overflow-hidden transition-colors duration-300">
             {/* Dynamic Noise Mesh Background */}
             <div className="absolute inset-0 opacity-20 pointer-events-none">
                 <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-50 contrast-150" />
@@ -229,7 +229,7 @@ export function HeroSection({
             </div>
 
             {/* Specialized HUD Grid */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(var(--foreground-rgb),0.05)_1px,transparent_1px),linear-gradient(to_bottom,rgba(var(--foreground-rgb),0.05)_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
             
             {/* Vertical HUD Status Line */}
             <div className="absolute left-8 top-1/2 -translate-y-1/2 h-2/3 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent hidden xl:block">
@@ -252,19 +252,19 @@ export function HeroSection({
                             </span>
                             v4.0 Protocol Active
                         </div>
-                        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 leading-[0.9] animate-fade-in translate-z-0">
+                        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/40 leading-[0.9] animate-fade-in translate-z-0">
                             <ScrambleText text={headline} replayRef={replayScrambleRef} />
                         </h1>
                     </div>
 
-                    <p className="text-lg md:text-xl text-neutral-400 max-w-2xl leading-relaxed font-medium animate-fade-in animation-delay-1000 translate-z-0">
+                    <p className="text-lg md:text-xl text-muted-foreground max-w-2xl leading-relaxed font-medium animate-fade-in animation-delay-1000 translate-z-0">
                         {subtitle}
                     </p>
 
                     {/* HUD-Style Command Input */}
                     <div className="animate-fade-in animation-delay-2000">
                         <form onSubmit={handleSubmit} className="relative group max-w-xl">
-                            <div className="relative rounded-3xl border border-white/10 bg-white/[0.05] backdrop-blur-md shadow-2xl transition-all duration-700 group-focus-within:border-primary/50 group-focus-within:shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)] group-focus-within:-translate-y-1 will-change-transform translate-z-0">
+                            <div className="relative rounded-3xl border border-primary/10 bg-primary/5 backdrop-blur-md shadow-2xl transition-all duration-700 group-focus-within:border-primary/50 group-focus-within:shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)] group-focus-within:-translate-y-1 will-change-transform translate-z-0">
                                 <div className="p-1 flex items-center">
                                     <div className="flex-1 relative flex items-center min-h-[5rem]">
                                         <textarea
@@ -276,11 +276,11 @@ export function HeroSection({
                                             onKeyDown={handleKeyDown}
                                             placeholder={!showAnimatedPlaceholder ? t('I want to build...') : ""}
                                             disabled={isDisabled}
-                                            className="w-full px-8 py-8 text-lg font-bold tracking-tight resize-none focus:outline-none focus:ring-0 border-0 bg-transparent text-white disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-white/20 leading-snug"
+                                            className="w-full px-8 py-8 text-lg font-bold tracking-tight resize-none focus:outline-none focus:ring-0 border-0 bg-transparent text-foreground disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-foreground/20 leading-snug"
                                             rows={1}
                                         />
                                         {showAnimatedPlaceholder && (
-                                            <div className="absolute left-8 pointer-events-none text-lg font-bold tracking-tight text-white/20">
+                                            <div className="absolute left-8 pointer-events-none text-lg font-bold tracking-tight text-foreground/20">
                                                 <TypingText texts={typingPrompts} />
                                             </div>
                                         )}
@@ -301,7 +301,7 @@ export function HeroSection({
                                     <button
                                         key={suggestion}
                                         onClick={() => handleSuggestionClick(suggestion)}
-                                        className="text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg border border-white/5 bg-white/5 text-white/40 hover:text-primary hover:border-primary/30 transition-all"
+                                        className="text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg border border-primary/10 bg-primary/5 text-foreground/40 hover:text-primary hover:border-primary/30 transition-all"
                                     >
                                         {suggestion}
                                     </button>
@@ -325,22 +325,23 @@ export function HeroSection({
                                     <div className="w-2 h-2 rounded-full bg-yellow-500/40" />
                                     <div className="w-2 h-2 rounded-full bg-green-500/40" />
                                 </div>
-                                <div className="space-y-2">
+                                 <div className="space-y-2">
                                     <div className="h-2 w-full bg-primary/20 rounded-full" />
-                                    <div className="h-2 w-2/3 bg-white/10 rounded-full" />
-                                    <div className="h-2 w-4/5 bg-white/10 rounded-full" />
+                                    <div className="h-2 w-2/3 bg-foreground/10 rounded-full" />
+                                    <div className="h-2 w-4/5 bg-foreground/10 rounded-full" />
                                 </div>
                             </div>
 
                             {/* UI Preview Window */}
-                            <div className="absolute bottom-12 left-0 w-80 p-1.5 rounded-[2.5rem] border border-white/10 bg-white/10 backdrop-blur-md shadow-[0_50px_100px_rgba(0,0,0,0.5)] rotate-[-4deg] animate-float animation-delay-2000 will-change-transform translate-z-0">
-                                <div className="rounded-[2rem] overflow-hidden aspect-[4/3] bg-[#1d1d1d] relative">
+                             {/* UI Preview Window */}
+                            <div className="absolute bottom-12 left-0 w-80 p-1.5 rounded-[2.5rem] border border-primary/10 bg-background/60 backdrop-blur-md shadow-[0_50px_100px_rgba(0,0,0,0.5)] rotate-[-4deg] animate-float animation-delay-2000 will-change-transform translate-z-0">
+                                <div className="rounded-[2rem] overflow-hidden aspect-[4/3] bg-muted relative">
                                     <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent" />
-                                    <div className="p-6 space-y-4">
-                                        <div className="h-8 w-1/2 bg-white/10 rounded-xl" />
+                                     <div className="p-6 space-y-4">
+                                        <div className="h-8 w-1/2 bg-foreground/10 rounded-xl" />
                                         <div className="grid grid-cols-2 gap-3">
-                                            <div className="h-24 bg-white/5 rounded-2xl border border-white/5" />
-                                            <div className="h-24 bg-white/5 rounded-2xl border border-white/5" />
+                                            <div className="h-24 bg-foreground/5 rounded-2xl border border-primary/10" />
+                                            <div className="h-24 bg-foreground/5 rounded-2xl border border-primary/10" />
                                         </div>
                                     </div>
                                 </div>
@@ -358,7 +359,8 @@ export function HeroSection({
             </div>
 
             {/* Bottom Trusted By - Minimal Strip */}
-            <div className="absolute bottom-0 left-0 w-full p-8 border-t border-white/5 bg-gradient-to-t from-black to-transparent">
+             {/* Bottom Trusted By - Minimal Strip */}
+            <div className="absolute bottom-0 left-0 w-full p-8 border-t border-primary/10 bg-gradient-to-t from-background to-transparent">
                 <div className="max-w-7xl mx-auto opacity-40 hover:opacity-100 transition-opacity duration-700">
                     {trustedBy?.enabled !== false && (
                         <TrustedBy

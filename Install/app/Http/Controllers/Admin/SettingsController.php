@@ -92,7 +92,7 @@ class SettingsController extends Controller
 
         $request->validate([
             'type' => 'required|in:logo,logo_dark,favicon',
-            'file' => 'required|image|mimes:png,jpg,jpeg,svg,ico|max:2048',
+            'file' => 'required|file|mimes:png,jpg,jpeg,svg,ico|max:2048',
         ]);
 
         $type = $request->input('type');

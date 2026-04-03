@@ -37,7 +37,7 @@ export function SocialProof({ statistics, content }: SocialProofProps) {
     ];
 
     return (
-        <section className="py-32 lg:py-48 bg-[#050505] relative overflow-hidden text-white">
+        <section className="py-32 lg:py-48 bg-background relative overflow-hidden text-foreground transition-colors duration-300">
             <div className="absolute inset-0 bg-primary/2 pointer-events-none" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Stats */}

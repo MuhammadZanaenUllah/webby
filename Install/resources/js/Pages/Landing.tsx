@@ -259,7 +259,7 @@ export default function Landing({
             <Toaster />
             {!isPreview && <DemoIframeBlocker />}
             <Navbar auth={auth} canLogin={canLogin} canRegister={canRegister} enabledSectionTypes={enabledSectionTypes} />
-            <main className="relative bg-[#0a0a0a]">
+            <main className="relative bg-background text-foreground transition-colors duration-300">
                 {/* Render all sections with Stacking Logic */}
                 <div className="relative">
                     {enabledSections.map((section, index) => (

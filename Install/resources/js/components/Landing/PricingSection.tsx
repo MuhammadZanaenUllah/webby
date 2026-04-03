@@ -96,9 +96,9 @@ function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
         <div className="relative group perspective-[1000px] mt-12 mb-12">
             <Card
                 className={cn(
-                    "flex flex-col relative transition-all duration-700 bg-white/[0.05] backdrop-blur-md border border-white/5 shadow-2xl rounded-[3rem] overflow-visible group-hover:shadow-[0_60px_120px_-30px_rgba(0,0,0,0.5)] group-hover:-translate-y-4 will-change-transform translate-z-0",
+                    "flex flex-col relative transition-all duration-700 bg-primary/5 backdrop-blur-md border border-primary/10 shadow-2xl rounded-[3rem] overflow-visible group-hover:shadow-[0_60px_120px_-30px_rgba(0,0,0,0.5)] group-hover:-translate-y-4 will-change-transform translate-z-0",
                     plan.is_popular
-                        ? "ring-2 ring-[#00dfab] scale-105 z-20"
+                        ? "ring-2 ring-primary scale-105 z-20"
                         : "z-10",
                 )}
             >
@@ -115,7 +115,7 @@ function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
                 <CardHeader className="text-start pt-16 pb-8 px-10 relative overflow-visible">
                     {/* STANDARD Label (from Image) */}
                     <div className="mb-4">
-                        <span className="inline-block px-3 py-1 bg-white/10 text-[#00dfab] text-[10px] font-black uppercase tracking-[0.3em] rounded-sm">
+                        <span className="inline-block px-3 py-1 bg-primary/10 text-primary text-[10px] font-black uppercase tracking-[0.3em] rounded-sm">
                             {plan.slug === "free"
                                 ? t("Kickstart")
                                 : plan.slug === "pro"
@@ -126,7 +126,7 @@ function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
                         </span>
                     </div>
 
-                    <CardTitle className="text-5xl font-black tracking-tighter text-white mb-8">
+                    <CardTitle className="text-5xl font-black tracking-tighter text-foreground mb-8">
                         {plan.slug === "free"
                             ? t("Starter")
                             : plan.slug === "pro"
@@ -141,7 +141,7 @@ function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
                             <div className="inline-flex items-center px-3 py-1.5 rounded-full border border-[#00dfab]/50 bg-[#00dfab]/10 text-[#00dfab] text-[10px] font-black uppercase tracking-tight">
                                 {t("Save :percent%", { percent: discount })}
                             </div>
-                            <span className="text-xs text-neutral-400 line-through font-bold opacity-80">
+                            <span className="text-xs text-muted-foreground line-through font-bold opacity-80">
                                 {formatCurrency(oldPriceNum)}
                             </span>
                         </div>
@@ -149,10 +149,10 @@ function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
 
                     <div className="flex flex-col items-start">
                         <div className="flex items-baseline gap-1">
-                            <span className="text-6xl font-black tracking-tighter text-white">
+                            <span className="text-6xl font-black tracking-tighter text-foreground">
                                 {formatCurrency(plan.price)}
                             </span>
-                            <span className="text-sm text-white/70 font-bold uppercase tracking-widest ms-2">
+                            <span className="text-sm text-foreground/70 font-bold uppercase tracking-widest ms-2">
                                 {plan.slug === "free"
                                     ? billingPeriodLabels[plan.billing_period]
                                     : t("/yr")}
@@ -168,8 +168,8 @@ function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
                                 className={cn(
                                     "w-full h-16 rounded-[2rem] font-black text-lg tracking-tight transition-all duration-200 active:scale-95 shadow-2xl",
                                     plan.is_popular
-                                        ? "bg-[#00dfab] text-white hover:bg-[#00dfab]/90 shadow-[#00dfab]/20"
-                                        : "bg-[#0a0a0a] text-white hover:bg-[#1a1a1a] shadow-black/20",
+                                        ? "bg-primary text-primary-foreground hover:bg-primary/90 shadow-primary/20"
+                                        : "bg-muted text-foreground hover:bg-muted/80 shadow-black/10",
                                 )}
                                 asChild
                             >
@@ -178,13 +178,13 @@ function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
                                 </Link>
                             </Button>
                             {plan.slug !== "free" && (
-                                <p className="text-[10px] text-neutral-400 text-center font-bold uppercase tracking-widest px-1">
+                                <p className="text-[10px] text-muted-foreground text-center font-bold uppercase tracking-widest px-1">
                                     {t("Limited time offer")}
                                 </p>
                             )}
                         </div>
 
-                        <ul className="space-y-4 pt-10 border-t border-white/5">
+                        <ul className="space-y-4 pt-10 border-t border-primary/10">
                             {[
                                 { name: getProjectsLabel(), included: true },
                                 {
@@ -273,20 +273,20 @@ export function PricingSection({
     return (
         <section
             id="pricing"
-            className="py-32 lg:py-64 bg-[#0a0a0a] relative overflow-hidden"
+            className="py-32 lg:py-64 bg-background relative overflow-hidden"
         >
             {/* Ambient Background Ornament */}
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full bg-[radial-gradient(circle_at_center,rgba(0,223,171,0.05)_0%,transparent_70%)] pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full bg-[radial-gradient(circle_at_center,rgba(var(--primary-rgb),0.05)_0%,transparent_70%)] pointer-events-none" />
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 <div className="text-center mb-32 animate-fade-in">
                     <div className="text-[#00dfab] text-[10px] font-black uppercase tracking-[0.5em] mb-6">
                         [ Network_Valuation.v4 ]
                     </div>
-                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 text-white leading-[0.9]">
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 text-foreground leading-[0.9]">
                         {title}
                     </h2>
-                    <p className="text-lg text-neutral-500 max-w-2xl mx-auto font-medium">
+                    <p className="text-lg text-muted-foreground max-w-2xl mx-auto font-medium">
                         {subtitle}
                     </p>
                 </div>

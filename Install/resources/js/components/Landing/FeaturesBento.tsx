@@ -38,7 +38,7 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
     const subtitle = (content?.subtitle as string) || t("From idea to deployment, we've got you covered with powerful features designed for modern development.");
     
     return (
-        <section id="features" className="py-32 lg:py-48 bg-[#0a0a0a] relative overflow-hidden">
+        <section id="features" className="py-32 lg:py-48 bg-background relative overflow-hidden transition-colors duration-300">
             {/* Top Border HUD Line */}
             <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
             
@@ -49,11 +49,11 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
                         <div className="text-primary text-[10px] font-black uppercase tracking-[0.5em] mb-6">
                             [ Core_Features.v4 ]
                         </div>
-                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 text-white leading-[0.9]">
+                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 text-foreground leading-[0.9]">
                             {title}
                         </h2>
                     </div>
-                    <p className="text-lg text-neutral-400 max-w-md leading-relaxed font-medium lg:mb-4">
+                    <p className="text-lg text-muted-foreground max-w-md leading-relaxed font-medium lg:mb-4">
                         {subtitle}
                     </p>
                 </div>
@@ -74,7 +74,7 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
                             <div
                                 key={feature.id}
                                 className={cn(
-                                    'group relative rounded-[2.5rem] p-10 border border-white/5 bg-white/[0.05] backdrop-blur-md transition-all duration-700 hover:border-primary/50 hover:bg-white/[0.08] hover:-translate-y-2 overflow-hidden spotlight-card translate-z-0 will-change-transform',
+                                    'group relative rounded-[2.5rem] p-10 border border-primary/10 bg-primary/5 backdrop-blur-md transition-all duration-700 hover:border-primary/50 hover:bg-primary/10 hover:-translate-y-2 overflow-hidden spotlight-card translate-z-0 will-change-transform',
                                     getSpanClass(index)
                                 )}
                             >
@@ -88,30 +88,30 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
                                 </div>
 
                                 <div className="relative z-10 flex flex-col h-full">
-                                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-10 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-12 transition-all duration-700">
+                                    <div className="w-14 h-14 rounded-2xl bg-primary/10 border border-primary/10 flex items-center justify-center mb-10 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-12 transition-all duration-700">
                                         <Icon className="w-6 h-6" />
                                     </div>
                                     
                                     <h3 className={cn(
-                                        "font-black tracking-tight mb-6 text-white group-hover:text-primary transition-colors",
+                                        "font-black tracking-tight mb-6 text-foreground group-hover:text-primary transition-colors",
                                         index === 0 ? "text-4xl lg:text-5xl" : "text-2xl lg:text-3xl"
                                     )}>
                                         {feature.title}
                                     </h3>
                                     
                                     <p className={cn(
-                                        "font-medium leading-relaxed text-neutral-500 group-hover:text-neutral-300 transition-colors",
+                                        "font-medium leading-relaxed text-muted-foreground group-hover:text-foreground transition-colors",
                                         index === 0 ? "text-lg lg:text-xl" : "text-base"
                                     )}>
                                         {feature.description}
                                     </p>
 
                                     {/* HUD Decoration Strip */}
-                                    <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-1000 translate-y-4 group-hover:translate-y-0">
+                                    <div className="mt-12 pt-8 border-t border-primary/10 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-1000 translate-y-4 group-hover:translate-y-0">
                                         <div className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/60">
                                             Module.Active
                                         </div>
-                                        <div className="h-1 w-24 bg-white/5 rounded-full overflow-hidden">
+                                        <div className="h-1 w-24 bg-primary/10 rounded-full overflow-hidden">
                                             <div className="h-full w-2/3 bg-primary animate-pulse" />
                                         </div>
                                     </div>

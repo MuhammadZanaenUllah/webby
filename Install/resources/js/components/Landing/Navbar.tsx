@@ -101,11 +101,11 @@ export function Navbar({
                     </div>
 
                     {/* Top Right: Global Actions */}
-                    <div className="flex items-center gap-4 pointer-events-auto bg-[#0a0a0a]/40 backdrop-blur-md px-6 py-2 rounded-2xl border border-white/5 shadow-2xl">
+                    <div className="flex items-center gap-4 pointer-events-auto bg-background/40 backdrop-blur-md px-6 py-2 rounded-2xl border border-primary/10 shadow-2xl">
                         <LanguageSelector />
                         <ThemeToggle />
                         {!auth.user && canLogin && (
-                            <Link href="/login" className="text-xs font-black uppercase tracking-[0.2em] text-white/50 hover:text-primary transition-colors px-4">
+                            <Link href="/login" className="text-xs font-black uppercase tracking-[0.2em] text-foreground/50 hover:text-primary transition-colors px-4">
                                 {t("Login")}
                             </Link>
                         )}
@@ -125,7 +125,7 @@ export function Navbar({
             </header>
 
             {/* Side HUD Navigation (Vertical Bar) */}
-            <aside className="fixed left-8 top-1/2 -translate-y-1/2 z-[90] hidden xl:flex flex-col gap-8 items-center py-10 px-4 rounded-full border border-white/5 bg-[#0a0a0a]/40 backdrop-blur-md shadow-2xl translate-z-0 will-change-transform">
+            <aside className="fixed left-8 top-1/2 -translate-y-1/2 z-[90] hidden xl:flex flex-col gap-8 items-center py-10 px-4 rounded-full border border-primary/10 bg-background/40 backdrop-blur-md shadow-2xl translate-z-0 will-change-transform">
                 <div className="absolute inset-0 bg-primary/5 blur-2xl rounded-full" />
                 {navLinks.map((link) => {
                     const Icon = link.icon;
@@ -137,9 +137,9 @@ export function Navbar({
                             className="group relative p-4 rounded-2xl hover:bg-primary/10 transition-all duration-200"
                             title={link.label}
                         >
-                            <Icon className="h-6 w-6 text-white/40 group-hover:text-primary transition-colors" />
+                             <Icon className="h-6 w-6 text-foreground/40 group-hover:text-primary transition-colors" />
                             {/* Tooltip Label */}
-                            <span className="absolute left-full ml-6 px-4 py-2 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.3em] text-white opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all pointer-events-none whitespace-nowrap">
+                            <span className="absolute left-full ml-6 px-4 py-2 rounded-xl bg-background/80 border border-primary/10 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.3em] text-foreground opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all pointer-events-none whitespace-nowrap">
                                 {link.label}
                             </span>
                         </a>
@@ -155,7 +155,7 @@ export function Navbar({
                             <Menu className="h-8 w-8" />
                         </Button>
                     </SheetTrigger>
-                    <SheetContent side="bottom" className="h-[70vh] rounded-t-[3rem] border-t border-white/10 bg-[#0a0a0a] backdrop-blur-md">
+                    <SheetContent side="bottom" className="h-[70vh] rounded-t-[3rem] border-t border-primary/10 bg-background backdrop-blur-md">
                         <div className="flex flex-col gap-12 mt-12 px-6">
                             <div className="flex flex-col gap-6">
                                 {navLinks.map((link) => {
@@ -168,7 +168,7 @@ export function Navbar({
                                                 handleSmoothScroll(e, link.href);
                                                 setMobileMenuOpen(false);
                                             }}
-                                            className="flex items-center gap-6 p-6 rounded-3xl bg-white/5 border border-white/5 text-xl font-bold hover:bg-primary/20 transition-all"
+                                            className="flex items-center gap-6 p-6 rounded-3xl bg-primary/5 border border-primary/10 text-xl font-bold hover:bg-primary/20 transition-all"
                                         >
                                             <Icon className="h-8 w-8 text-primary" />
                                             {link.label}
@@ -177,7 +177,7 @@ export function Navbar({
                                 })}
                             </div>
                             <div className="grid grid-cols-2 gap-4">
-                                <Button asChild variant="outline" className="h-16 rounded-3xl border-white/10">
+                                <Button asChild variant="outline" className="h-16 rounded-3xl border-primary/10">
                                     <Link href="/login" onClick={() => setMobileMenuOpen(false)}>{t("Login")}</Link>
                                 </Button>
                                 <Button asChild className="h-16 rounded-3xl bg-primary">
