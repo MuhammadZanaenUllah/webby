@@ -3,8 +3,6 @@ import { Link, usePage } from "@inertiajs/react";
 import {
     Sidebar,
     SidebarContent,
-    SidebarGroup,
-    SidebarGroupContent,
     SidebarHeader,
     SidebarMenu,
     SidebarMenuButton,
@@ -18,27 +16,10 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-    FolderOpen,
-    Files,
-    Database,
-    LayoutTemplate,
-    ChevronDown,
-    LayoutDashboard,
-    Users,
-    CreditCard,
-    Crown,
-    Receipt,
-    Package,
-    Puzzle,
-    Globe,
-    Clock,
-    Settings,
-    Sparkles,
-    Bot,
-    Cpu,
-    Paintbrush,
-    Gift,
-    Layout,
+    FolderOpen, Files, Database, LayoutTemplate, ChevronDown,
+    LayoutDashboard, Users, CreditCard, Crown, Receipt, Package,
+    Puzzle, Globe, Clock, Settings, Sparkles, Bot, Cpu,
+    Paintbrush, Gift, Layout,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ApplicationLogo from "@/components/ApplicationLogo";
@@ -71,8 +52,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
     const [shareDialogOpen, setShareDialogOpen] = useState(false);
     const [recentOpen, setRecentOpen] = useState(() => {
         if (typeof window !== "undefined") {
-            const saved = localStorage.getItem(RECENT_COLLAPSED_KEY);
-            return saved !== "closed";
+            return localStorage.getItem(RECENT_COLLAPSED_KEY) !== "closed";
         }
         return true;
     });
@@ -84,19 +64,13 @@ export function AppSidebar({ user }: AppSidebarProps) {
     useLayoutEffect(() => {
         const scrollArea = scrollAreaRef.current;
         if (!scrollArea) return;
-        const viewport = scrollArea.querySelector(
-            '[data-slot="scroll-area-viewport"]',
-        ) as HTMLElement;
+        const viewport = scrollArea.querySelector('[data-slot="scroll-area-viewport"]') as HTMLElement;
         if (!viewport) return;
-        const savedPosition = sessionStorage.getItem(SCROLL_POSITION_KEY);
-        if (savedPosition) {
-            viewport.scrollTop = parseInt(savedPosition, 10);
-        }
-        const handleScroll = () => {
-            sessionStorage.setItem(SCROLL_POSITION_KEY, viewport.scrollTop.toString());
-        };
-        viewport.addEventListener("scroll", handleScroll);
-        return () => viewport.removeEventListener("scroll", handleScroll);
+        const saved = sessionStorage.getItem(SCROLL_POSITION_KEY);
+        if (saved) viewport.scrollTop = parseInt(saved, 10);
+        const onScroll = () => sessionStorage.setItem(SCROLL_POSITION_KEY, viewport.scrollTop.toString());
+        viewport.addEventListener("scroll", onScroll);
+        return () => viewport.removeEventListener("scroll", onScroll);
     }, []);
 
     const projectItems = [
@@ -127,237 +101,179 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
     const isActive = (href: string) => url.startsWith(href);
 
+    // Reusable nav item component
+    const NavItem = ({ href, icon: Icon, label, compact = false }: {
+        href: string; icon: React.ElementType; label: string; compact?: boolean;
+    }) => {
+        const active = isActive(href);
+        return (
+            <SidebarMenuItem>
+                <SidebarMenuButton
+                    asChild
+                    isActive={active}
+                    className={`
+                        ${compact ? "h-8" : "h-9"} px-3 rounded-lg transition-colors duration-150
+                        ${active
+                            ? "bg-primary/10 text-primary"
+                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                        }
+                    `}
+                >
+                    <Link href={href} className="flex items-center gap-2.5 w-full">
+                        <Icon className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"} ${active ? "text-primary" : "text-muted-foreground/60"}`} />
+                        <span className={`${compact ? "text-xs" : "text-sm"} font-medium truncate ${active ? "font-semibold" : ""}`}>
+                            {label}
+                        </span>
+                        {active && <div className="ms-auto w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
+                    </Link>
+                </SidebarMenuButton>
+            </SidebarMenuItem>
+        );
+    };
+
+    const SectionHeader = ({ label, children }: { label: string; children?: React.ReactNode }) => (
+        <div className="flex items-center justify-between px-2 mb-1 mt-4">
+            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-muted-foreground/40">
+                {label}
+            </span>
+            {children}
+        </div>
+    );
+
     return (
         <Sidebar
             variant="floating"
             collapsible="none"
-            className="group/sidebar border-none bg-transparent"
+            className="border-none bg-transparent"
         >
-            {/* Glassmorphism card overlay */}
-            <div className="absolute inset-3 rounded-[2rem] bg-background/80 backdrop-blur-xl border border-border/60 shadow-xl z-0 pointer-events-none" />
-
-            {/* Logo Header */}
-            <SidebarHeader className="h-[72px] px-6 flex-row items-center border-b border-border/40 relative z-10">
-                <Link
-                    href="/create"
-                    className="flex items-center w-full transition-opacity hover:opacity-80"
-                >
+            {/* Logo */}
+            <SidebarHeader className="h-16 px-4 flex-row items-center border-b border-border/50 shrink-0">
+                <Link href="/create" className="flex items-center w-full hover:opacity-80 transition-opacity">
                     <ApplicationLogo showText={true} size="lg" />
                 </Link>
             </SidebarHeader>
 
-            <SidebarContent className="!overflow-hidden flex-1 relative z-10 px-3 py-2">
+            <SidebarContent className="!overflow-hidden flex-1 px-2 py-0">
                 <div ref={scrollAreaRef} className="h-full">
                     <ScrollArea
-                        className="h-full [&_[data-slot=scroll-area-scrollbar]]:opacity-0 [&_[data-slot=scroll-area-scrollbar]]:transition-opacity group-hover/sidebar:[&_[data-slot=scroll-area-scrollbar]]:opacity-100"
+                        className="h-full [&_[data-slot=scroll-area-scrollbar]]:opacity-0 [&_[data-slot=scroll-area-scrollbar]]:transition-opacity hover:[&_[data-slot=scroll-area-scrollbar]]:opacity-100"
                         type="always"
                     >
-                        {/* Launch AI Button */}
-                        <div className="px-1 pt-4 pb-2">
+                        {/* Launch AI */}
+                        <div className="px-1 pt-3 pb-1">
                             <Link
                                 href="/create"
-                                className={`flex items-center gap-3 w-full h-12 px-4 rounded-xl font-bold text-sm transition-all duration-200 ${
-                                    url === "/create"
-                                        ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
-                                        : "bg-primary text-primary-foreground shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:scale-[1.02] active:scale-[0.98]"
-                                }`}
+                                className="flex items-center gap-3 w-full h-11 px-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:brightness-105 active:scale-[0.98] transition-all"
                             >
-                                <Paintbrush className="h-5 w-5 shrink-0" />
-                                <span className="font-black tracking-tight">{t("Launch AI")}</span>
+                                <Paintbrush className="h-4 w-4 shrink-0" />
+                                <span className="font-black">{t("Launch AI")}</span>
                             </Link>
                         </div>
 
-                        {/* Workspace Section */}
-                        <Collapsible defaultOpen className="group/collapsible">
-                            <SidebarGroup className="px-0 py-1">
+                        {/* Workspace */}
+                        <Collapsible defaultOpen className="group/ws">
+                            <CollapsibleTrigger asChild>
+                                <button className="w-full">
+                                    <SectionHeader label={t("Workspace")}>
+                                        <ChevronDown className="h-3 w-3 text-muted-foreground/40 transition-transform duration-200 group-data-[state=closed]/ws:rotate-[-90deg]" />
+                                    </SectionHeader>
+                                </button>
+                            </CollapsibleTrigger>
+                            <CollapsibleContent>
+                                <SidebarMenu className="gap-0.5 px-1">
+                                    {/* Recent projects */}
+                                    {recentProjects && recentProjects.length > 0 && (
+                                        <Collapsible open={recentOpen} onOpenChange={setRecentOpen} className="group/recent">
+                                            <SidebarMenuItem>
+                                                <CollapsibleTrigger asChild>
+                                                    <SidebarMenuButton className="h-9 px-3 rounded-lg text-muted-foreground hover:bg-muted/50 hover:text-foreground transition-colors">
+                                                        <Clock className="h-4 w-4 shrink-0 text-muted-foreground/60" />
+                                                        <span className="text-sm font-medium flex-1 text-start">{t("Recent")}</span>
+                                                        <ChevronDown className={`h-3 w-3 text-muted-foreground/40 transition-transform duration-200 ${recentOpen ? "" : "-rotate-90"}`} />
+                                                    </SidebarMenuButton>
+                                                </CollapsibleTrigger>
+                                                <CollapsibleContent>
+                                                    <div className="ms-7 my-1 border-s-2 border-primary/10 ps-2 space-y-0.5">
+                                                        {recentProjects.map((p) => (
+                                                            <Link
+                                                                key={p.id}
+                                                                href={`/project/${p.id}`}
+                                                                title={p.name}
+                                                                className="flex items-center h-7 px-2 text-xs font-medium text-muted-foreground/60 hover:text-primary hover:bg-primary/5 rounded-md transition-colors truncate"
+                                                            >
+                                                                {p.name.length > 26 ? p.name.slice(0, 26) + "…" : p.name}
+                                                            </Link>
+                                                        ))}
+                                                    </div>
+                                                </CollapsibleContent>
+                                            </SidebarMenuItem>
+                                        </Collapsible>
+                                    )}
+                                    {projectItems.map((item) => (
+                                        <NavItem key={item.href} href={item.href} icon={item.icon} label={t(item.titleKey)} />
+                                    ))}
+                                </SidebarMenu>
+                            </CollapsibleContent>
+                        </Collapsible>
+
+                        {/* Administration */}
+                        {user.role === "admin" && (
+                            <Collapsible defaultOpen className="group/adm">
                                 <CollapsibleTrigger asChild>
-                                    <button className="flex items-center justify-between w-full px-3 py-2 mb-1 rounded-lg hover:bg-muted/50 transition-colors group">
-                                        <span className="text-[10px] font-black uppercase tracking-[0.12em] text-muted-foreground/50 group-hover:text-muted-foreground/70 transition-colors">
-                                            {t("Workspace")}
-                                        </span>
-                                        <ChevronDown className="h-3 w-3 text-muted-foreground/40 transition-transform duration-200 group-data-[state=closed]/collapsible:rotate-[-90deg]" />
+                                    <button className="w-full">
+                                        <SectionHeader label={t("Administration")}>
+                                            <ChevronDown className="h-3 w-3 text-muted-foreground/40 transition-transform duration-200 group-data-[state=closed]/adm:rotate-[-90deg]" />
+                                        </SectionHeader>
                                     </button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                    <SidebarGroupContent>
-                                        <SidebarMenu className="gap-0.5">
-                                            {/* Recent Projects */}
-                                            {recentProjects && recentProjects.length > 0 && (
-                                                <Collapsible open={recentOpen} onOpenChange={setRecentOpen}>
-                                                    <SidebarMenuItem>
-                                                        <CollapsibleTrigger asChild>
-                                                            <SidebarMenuButton className="h-10 px-3 rounded-xl hover:bg-muted/60 text-muted-foreground hover:text-foreground transition-all group/recent">
-                                                                <div className="flex items-center gap-3 w-full">
-                                                                    <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                                                                        <Clock className="h-4 w-4 text-muted-foreground/50 group-hover/recent:text-primary transition-colors" />
-                                                                    </div>
-                                                                    <span className="text-sm font-semibold flex-1 text-start">
-                                                                        {t("Recent")}
-                                                                    </span>
-                                                                    <ChevronDown className={`h-3.5 w-3.5 text-muted-foreground/40 transition-transform duration-200 ${recentOpen ? "" : "rotate-[-90deg]"}`} />
-                                                                </div>
-                                                            </SidebarMenuButton>
-                                                        </CollapsibleTrigger>
-                                                        <CollapsibleContent>
-                                                            <div className="ms-8 mt-1 mb-1 border-s-2 border-primary/10 ps-3 space-y-0.5">
-                                                                {recentProjects.map((project) => {
-                                                                    const displayName =
-                                                                        project.name.length > 24
-                                                                            ? project.name.slice(0, 24) + "…"
-                                                                            : project.name;
-                                                                    return (
-                                                                        <Link
-                                                                            key={project.id}
-                                                                            href={`/project/${project.id}`}
-                                                                            className="flex items-center h-8 px-2 text-xs font-medium text-muted-foreground/60 hover:text-primary hover:bg-primary/5 rounded-lg transition-all truncate"
-                                                                            title={project.name}
-                                                                        >
-                                                                            {displayName}
-                                                                        </Link>
-                                                                    );
-                                                                })}
-                                                            </div>
-                                                        </CollapsibleContent>
-                                                    </SidebarMenuItem>
-                                                </Collapsible>
-                                            )}
-
-                                            {/* Main Nav Items */}
-                                            {projectItems.map((item) => (
-                                                <SidebarMenuItem key={item.titleKey}>
-                                                    <SidebarMenuButton
-                                                        asChild
-                                                        isActive={isActive(item.href)}
-                                                        className={`h-10 px-3 rounded-xl transition-all duration-150 group/item ${
-                                                            isActive(item.href)
-                                                                ? "bg-primary/10 text-primary"
-                                                                : "hover:bg-muted/60 text-muted-foreground hover:text-foreground"
-                                                        }`}
-                                                    >
-                                                        <Link href={item.href} className="flex items-center gap-3 w-full h-full">
-                                                            <div className="w-5 h-5 flex items-center justify-center shrink-0">
-                                                                <item.icon
-                                                                    className={`h-4 w-4 transition-colors ${
-                                                                        isActive(item.href)
-                                                                            ? "text-primary"
-                                                                            : "text-muted-foreground/50 group-hover/item:text-foreground"
-                                                                    }`}
-                                                                />
-                                                            </div>
-                                                            <span className={`text-sm font-semibold truncate ${isActive(item.href) ? "font-bold" : ""}`}>
-                                                                {t(item.titleKey)}
-                                                            </span>
-                                                            {isActive(item.href) && (
-                                                                <div className="ms-auto w-1.5 h-1.5 rounded-full bg-primary shrink-0" />
-                                                            )}
-                                                        </Link>
-                                                    </SidebarMenuButton>
-                                                </SidebarMenuItem>
-                                            ))}
-                                        </SidebarMenu>
-                                    </SidebarGroupContent>
+                                    <SidebarMenu className="gap-0 px-1">
+                                        {adminItems.map((item) => (
+                                            <NavItem key={item.href} href={item.href} icon={item.icon} label={t(item.titleKey)} compact />
+                                        ))}
+                                    </SidebarMenu>
                                 </CollapsibleContent>
-                            </SidebarGroup>
-                        </Collapsible>
-
-                        {/* Administration Section */}
-                        {user.role === "admin" && (
-                            <Collapsible defaultOpen className="group/collapsible">
-                                <SidebarGroup className="px-0 py-1">
-                                    <CollapsibleTrigger asChild>
-                                        <button className="flex items-center justify-between w-full px-3 py-2 mb-1 rounded-lg hover:bg-muted/50 transition-colors group">
-                                            <span className="text-[10px] font-black uppercase tracking-[0.12em] text-muted-foreground/50 group-hover:text-muted-foreground/70 transition-colors">
-                                                {t("Administration")}
-                                            </span>
-                                            <ChevronDown className="h-3 w-3 text-muted-foreground/40 transition-transform duration-200 group-data-[state=closed]/collapsible:rotate-[-90deg]" />
-                                        </button>
-                                    </CollapsibleTrigger>
-                                    <CollapsibleContent>
-                                        <SidebarGroupContent>
-                                            <SidebarMenu className="gap-0.5">
-                                                {adminItems.map((item) => (
-                                                    <SidebarMenuItem key={item.href}>
-                                                        <SidebarMenuButton
-                                                            asChild
-                                                            isActive={isActive(item.href)}
-                                                            className={`h-9 px-3 rounded-lg transition-all duration-150 group/item ${
-                                                                isActive(item.href)
-                                                                    ? "bg-primary/10 text-primary"
-                                                                    : "hover:bg-muted/60 text-muted-foreground hover:text-foreground"
-                                                            }`}
-                                                        >
-                                                            <Link href={item.href} className="flex items-center gap-3 w-full h-full">
-                                                                <div className="w-4 h-4 flex items-center justify-center shrink-0">
-                                                                    <item.icon
-                                                                        className={`h-3.5 w-3.5 transition-colors ${
-                                                                            isActive(item.href)
-                                                                                ? "text-primary"
-                                                                                : "text-muted-foreground/40 group-hover/item:text-foreground"
-                                                                        }`}
-                                                                    />
-                                                                </div>
-                                                                <span className={`text-xs font-semibold truncate ${isActive(item.href) ? "font-bold" : ""}`}>
-                                                                    {t(item.titleKey)}
-                                                                </span>
-                                                                {isActive(item.href) && (
-                                                                    <div className="ms-auto w-1 h-1 rounded-full bg-primary shrink-0" />
-                                                                )}
-                                                            </Link>
-                                                        </SidebarMenuButton>
-                                                    </SidebarMenuItem>
-                                                ))}
-                                            </SidebarMenu>
-                                        </SidebarGroupContent>
-                                    </CollapsibleContent>
-                                </SidebarGroup>
                             </Collapsible>
                         )}
+
+                        {/* Bottom padding */}
+                        <div className="h-4" />
                     </ScrollArea>
                 </div>
             </SidebarContent>
 
             {/* Footer */}
-            <SidebarFooter className="px-4 pb-4 pt-2 space-y-2 relative z-10">
-                {/* Earn Rewards */}
+            <SidebarFooter className="px-3 pb-3 pt-2 space-y-1.5 border-t border-border/40">
                 <Button
                     variant="ghost"
-                    className="w-full justify-start h-auto py-2.5 px-3 rounded-xl border border-border/50 bg-muted/30 hover:bg-muted/60 hover:border-border transition-all group"
+                    className="w-full justify-start h-10 px-3 rounded-xl border border-border/50 bg-muted/20 hover:bg-muted/50 transition-all group"
                     size="sm"
                     onClick={() => setShareDialogOpen(true)}
                 >
-                    <div className="h-8 w-8 rounded-lg bg-primary/10 flex items-center justify-center me-3 group-hover:bg-primary/20 group-hover:scale-110 transition-all shrink-0">
-                        <Gift className="h-4 w-4 text-primary" />
+                    <div className="h-7 w-7 rounded-lg bg-primary/10 flex items-center justify-center me-2.5 group-hover:bg-primary/15 transition-colors shrink-0">
+                        <Gift className="h-3.5 w-3.5 text-primary" />
                     </div>
-                    <div className="flex flex-col items-start min-w-0">
-                        <span className="font-bold text-sm tracking-tight text-foreground">
-                            {t("Earn Rewards")}
-                        </span>
-                        <span className="text-[10px] font-medium text-muted-foreground/60">
-                            {t("Refer Friends")}
-                        </span>
+                    <div className="flex flex-col items-start">
+                        <span className="font-semibold text-xs text-foreground">{t("Earn Rewards")}</span>
+                        <span className="text-[10px] text-muted-foreground/60">{t("Refer Friends")}</span>
                     </div>
                 </Button>
 
                 <ShareDialog open={shareDialogOpen} onOpenChange={setShareDialogOpen} />
 
-                {/* Upgrade CTA */}
                 {hasUpgradablePlans && (
                     <Button
                         asChild
-                        className="w-full justify-start h-auto py-2.5 px-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/25 hover:shadow-lg hover:shadow-primary/35 hover:scale-[1.02] active:scale-[0.98] transition-all overflow-hidden"
+                        className="w-full justify-start h-10 px-3 rounded-xl bg-primary hover:bg-primary/90 text-primary-foreground shadow-md shadow-primary/20 hover:scale-[1.02] active:scale-[0.98] transition-all"
                         size="sm"
                     >
                         <Link href="/billing/plans">
-                            <div className="h-8 w-8 rounded-lg bg-white/20 flex items-center justify-center me-3 shrink-0">
-                                <Sparkles className="h-4 w-4" />
+                            <div className="h-7 w-7 rounded-lg bg-white/20 flex items-center justify-center me-2.5 shrink-0">
+                                <Sparkles className="h-3.5 w-3.5" />
                             </div>
-                            <div className="flex flex-col items-start min-w-0">
-                                <span className="font-black text-sm tracking-tight">
-                                    {t("Elite Access")}
-                                </span>
-                                <span className="text-[10px] font-bold opacity-75 uppercase tracking-widest">
-                                    {t("Upgrade Now")}
-                                </span>
+                            <div className="flex flex-col items-start">
+                                <span className="font-black text-xs">{t("Elite Access")}</span>
+                                <span className="text-[10px] opacity-75 uppercase tracking-widest">{t("Upgrade Now")}</span>
                             </div>
                         </Link>
                     </Button>
