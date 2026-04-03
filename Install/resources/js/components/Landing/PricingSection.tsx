@@ -1,10 +1,16 @@
-import { Link } from '@inertiajs/react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Check, X, Star, Info } from 'lucide-react';
-import { cn } from '@/lib/utils';
-import { useTranslation } from '@/contexts/LanguageContext';
+import { Link } from "@inertiajs/react";
+import { Button } from "@/components/ui/button";
+import {
+    Card,
+    CardContent,
+    CardFooter,
+    CardHeader,
+    CardTitle,
+} from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { Check, X, Star, Info } from "lucide-react";
+import { cn } from "@/lib/utils";
+import { useTranslation } from "@/contexts/LanguageContext";
 
 interface PlanFeature {
     name: string;
@@ -17,7 +23,7 @@ interface Plan {
     slug: string;
     description: string | null;
     price: string;
-    billing_period: 'monthly' | 'yearly' | 'lifetime';
+    billing_period: "monthly" | "yearly" | "lifetime";
     features: PlanFeature[];
     is_popular: boolean;
     max_projects: number | null;
@@ -38,186 +44,263 @@ interface PricingSectionProps {
     settings?: Record<string, unknown>;
 }
 
-type TranslationFn = (key: string, replacements?: Record<string, string | number>) => string;
+type TranslationFn = (
+    key: string,
+    replacements?: Record<string, string | number>,
+) => string;
 
 function formatCredits(credits: number, t: TranslationFn): string {
-    if (credits === -1) return t('Unlimited');
+    if (credits === -1) return t("Unlimited");
     if (credits >= 1_000_000) return `${(credits / 1_000_000).toFixed(0)}M`;
     if (credits >= 1_000) return `${(credits / 1_000).toFixed(0)}K`;
     return credits.toString();
 }
 
 function formatCurrency(amount: string | number): string {
-    const num = typeof amount === 'string' ? parseFloat(amount) : amount;
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'USD',
+    const num = typeof amount === "string" ? parseFloat(amount) : amount;
+    return new Intl.NumberFormat("en-US", {
+        style: "currency",
+        currency: "USD",
         minimumFractionDigits: num % 1 === 0 ? 0 : 2,
     }).format(num);
 }
 
 function PlanCard({ plan, t }: { plan: Plan; t: TranslationFn }) {
     const billingPeriodLabels: Record<string, string> = {
-        monthly: t('/month'),
-        yearly: t('/year'),
-        lifetime: '',
+        monthly: t("/mo"),
+        yearly: t("/yr"),
+        lifetime: "",
     };
 
     const getProjectsLabel = () => {
         if (plan.max_projects === null) {
-            return t('Unlimited projects');
+            return t("Unlimited projects");
         }
         if (plan.max_projects === 1) {
-            return t(':count project', { count: 1 });
+            return t(":count project", { count: 1 });
         }
-        return t(':count projects', { count: plan.max_projects });
+        return t(":count projects", { count: plan.max_projects });
     };
 
-    const getSubdomainsLabel = () => {
-        if (plan.max_subdomains_per_user === null) {
-            return t('Unlimited custom subdomains');
-        }
-        if (plan.max_subdomains_per_user === 1) {
-            return t('1 custom subdomain');
-        }
-        return t(':count custom subdomains', { count: plan.max_subdomains_per_user ?? 0 });
-    };
-
-    const discount = plan.slug === 'free' ? 0 : plan.is_popular ? 47 : (plan.slug === 'enterprise' ? 52 : 40);
+    const discount =
+        plan.slug === "free"
+            ? 0
+            : plan.is_popular
+              ? 47
+              : plan.slug === "enterprise"
+                ? 52
+                : 40;
     const oldPriceNum = parseFloat(plan.price) / (1 - discount / 100);
 
     return (
-        <Card
-            className={cn(
-                'flex flex-col relative transition-all duration-500 hover:shadow-2xl hover:-translate-y-2 border-primary/10 rounded-[2.5rem] bg-card group',
-                plan.is_popular ? 'ring-2 ring-primary bg-emerald-50/20 dark:bg-emerald-900/5 shadow-2xl scale-105 z-10' : 'shadow-xl'
-            )}
-        >
-            {plan.is_popular && (
-                <div className="absolute top-0 left-0 right-0 h-1.5 bg-primary rounded-t-[2.5rem]" />
-            )}
-            {plan.is_popular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 z-20">
-                    <Badge className="flex items-center gap-1.5 bg-primary text-primary-foreground px-5 py-2 rounded-full text-[10px] font-black tracking-widest uppercase border-0 shadow-lg whitespace-nowrap">
-                        <Star className="h-3 w-3 fill-current" />
-                        {t('Most Popular')}
-                    </Badge>
-                </div>
-            )}
-            <CardHeader className={cn('text-start pt-10 pb-4 px-10')}>
-                <div className="space-y-1 mb-4">
-                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-muted-foreground/60">
-                        {plan.slug === 'free' ? t('Starter') : plan.slug === 'pro' ? t('Grow') : plan.is_popular ? t('Recommended') : t('Powerful')}
-                    </p>
-                    <CardTitle className="text-3xl font-bold tracking-tight">
-                        {plan.slug === 'free' ? t('Startup') : plan.slug === 'pro' ? t('Grow') : plan.slug === 'enterprise' ? t('Business') : plan.name}
-                    </CardTitle>
-                </div>
-                
-                {plan.slug !== 'free' && (
-                    <div className="flex items-center gap-3 mb-4">
-                        <div className="inline-flex items-center px-2 py-1 rounded-md bg-[#e2ff3d] border border-black/5 text-black text-[10px] font-black uppercase tracking-tighter">
-                            {t('Save :percent%', { percent: discount })}
-                        </div>
-                        <span className="text-xs text-muted-foreground line-through opacity-50 font-medium">
-                            {formatCurrency(oldPriceNum)}
+        <div className="relative group perspective-[1000px] mt-12 mb-12">
+            <Card
+                className={cn(
+                    "flex flex-col relative transition-all duration-700 bg-white/[0.05] backdrop-blur-md border border-white/5 shadow-2xl rounded-[3rem] overflow-visible group-hover:shadow-[0_60px_120px_-30px_rgba(0,0,0,0.5)] group-hover:-translate-y-4 will-change-transform translate-z-0",
+                    plan.is_popular
+                        ? "ring-2 ring-[#00dfab] scale-105 z-20"
+                        : "z-10",
+                )}
+            >
+                {/* Image Top Tab Style Redesign */}
+                {plan.is_popular && (
+                    <div className="absolute -top-10 left-1/2 -translate-x-1/2 w-48 h-12 bg-[#00dfab] rounded-t-3xl flex items-center justify-center gap-2 shadow-2xl z-20 overflow-visible before:content-[''] before:absolute before:-bottom-1 before:-left-8 before:h-8 before:w-8 before:bg-[radial-gradient(circle_at_0_0,transparent_70%,#00dfab_72%)] after:content-[''] after:absolute after:-bottom-1 after:-right-8 after:h-8 after:w-8 after:bg-[radial-gradient(circle_at_100%_0,transparent_70%,#00dfab_72%)]">
+                        <Star className="h-3.5 w-3.5 fill-white text-white" />
+                        <span className="text-[10px] font-black uppercase tracking-[0.25em] text-white whitespace-nowrap">
+                            {t("Elite Choice")}
                         </span>
                     </div>
                 )}
 
-                <div className="flex flex-col items-start mt-2">
-                    <div className="flex items-baseline gap-1">
-                        <span className="text-4xl font-black tracking-tighter">{formatCurrency(plan.price)}</span>
-                        <span className="text-sm text-muted-foreground font-medium opacity-70">
-                            {plan.slug === 'free' ? billingPeriodLabels[plan.billing_period] : t('/yr')}
+                <CardHeader className="text-start pt-16 pb-8 px-10 relative overflow-visible">
+                    {/* STANDARD Label (from Image) */}
+                    <div className="mb-4">
+                        <span className="inline-block px-3 py-1 bg-white/10 text-[#00dfab] text-[10px] font-black uppercase tracking-[0.3em] rounded-sm">
+                            {plan.slug === "free"
+                                ? t("Kickstart")
+                                : plan.slug === "pro"
+                                  ? t("Standard")
+                                  : plan.is_popular
+                                    ? t("Best Value")
+                                    : t("Enterprise")}
                         </span>
                     </div>
-                </div>
-            </CardHeader>
-            
-            <CardContent className="flex-1 px-10 py-6">
-                <div className="space-y-6">
-                    <div className="space-y-3">
-                        <Button className="w-full h-11 rounded-xl font-black text-sm transition-all active:scale-95 shadow-md hover:shadow-xl shadow-primary/10 bg-slate-900 hover:bg-slate-800 text-white" asChild>
-                            <Link href="/billing/plans">{t('Get Started')}</Link>
-                        </Button>
-                        {plan.slug !== 'free' && (
-                            <p className="text-[10px] text-muted-foreground/70 text-start font-medium px-1">
-                                {formatCurrency(oldPriceNum)}{t('/yr when you renew')}
-                            </p>
-                        )}
+
+                    <CardTitle className="text-5xl font-black tracking-tighter text-white mb-8">
+                        {plan.slug === "free"
+                            ? t("Starter")
+                            : plan.slug === "pro"
+                              ? t("Pro")
+                              : plan.slug === "enterprise"
+                                ? t("Agency")
+                                : plan.name}
+                    </CardTitle>
+
+                    {plan.slug !== "free" && (
+                        <div className="flex items-center gap-3 mb-8">
+                            <div className="inline-flex items-center px-3 py-1.5 rounded-full border border-[#00dfab]/50 bg-[#00dfab]/10 text-[#00dfab] text-[10px] font-black uppercase tracking-tight">
+                                {t("Save :percent%", { percent: discount })}
+                            </div>
+                            <span className="text-xs text-neutral-400 line-through font-bold opacity-80">
+                                {formatCurrency(oldPriceNum)}
+                            </span>
+                        </div>
+                    )}
+
+                    <div className="flex flex-col items-start">
+                        <div className="flex items-baseline gap-1">
+                            <span className="text-6xl font-black tracking-tighter text-white">
+                                {formatCurrency(plan.price)}
+                            </span>
+                            <span className="text-sm text-white/70 font-bold uppercase tracking-widest ms-2">
+                                {plan.slug === "free"
+                                    ? billingPeriodLabels[plan.billing_period]
+                                    : t("/yr")}
+                            </span>
+                        </div>
                     </div>
-                    
-                    <ul className="space-y-3.5 pt-6 border-t border-primary/5">
-                        <li className="flex items-center justify-between text-[11px] font-bold">
-                            <div className="flex items-center gap-2.5">
-                                <Check className="h-3.5 w-3.5 text-foreground shrink-0 stroke-[3]" />
-                                {getProjectsLabel()}
-                            </div>
-                        </li>
-                        <li className="flex items-center justify-between text-[11px] font-bold">
-                            <div className="flex items-center gap-2.5">
-                                <Check className="h-3.5 w-3.5 text-foreground shrink-0 stroke-[3]" />
-                                {t(':credits AI Credits', { credits: formatCredits(plan.monthly_build_credits, t) })}
-                            </div>
-                            <Info className="h-3.5 w-3.5 text-muted-foreground/40 shrink-0 cursor-help" />
-                        </li>
-                        {plan.allow_user_ai_api_key && (
-                            <li className="flex items-center justify-between text-[11px] font-bold">
-                                <div className="flex items-center gap-2.5">
-                                    <Check className="h-3.5 w-3.5 text-foreground shrink-0 stroke-[3]" />
-                                    {t('Bring your own AI keys')}
-                                </div>
-                                <Info className="h-3.5 w-3.5 text-muted-foreground/40 shrink-0 cursor-help" />
-                            </li>
-                        )}
-                        {plan.features.slice(0, 10).map((feature, index) => (
-                            <li key={index} className="flex items-center justify-between text-[11px] font-bold">
-                                <div className="flex items-center gap-2.5">
-                                    <Check className={cn("h-3.5 w-3.5 text-foreground shrink-0 stroke-[3]", !feature.included && "opacity-20")} />
-                                    <span className={cn(!feature.included && 'text-muted-foreground/40 font-medium')}>
-                                        {feature.name}
-                                    </span>
-                                </div>
-                                {feature.included && <Info className="h-3.5 w-3.5 text-muted-foreground/40 shrink-0 cursor-help" />}
-                            </li>
-                        ))}
-                    </ul>
-                </div>
-            </CardContent>
-        </Card>
+                </CardHeader>
+
+                <CardContent className="px-10 py-8">
+                    <div className="space-y-8">
+                        <div className="space-y-4">
+                            <Button
+                                className={cn(
+                                    "w-full h-16 rounded-[2rem] font-black text-lg tracking-tight transition-all duration-200 active:scale-95 shadow-2xl",
+                                    plan.is_popular
+                                        ? "bg-[#00dfab] text-white hover:bg-[#00dfab]/90 shadow-[#00dfab]/20"
+                                        : "bg-[#0a0a0a] text-white hover:bg-[#1a1a1a] shadow-black/20",
+                                )}
+                                asChild
+                            >
+                                <Link href={`/billing/plans?plan=${plan.id}`}>
+                                    {t("Get Started")}
+                                </Link>
+                            </Button>
+                            {plan.slug !== "free" && (
+                                <p className="text-[10px] text-neutral-400 text-center font-bold uppercase tracking-widest px-1">
+                                    {t("Limited time offer")}
+                                </p>
+                            )}
+                        </div>
+
+                        <ul className="space-y-4 pt-10 border-t border-white/5">
+                            {[
+                                { name: getProjectsLabel(), included: true },
+                                {
+                                    name: t(":credits AI Credits", {
+                                        credits: formatCredits(
+                                            plan.monthly_build_credits,
+                                            t,
+                                        ),
+                                    }),
+                                    included: true,
+                                },
+                                ...(plan.allow_user_ai_api_key
+                                    ? [
+                                          {
+                                              name: t("Custom AI Engines"),
+                                              included: true,
+                                          },
+                                      ]
+                                    : []),
+                                ...plan.features.slice(0, 6),
+                            ].map((feature, index) => (
+                                <li
+                                    key={index}
+                                    className="flex items-center justify-between text-xs font-bold tracking-tight"
+                                >
+                                    <div className="flex items-center gap-4">
+                                        <div
+                                            className={cn(
+                                                "h-6 w-6 rounded-full flex items-center justify-center transition-colors shadow-sm",
+                                                feature.included
+                                                    ? "bg-[#00dfab]/10"
+                                                    : "bg-white/5",
+                                            )}
+                                        >
+                                            <Check
+                                                className={cn(
+                                                    "h-3.5 w-3.5 stroke-[4]",
+                                                    feature.included
+                                                        ? "text-[#00dfab]"
+                                                        : "text-neutral-700",
+                                                )}
+                                            />
+                                        </div>
+                                        <span
+                                            className={cn(
+                                                "text-sm tracking-tight transition-colors",
+                                                feature.included
+                                                    ? "text-neutral-200 font-bold"
+                                                    : "text-neutral-600 font-medium",
+                                            )}
+                                        >
+                                            {feature.name}
+                                        </span>
+                                    </div>
+                                    {feature.included && (
+                                        <Info className="h-4 w-4 text-white/20 shrink-0 cursor-help hover:text-[#00dfab] transition-colors duration-200" />
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                </CardContent>
+            </Card>
+        </div>
     );
 }
 
-export function PricingSection({ plans, content, settings: _settings }: PricingSectionProps) {
+export function PricingSection({
+    plans,
+    content,
+    settings: _settings,
+}: PricingSectionProps) {
     const { t } = useTranslation();
 
     if (plans.length === 0) return null;
 
     // Get content with defaults - DB content takes priority
-    const title = (content?.title as string) || t('Simple, transparent pricing');
-    const subtitle = (content?.subtitle as string) || t('Choose the plan that fits your needs. All plans include access to our AI-powered website builder.');
+    const title =
+        (content?.title as string) || t("Simple, transparent pricing");
+    const subtitle =
+        (content?.subtitle as string) ||
+        t(
+            "Choose the plan that fits your needs. All plans include access to our AI-powered website builder.",
+        );
 
     return (
-        <section id="pricing" className="py-24 lg:py-32 bg-background relative overflow-hidden">
-            <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="text-center mb-20 relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
+        <section
+            id="pricing"
+            className="py-32 lg:py-64 bg-[#0a0a0a] relative overflow-hidden"
+        >
+            {/* Ambient Background Ornament */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-6xl h-full bg-[radial-gradient(circle_at_center,rgba(0,223,171,0.05)_0%,transparent_70%)] pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+                <div className="text-center mb-32 animate-fade-in">
+                    <div className="text-[#00dfab] text-[10px] font-black uppercase tracking-[0.5em] mb-6">
+                        [ Network_Valuation.v4 ]
+                    </div>
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 text-white leading-[0.9]">
                         {title}
                     </h2>
-                    <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-lg text-neutral-500 max-w-2xl mx-auto font-medium">
                         {subtitle}
                     </p>
                 </div>
 
                 <div
                     className={cn(
-                        'grid gap-8 mx-auto',
-                        plans.length === 1 && 'max-w-md grid-cols-1',
-                        plans.length === 2 && 'max-w-3xl grid-cols-1 md:grid-cols-2',
-                        plans.length === 3 && 'max-w-6xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-                        plans.length >= 4 && 'max-w-7xl grid-cols-1 md:grid-cols-2 lg:grid-cols-4'
+                        "grid gap-12 mx-auto items-stretch mt-12",
+                        plans.length === 1 && "max-w-md grid-cols-1",
+                        plans.length === 2 &&
+                            "max-w-4xl grid-cols-1 md:grid-cols-2",
+                        plans.length === 3 &&
+                            "max-w-6xl grid-cols-1 md:grid-cols-2 lg:grid-cols-3",
+                        plans.length >= 4 &&
+                            "max-w-7xl grid-cols-1 md:grid-cols-2 lg:grid-cols-4",
                     )}
                 >
                     {plans.map((plan) => (

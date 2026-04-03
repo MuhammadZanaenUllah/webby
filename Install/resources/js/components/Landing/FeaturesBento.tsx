@@ -36,75 +36,98 @@ export function FeaturesBento({ content, items, settings: _settings }: FeaturesB
     // Get content with defaults - DB content takes priority
     const title = (content?.title as string) || t('Everything you need to build');
     const subtitle = (content?.subtitle as string) || t("From idea to deployment, we've got you covered with powerful features designed for modern development.");
+    
     return (
-        <section id="features" className="py-24 lg:py-32 relative overflow-hidden">
-            <Parallax 
-                className="absolute inset-0 bg-gradient-to-b from-transparent via-primary/5 to-transparent pointer-events-none" 
-                speed={-0.05}
-            />
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="features" className="py-32 lg:py-48 bg-[#0a0a0a] relative overflow-hidden">
+            {/* Top Border HUD Line */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
+            
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
-                <div className="text-center mb-20 relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-extrabold tracking-tight mb-6">
-                        {title}
-                    </h2>
-                    <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
+                <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-12 mb-24 animate-fade-in">
+                    <div className="max-w-3xl">
+                        <div className="text-primary text-[10px] font-black uppercase tracking-[0.5em] mb-6">
+                            [ Core_Features.v4 ]
+                        </div>
+                        <h2 className="text-5xl md:text-7xl lg:text-8xl font-black tracking-tighter mb-8 text-white leading-[0.9]">
+                            {title}
+                        </h2>
+                    </div>
+                    <p className="text-lg text-neutral-400 max-w-md leading-relaxed font-medium lg:mb-4">
                         {subtitle}
                     </p>
                 </div>
 
-                {/* Bento Grid - Asymmetrical Layout */}
-                <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-6 lg:gap-8 relative z-10">
+                {/* Staggered Spotlight Grid */}
+                <div className="grid grid-cols-1 md:grid-cols-6 lg:grid-cols-12 gap-8">
                     {features.map((feature, index) => {
                         const Icon = feature.icon;
-                        // Custom asymmetrical span logic
                         const getSpanClass = (idx: number) => {
-                            if (idx === 0) return 'md:col-span-6 lg:col-span-8 lg:row-span-2'; // Main large feature
-                            if (idx === 1) return 'md:col-span-3 lg:col-span-4'; // Medium
-                            if (idx === 2) return 'md:col-span-3 lg:col-span-4'; // Medium
-                            if (idx === 3) return 'md:col-span-6 lg:col-span-6'; // Wide
-                            if (idx === 4) return 'md:col-span-3 lg:col-span-3'; // Small
-                            if (idx === 5) return 'md:col-span-3 lg:col-span-3'; // Small
-                            return 'md:col-span-3 lg:col-span-4';
+                            if (idx === 0) return 'md:col-span-6 lg:col-span-7 lg:row-span-2'; 
+                            if (idx === 1) return 'md:col-span-3 lg:col-span-5'; 
+                            if (idx === 2) return 'md:col-span-3 lg:col-span-5'; 
+                            if (idx === 3) return 'md:col-span-6 lg:col-span-12'; 
+                            return 'md:col-span-3 lg:col-span-6';
                         };
 
                         return (
-                            <Card
+                            <div
                                 key={feature.id}
                                 className={cn(
-                                    'group relative overflow-hidden transition-all duration-700 hover:-translate-y-2 border-primary/10 rounded-[2.5rem] bg-card/60 backdrop-blur-lg hover:bg-card hover:border-primary/30 shadow-xl hover:shadow-[0_40px_80px_-15px_rgba(var(--primary-rgb),0.15)]',
+                                    'group relative rounded-[2.5rem] p-10 border border-white/5 bg-white/[0.05] backdrop-blur-md transition-all duration-700 hover:border-primary/50 hover:bg-white/[0.08] hover:-translate-y-2 overflow-hidden spotlight-card translate-z-0 will-change-transform',
                                     getSpanClass(index)
                                 )}
                             >
-                                <CardHeader className="p-10">
-                                    <div className="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center mb-8 group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500 group-hover:scale-110 group-hover:rotate-6">
-                                        <Icon className="w-6 h-6 shrink-0" />
+                                {/* Active Spotlight Glow */}
+                                <div className="absolute inset-0 bg-primary/5 opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                                
+                                {/* HUD Corner Accents */}
+                                <div className="absolute top-6 right-6 flex gap-1 opacity-20 group-hover:opacity-100 transition-opacity">
+                                    <div className="w-1.5 h-1.5 rounded-full bg-primary" />
+                                    <div className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                                </div>
+
+                                <div className="relative z-10 flex flex-col h-full">
+                                    <div className="w-14 h-14 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center mb-10 group-hover:bg-primary group-hover:text-primary-foreground group-hover:rotate-12 transition-all duration-700">
+                                        <Icon className="w-6 h-6" />
                                     </div>
-                                    <CardTitle className={cn(
-                                        "text-xl font-bold tracking-tight mb-4 transition-colors",
-                                        index === 0 && "text-3xl"
+                                    
+                                    <h3 className={cn(
+                                        "font-black tracking-tight mb-6 text-white group-hover:text-primary transition-colors",
+                                        index === 0 ? "text-4xl lg:text-5xl" : "text-2xl lg:text-3xl"
                                     )}>
                                         {feature.title}
-                                    </CardTitle>
-                                    <CardDescription className={cn(
-                                        "text-sm font-medium leading-relaxed text-muted-foreground/80",
-                                        index === 0 && "text-lg"
+                                    </h3>
+                                    
+                                    <p className={cn(
+                                        "font-medium leading-relaxed text-neutral-500 group-hover:text-neutral-300 transition-colors",
+                                        index === 0 ? "text-lg lg:text-xl" : "text-base"
                                     )}>
                                         {feature.description}
-                                    </CardDescription>
-                                </CardHeader>
-                                {/* Interactive Ornament for large cards */}
+                                    </p>
+
+                                    {/* HUD Decoration Strip */}
+                                    <div className="mt-12 pt-8 border-t border-white/5 flex items-center justify-between opacity-0 group-hover:opacity-100 transition-all duration-1000 translate-y-4 group-hover:translate-y-0">
+                                        <div className="text-[9px] font-black uppercase tracking-[0.4em] text-primary/60">
+                                            Module.Active
+                                        </div>
+                                        <div className="h-1 w-24 bg-white/5 rounded-full overflow-hidden">
+                                            <div className="h-full w-2/3 bg-primary animate-pulse" />
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                {/* Background Ornament for large cards */}
                                 {index === 0 && (
-                                    <Parallax 
-                                        className="absolute -bottom-10 -right-10 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-1000" 
-                                        speed={0.1}
-                                    />
+                                    <div className="absolute -bottom-24 -right-24 w-80 h-80 bg-primary/5 rounded-full blur-[100px] group-hover:bg-primary/10 transition-all duration-1000" />
                                 )}
-                            </Card>
+                            </div>
                         );
                     })}
                 </div>
             </div>
+            {/* Horizontal HUD Line */}
+            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         </section>
     );
 }

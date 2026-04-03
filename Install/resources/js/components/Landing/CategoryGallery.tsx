@@ -29,7 +29,7 @@ export function CategoryGallery({ content, items, settings: _settings }: Categor
     const subtitle = (content?.subtitle as string) || t('From landing pages to complex web applications, explore what you can create.');
 
     return (
-        <section className="py-16 lg:py-24">
+        <section className="py-16 lg:py-24 bg-[#0a0a0a] text-white">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Section Header */}
                 <div className="text-center mb-12">
@@ -48,7 +48,7 @@ export function CategoryGallery({ content, items, settings: _settings }: Categor
                         return (
                             <Card
                                 key={category.name}
-                                className="group cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 hover:border-primary/50"
+                                className="group cursor-pointer bg-white/[0.05] backdrop-blur-md border-white/10 hover:bg-white/10 transition-all duration-300 hover:-translate-y-1 hover:border-primary/50 translate-z-0 will-change-transform"
                             >
                                 <CardContent className="p-4 text-center">
                                     <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mx-auto mb-3 group-hover:bg-primary/20 transition-colors">

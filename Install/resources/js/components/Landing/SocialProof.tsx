@@ -37,33 +37,36 @@ export function SocialProof({ statistics, content }: SocialProofProps) {
     ];
 
     return (
-        <section className="py-24 lg:py-32 bg-background relative overflow-hidden">
-            <div className="absolute inset-0 bg-primary/[0.02] pointer-events-none" />
+        <section className="py-32 lg:py-48 bg-[#050505] relative overflow-hidden text-white">
+            <div className="absolute inset-0 bg-primary/2 pointer-events-none" />
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Stats */}
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-12 sm:gap-16">
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-16 sm:gap-24">
                     {stats.map((stat, index) => (
                         <div key={stat.label} className="text-center group relative">
                             {/* Decorative Glow */}
-                            <div className="absolute inset-0 bg-primary/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
+                            <div className="absolute inset-0 bg-primary/10 blur-[100px] rounded-full opacity-0 group-hover:opacity-100 transition-opacity duration-1000" />
                             
                             <div className="relative z-10">
-                                <div className="text-5xl md:text-7xl font-black text-foreground tracking-tighter transition-all duration-700 group-hover:scale-110 group-hover:text-primary">
+                                <div className="text-6xl md:text-8xl font-black tracking-tighter mb-8 transition-all duration-1000 group-hover:scale-110 group-hover:text-primary">
                                     {stat.value}
                                 </div>
-                                <div className="text-[10px] md:text-[11px] font-black uppercase tracking-[0.4em] text-muted-foreground/70 mt-6 group-hover:text-muted-foreground/80 transition-colors">
+                                <div className="text-[10px] md:text-[12px] font-black uppercase tracking-[0.5em] text-muted-foreground/40 mt-6 group-hover:text-primary/60 transition-all duration-300">
                                     {stat.label}
                                 </div>
                                 
                                 {/* Divider - only for sm view and between items */}
                                 {index < stats.length - 1 && (
-                                    <div className="hidden sm:block absolute top-1/2 -right-8 w-px h-12 bg-primary/10 -translate-y-1/2" />
+                                    <div className="hidden sm:block absolute top-1/2 -right-12 w-px h-20 bg-primary/10 -translate-y-1/2" />
                                 )}
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
+            {/* Horizontal Line Ornaments */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
+            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/20 to-transparent" />
         </section>
     );
 }

@@ -43,10 +43,7 @@ function getInitials(name: string): string {
 }
 
 export function TestimonialsSection({ content, items, settings: _settings }: TestimonialsSectionProps = {}) {
-    const { t, isRtl } = useTranslation();
-    const [selectedIndex, setSelectedIndex] = useState(0);
-    const [canScroll, setCanScroll] = useState(false);
-    const [scrollSnaps, setScrollSnaps] = useState<number[]>([]);
+    const { t } = useTranslation();
 
     // Use database items if provided, otherwise fall back to translated defaults
     const testimonials = items?.length ? items : getTranslatedTestimonials(t);
@@ -55,186 +52,90 @@ export function TestimonialsSection({ content, items, settings: _settings }: Tes
     const title = (content?.title as string) || t('What our users say');
     const subtitle = (content?.subtitle as string) || t('Join thousands of satisfied developers and teams who have transformed their workflow.');
 
-    const autoplayPlugin = useMemo(
-        () => Autoplay({ delay: 5000, stopOnInteraction: true, stopOnMouseEnter: true }),
-        []
-    );
-
-    const [emblaRef, emblaApi] = useEmblaCarousel(
-        {
-            loop: true,
-            align: 'start',
-            slidesToScroll: 1,
-            direction: isRtl ? 'rtl' : 'ltr',
-        },
-        [autoplayPlugin]
-    );
-
-    const scrollPrev = useCallback(() => {
-        if (emblaApi) {
-            autoplayPlugin.stop();
-            emblaApi.scrollPrev();
-        }
-    }, [emblaApi, autoplayPlugin]);
-
-    const scrollNext = useCallback(() => {
-        if (emblaApi) {
-            autoplayPlugin.stop();
-            emblaApi.scrollNext();
-        }
-    }, [emblaApi, autoplayPlugin]);
-
-    const onSelect = useCallback(() => {
-        if (!emblaApi) return;
-        setSelectedIndex(emblaApi.selectedScrollSnap());
-        setScrollSnaps(emblaApi.scrollSnapList());
-        setCanScroll(emblaApi.canScrollPrev() || emblaApi.canScrollNext());
-    }, [emblaApi]);
-
-    useEffect(() => {
-        if (!emblaApi) return;
-        onSelect();
-        emblaApi.on('select', onSelect);
-        emblaApi.on('reInit', onSelect);
-        return () => {
-            emblaApi.off('select', onSelect);
-            emblaApi.off('reInit', onSelect);
-        };
-    }, [emblaApi, onSelect]);
-
     return (
-        <section className="py-16 lg:py-24 bg-muted/30 relative overflow-hidden">
-            {/* Background Parallax Ornaments */}
-            <Parallax 
-                className="absolute top-0 right-0 w-64 h-64 bg-primary/5 blur-3xl rounded-full -mr-32 -mt-32" 
-                speed={0.08}
-            />
-            <Parallax 
-                className="absolute bottom-0 left-0 w-96 h-96 bg-primary/10 blur-3xl rounded-full -ml-48 -mb-48" 
-                speed={-0.12}
-            />
+        <section id="testimonials" className="py-32 lg:py-64 bg-[#0a0a0a] relative overflow-hidden">
+            {/* Top HUD Line */}
+            <div className="absolute top-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
             
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
-                <div className="text-center mb-12">
-                    <h2 className="text-3xl md:text-4xl font-bold tracking-tighter mb-4">
+                <div className="text-center mb-32 animate-fade-in">
+                    <div className="text-primary text-[10px] font-black uppercase tracking-[0.5em] mb-6">
+                        [ User_Intelligence.v4 ]
+                    </div>
+                    <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 text-white leading-[0.9]">
                         {title}
                     </h2>
-                    <p className="text-lg text-muted-foreground/90 max-w-2xl mx-auto leading-relaxed">
+                    <p className="text-lg text-neutral-500 max-w-2xl mx-auto font-medium">
                         {subtitle}
                     </p>
                 </div>
 
-                {/* Carousel */}
-                <div className={cn("relative", canScroll && "px-12 md:px-14")}>
-                    {/* Navigation Buttons - only show when scrolling is possible */}
-                    {canScroll && (
-                        <>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="absolute start-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex rounded-full bg-background/80 backdrop-blur-sm shadow-lg hover:bg-background"
-                                onClick={scrollPrev}
-                                aria-label={t('Previous')}
+                {/* Floating Mesh of Testimonials */}
+                <div className="relative h-[1200px] md:h-[800px] w-full mt-24">
+                    {/* Background Noise/Mesh */}
+                    <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(var(--primary-rgb),0.02)_0%,transparent_70%)]" />
+
+                    {testimonials.map((testimonial, index) => {
+                        // Deterministic but "random" looking positions
+                        const positions = [
+                            { top: '0%', left: '0%', speed: 0.1, rotate: -2 },
+                            { top: '10%', left: '60%', speed: -0.08, rotate: 3 },
+                            { top: '40%', left: '10%', speed: 0.12, rotate: 1 },
+                            { top: '50%', left: '70%', speed: -0.1, rotate: -3 },
+                            { top: '75%', left: '30%', speed: 0.05, rotate: 2 },
+                            { top: '85%', left: '75%', speed: -0.05, rotate: -1 },
+                        ];
+                        const pos = positions[index % positions.length];
+
+                        return (
+                            <div
+                                key={index}
+                                className="absolute w-[320px] md:w-[380px] group will-change-transform"
+                                style={{ 
+                                    top: pos.top, 
+                                    left: pos.left,
+                                    transform: `rotate(${pos.rotate}deg) translateZ(0)`,
+                                }}
                             >
-                                {isRtl ? <ChevronRight className="h-5 w-5" /> : <ChevronLeft className="h-5 w-5" />}
-                            </Button>
-                            <Button
-                                variant="outline"
-                                size="icon"
-                                className="absolute end-0 top-1/2 -translate-y-1/2 z-10 hidden md:flex rounded-full bg-background/80 backdrop-blur-sm shadow-lg hover:bg-background"
-                                onClick={scrollNext}
-                                aria-label={t('Next')}
-                            >
-                                {isRtl ? <ChevronLeft className="h-5 w-5" /> : <ChevronRight className="h-5 w-5" />}
-                            </Button>
-                        </>
-                    )}
+                                <Parallax speed={pos.speed}>
+                                    <div className="p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-xl transition-all duration-700 group-hover:border-primary/40 group-hover:bg-white/[0.05] group-hover:-translate-y-4 shadow-2xl overflow-hidden relative">
+                                        <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity">
+                                            <Star className="h-4 w-4 fill-primary text-primary" />
+                                        </div>
+                                        
+                                        <blockquote className="text-lg font-bold tracking-tight text-white mb-10 leading-relaxed italic relative z-10">
+                                            "{testimonial.quote}"
+                                        </blockquote>
 
-                    {/* Embla Carousel */}
-                    <div className="overflow-hidden" ref={emblaRef}>
-                        <div className="flex">
-                            {testimonials.map((testimonial, index) => (
-                                <div
-                                    key={index}
-                                    className="flex-[0_0_100%] min-w-0 px-2 md:flex-[0_0_50%] lg:flex-[0_0_33.333%]"
-                                >
-                                    <Card className="h-full group hover:shadow-lg transition-all duration-300">
-                                        <CardContent className="p-6 flex flex-col h-full">
-                                            {/* Rating */}
-                                            {testimonial.rating && (
-                                                <div className="mb-4">
-                                                    <StarRating rating={testimonial.rating} />
-                                                </div>
-                                            )}
-
-                                            {/* Quote */}
-                                            <blockquote className="text-muted-foreground mb-6 leading-relaxed flex-1">
-                                                "{testimonial.quote}"
-                                            </blockquote>
-
-                                            {/* Author */}
-                                            <div className="flex items-center gap-3">
-                                                <Avatar className="h-10 w-10">
-                                                    {testimonial.avatar && (
-                                                        <AvatarImage
-                                                            src={testimonial.avatar}
-                                                            alt={testimonial.author}
-                                                        />
-                                                    )}
-                                                    <AvatarFallback className="bg-primary/10 text-primary text-sm font-medium">
-                                                        {getInitials(testimonial.author)}
-                                                    </AvatarFallback>
-                                                </Avatar>
-                                                <div>
-                                                    <div className="font-medium text-sm">
-                                                        {testimonial.author}
-                                                    </div>
-                                                    <div className="text-xs text-muted-foreground">
-                                                        {testimonial.company_url ? (
-                                                            <a
-                                                                href={testimonial.company_url}
-                                                                target="_blank"
-                                                                rel="noopener noreferrer"
-                                                                className="hover:underline hover:text-muted-foreground/80"
-                                                            >
-                                                                {testimonial.role}
-                                                            </a>
-                                                        ) : (
-                                                            testimonial.role
-                                                        )}
-                                                    </div>
-                                                </div>
+                                        <div className="flex items-center gap-4 pt-8 border-t border-white/5 relative z-10">
+                                            <Avatar className="h-12 w-12 rounded-2xl border border-white/10">
+                                                {testimonial.avatar && (
+                                                    <AvatarImage src={testimonial.avatar} alt={testimonial.author} className="object-cover" />
+                                                )}
+                                                <AvatarFallback className="bg-primary text-primary-foreground font-black text-xs">
+                                                    {getInitials(testimonial.author)}
+                                                </AvatarFallback>
+                                            </Avatar>
+                                            <div>
+                                                <div className="font-black text-white text-sm tracking-tight">{testimonial.author}</div>
+                                                <div className="text-[9px] font-black uppercase tracking-[0.2em] text-primary/70">{testimonial.role}</div>
                                             </div>
-                                        </CardContent>
-                                    </Card>
-                                </div>
-                            ))}
-                        </div>
-                    </div>
-
-                    {/* Dots Indicator - only show when scrolling is possible */}
-                    {canScroll && scrollSnaps.length > 1 && (
-                        <div className="flex justify-center gap-2 mt-6" role="tablist" aria-label={t('Testimonial slides')}>
-                            {scrollSnaps.map((_, index) => (
-                                <button
-                                    key={index}
-                                    role="tab"
-                                    aria-selected={index === selectedIndex}
-                                    aria-label={t('Go to slide :number', { number: index + 1 })}
-                                    className={cn(
-                                        'w-2 h-2 rounded-full transition-all duration-300',
-                                        index === selectedIndex
-                                            ? 'bg-primary w-6'
-                                            : 'bg-muted-foreground/30 hover:bg-muted-foreground/50'
-                                    )}
-                                    onClick={() => emblaApi?.scrollTo(index)}
-                                />
-                            ))}
-                        </div>
-                    )}
+                                        </div>
+                                        
+                                        {/* HUD Accent */}
+                                        <div className="absolute bottom-4 right-8 text-[8px] font-mono font-black text-white/5 uppercase tracking-[0.3em] group-hover:text-primary/20 transition-colors">
+                                            Ref_ID: {index + 2048}
+                                        </div>
+                                    </div>
+                                </Parallax>
+                            </div>
+                        );
+                    })}
                 </div>
             </div>
+            {/* Bottom HUD Line */}
+            <div className="absolute bottom-0 left-0 w-full h-px bg-gradient-to-r from-transparent via-primary/30 to-transparent" />
         </section>
     );
 }

@@ -71,16 +71,18 @@ export function Parallax({
             if (!ticking) {
                 window.requestAnimationFrame(() => {
                     if (targetRef.current) {
-                        const rect = targetRef.current.getBoundingClientRect();
+                        const target = targetRef.current;
+                        const scrollY = window.scrollY;
                         const viewportHeight = window.innerHeight;
                         
-                        // 0 is centered in viewport
-                        const elementCenter = rect.top + rect.height / 2;
-                        const viewportCenter = viewportHeight / 2;
+                        // Calculate element position relative to viewport without reflow
+                        // We use offsetTop because it's cheaper. For nested positioning, we might need more logic
+                        // but for most landing page sections, offsetTop works well.
+                        const elementTop = target.offsetTop;
+                        const elementCenter = elementTop + target.offsetHeight / 2;
+                        const viewportCenter = scrollY + viewportHeight / 2;
                         const delta = elementCenter - viewportCenter;
                         
-                        // Increase the multiplier significantly for better visibility
-                        // A factor of speed * 0.5 - 1.0 is usually good for traditional feel
                         setOffset(delta * speed * 3); 
                     }
                     ticking = false;

@@ -1,6 +1,6 @@
 import { useState, useEffect, useMemo } from "react";
 import { Link } from "@inertiajs/react";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Globe, Box, CreditCard, Layers } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { ThemeToggle } from "@/components/ThemeToggle";
@@ -48,18 +48,21 @@ export function Navbar({
                 href: "#features",
                 isAnchor: true,
                 sectionType: "features",
+                icon: Layers,
             },
             {
                 label: t("Pricing"),
                 href: "#pricing",
                 isAnchor: true,
                 sectionType: "pricing",
+                icon: CreditCard,
             },
             {
                 label: t("Use Cases"),
                 href: "#use-cases",
                 isAnchor: true,
                 sectionType: "use_cases",
+                icon: Box,
             },
         ],
         [t],
@@ -86,190 +89,105 @@ export function Navbar({
     }, []);
 
     return (
-        <header
-            className={cn(
-                "fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-700 ease-out w-[95%] max-w-7xl",
-                scrolled
-                    ? "py-0"
-                    : "py-0",
-            )}
-        >
-            <nav className={cn(
-                "mx-auto px-4 sm:px-6 lg:px-8 bg-background/50 backdrop-blur-2xl border border-primary/10 rounded-[2.5rem] shadow-2xl transition-all duration-500",
-                scrolled ? "py-2" : "py-3"
-            )}>
-                <div className="flex items-center justify-between h-14 sm:h-16">
-                    {/* Logo */}
-                    <Link
-                        href="/"
-                        className="flex-shrink-0 transition-transform hover:scale-105 active:scale-95"
-                    >
-                        <ApplicationLogo showText size="lg" />
-                    </Link>
-
-                    {/* Desktop Navigation */}
-                    <div className="hidden md:flex items-center gap-6">
-                        {navLinks.map((link) =>
-                            link.isAnchor ? (
-                                <a
-                                    key={link.label}
-                                    href={link.href}
-                                    onClick={(e) =>
-                                        handleSmoothScroll(e, link.href)
-                                    }
-                                    className="text-sm font-semibold text-muted-foreground hover:text-primary transition-all relative group"
-                                >
-                                    {link.label}
-                                    <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-primary transition-all group-hover:w-full" />
-                                </a>
-                            ) : (
-                                <Link
-                                    key={link.label}
-                                    href={link.href}
-                                    className="text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
-                                >
-                                    {link.label}
-                                </Link>
-                            ),
-                        )}
+        <>
+            {/* Top Bar HUD (Logo & Actions) */}
+            <header className="fixed top-0 left-0 w-full z-[100] pointer-events-none">
+                <div className="max-w-[1800px] mx-auto px-8 py-8 flex justify-between items-start">
+                    {/* Top Left: Logo */}
+                    <div className="pointer-events-auto">
+                        <Link href="/" className="transition-transform hover:scale-105 inline-block">
+                            <ApplicationLogo showText size="lg" />
+                        </Link>
                     </div>
 
-                    {/* Desktop Actions */}
-                    <div className="hidden md:flex items-center gap-3">
+                    {/* Top Right: Global Actions */}
+                    <div className="flex items-center gap-4 pointer-events-auto bg-[#0a0a0a]/40 backdrop-blur-md px-6 py-2 rounded-2xl border border-white/5 shadow-2xl">
                         <LanguageSelector />
                         <ThemeToggle />
+                        {!auth.user && canLogin && (
+                            <Link href="/login" className="text-xs font-black uppercase tracking-[0.2em] text-white/50 hover:text-primary transition-colors px-4">
+                                {t("Login")}
+                            </Link>
+                        )}
                         {auth.user ? (
-                            <Button
-                                asChild
-                                className="rounded-full px-6 shadow-lg shadow-primary/20"
-                            >
-                                <Link href="/create">{t("Go to App")}</Link>
+                            <Button asChild className="rounded-xl px-6 bg-primary text-primary-foreground font-black uppercase text-[10px] tracking-widest h-11">
+                                <Link href="/create">{t("Dashboard")}</Link>
                             </Button>
                         ) : (
-                            <>
-                                {canLogin && (
-                                    <Button
-                                        variant="ghost"
-                                        asChild
-                                        className="rounded-full"
-                                    >
-                                        <Link href="/login">{t("Login")}</Link>
-                                    </Button>
-                                )}
-                                {canRegister && (
-                                    <Button
-                                        asChild
-                                        className="rounded-full px-6 shadow-lg shadow-primary/20"
-                                    >
-                                        <Link href="/register">
-                                            {t("Get Started")}
-                                        </Link>
-                                    </Button>
-                                )}
-                            </>
+                            canRegister && (
+                                <Button asChild className="rounded-xl px-6 bg-primary text-primary-foreground font-black uppercase text-[10px] tracking-widest h-11">
+                                    <Link href="/register">{t("Get Started")}</Link>
+                                </Button>
+                            )
                         )}
                     </div>
-
-                    {/* Mobile Menu */}
-                    <div className="flex md:hidden items-center gap-2">
-                        <LanguageSelector />
-                        <ThemeToggle />
-                        <Sheet
-                            open={mobileMenuOpen}
-                            onOpenChange={setMobileMenuOpen}
-                        >
-                            <SheetTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    {mobileMenuOpen ? (
-                                        <X className="h-5 w-5" />
-                                    ) : (
-                                        <Menu className="h-5 w-5" />
-                                    )}
-                                    <span className="sr-only">
-                                        {t("Toggle menu")}
-                                    </span>
-                                </Button>
-                            </SheetTrigger>
-                            <SheetContent
-                                side="right"
-                                className="w-[min(85vw,280px)] sm:w-[350px] p-6"
-                            >
-                                <div className="flex flex-col gap-6 mt-6">
-                                    {/* Mobile Nav Links */}
-                                    <div className="flex flex-col gap-4">
-                                        {navLinks.map((link) =>
-                                            link.isAnchor ? (
-                                                <a
-                                                    key={link.label}
-                                                    href={link.href}
-                                                    onClick={(e) => {
-                                                        handleSmoothScroll(
-                                                            e,
-                                                            link.href,
-                                                        );
-                                                        setMobileMenuOpen(
-                                                            false,
-                                                        );
-                                                    }}
-                                                    className="text-lg font-medium text-foreground hover:text-primary transition-colors cursor-pointer"
-                                                >
-                                                    {link.label}
-                                                </a>
-                                            ) : (
-                                                <Link
-                                                    key={link.label}
-                                                    href={link.href}
-                                                    className="text-lg font-medium text-foreground hover:text-primary transition-colors"
-                                                    onClick={() =>
-                                                        setMobileMenuOpen(false)
-                                                    }
-                                                >
-                                                    {link.label}
-                                                </Link>
-                                            ),
-                                        )}
-                                    </div>
-
-                                    {/* Mobile Actions */}
-                                    <div className="flex flex-col gap-3 pt-4 border-t">
-                                        {auth.user ? (
-                                            <Button asChild className="w-full">
-                                                <Link href="/create">
-                                                    {t("Dashboard")}
-                                                </Link>
-                                            </Button>
-                                        ) : (
-                                            <>
-                                                {canLogin && (
-                                                    <Button
-                                                        variant="outline"
-                                                        asChild
-                                                        className="w-full"
-                                                    >
-                                                        <Link href="/login">
-                                                            {t("Sign in")}
-                                                        </Link>
-                                                    </Button>
-                                                )}
-                                                {canRegister && (
-                                                    <Button
-                                                        asChild
-                                                        className="w-full"
-                                                    >
-                                                        <Link href="/register">
-                                                            {t("Get started")}
-                                                        </Link>
-                                                    </Button>
-                                                )}
-                                            </>
-                                        )}
-                                    </div>
-                                </div>
-                            </SheetContent>
-                        </Sheet>
-                    </div>
                 </div>
-            </nav>
-        </header>
+            </header>
+
+            {/* Side HUD Navigation (Vertical Bar) */}
+            <aside className="fixed left-8 top-1/2 -translate-y-1/2 z-[90] hidden xl:flex flex-col gap-8 items-center py-10 px-4 rounded-full border border-white/5 bg-[#0a0a0a]/40 backdrop-blur-md shadow-2xl translate-z-0 will-change-transform">
+                <div className="absolute inset-0 bg-primary/5 blur-2xl rounded-full" />
+                {navLinks.map((link) => {
+                    const Icon = link.icon;
+                    return (
+                        <a
+                            key={link.label}
+                            href={link.href}
+                            onClick={(e) => handleSmoothScroll(e, link.href)}
+                            className="group relative p-4 rounded-2xl hover:bg-primary/10 transition-all duration-200"
+                            title={link.label}
+                        >
+                            <Icon className="h-6 w-6 text-white/40 group-hover:text-primary transition-colors" />
+                            {/* Tooltip Label */}
+                            <span className="absolute left-full ml-6 px-4 py-2 rounded-xl bg-white/10 border border-white/10 backdrop-blur-md text-[10px] font-black uppercase tracking-[0.3em] text-white opacity-0 group-hover:opacity-100 translate-x-[-10px] group-hover:translate-x-0 transition-all pointer-events-none whitespace-nowrap">
+                                {link.label}
+                            </span>
+                        </a>
+                    );
+                })}
+            </aside>
+
+            {/* Mobile Menu HUD */}
+            <div className="fixed bottom-8 right-8 z-[100] md:hidden">
+                <Sheet open={mobileMenuOpen} onOpenChange={setMobileMenuOpen}>
+                    <SheetTrigger asChild>
+                        <Button variant="default" size="icon" className="h-16 w-16 rounded-full shadow-2xl bg-primary shadow-primary/20">
+                            <Menu className="h-8 w-8" />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent side="bottom" className="h-[70vh] rounded-t-[3rem] border-t border-white/10 bg-[#0a0a0a] backdrop-blur-md">
+                        <div className="flex flex-col gap-12 mt-12 px-6">
+                            <div className="flex flex-col gap-6">
+                                {navLinks.map((link) => {
+                                    const Icon = link.icon;
+                                    return (
+                                        <a
+                                            key={link.label}
+                                            href={link.href}
+                                            onClick={(e) => {
+                                                handleSmoothScroll(e, link.href);
+                                                setMobileMenuOpen(false);
+                                            }}
+                                            className="flex items-center gap-6 p-6 rounded-3xl bg-white/5 border border-white/5 text-xl font-bold hover:bg-primary/20 transition-all"
+                                        >
+                                            <Icon className="h-8 w-8 text-primary" />
+                                            {link.label}
+                                        </a>
+                                    );
+                                })}
+                            </div>
+                            <div className="grid grid-cols-2 gap-4">
+                                <Button asChild variant="outline" className="h-16 rounded-3xl border-white/10">
+                                    <Link href="/login" onClick={() => setMobileMenuOpen(false)}>{t("Login")}</Link>
+                                </Button>
+                                <Button asChild className="h-16 rounded-3xl bg-primary">
+                                    <Link href="/register" onClick={() => setMobileMenuOpen(false)}>{t("Register")}</Link>
+                                </Button>
+                            </div>
+                        </div>
+                    </SheetContent>
+                </Sheet>
+            </div>
+        </>
     );
 }

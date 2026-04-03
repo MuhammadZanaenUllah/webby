@@ -139,29 +139,32 @@ export function AppSidebar({ user }: AppSidebarProps) {
     const isActive = (href: string) => url.startsWith(href);
 
     return (
-        <Sidebar variant="floating" collapsible="icon" className="group/sidebar">
-            <SidebarHeader className="h-[70px] px-4 flex-row items-center bg-transparent border-b border-primary/5 mb-2">
+        <Sidebar variant="floating" collapsible="icon" className="group/sidebar border-none !bg-transparent">
+            {/* Sidebar Overlay for Blur Effect */}
+            <div className="absolute inset-4 rounded-[2.5rem] glass-morphism dark:glass-morphism border border-primary/10 shadow-2xl z-0 pointer-events-none" />
+
+            <SidebarHeader className="h-[80px] px-6 flex-row items-center border-b border-primary/5 mb-2 relative z-10">
                 <Link href="/create" className="flex items-center transition-transform hover:scale-[1.02] group-data-[collapsible=icon]:justify-center group-data-[collapsible=icon]:w-full">
                     <ApplicationLogo showText size="lg" />
                 </Link>
             </SidebarHeader>
 
-            <SidebarContent className="!overflow-hidden flex-1">
+            <SidebarContent className="!overflow-hidden flex-1 relative z-10 px-2">
                 <div ref={scrollAreaRef} className="h-full">
                 <ScrollArea className="h-full [&_[data-slot=scroll-area-scrollbar]]:opacity-0 [&_[data-slot=scroll-area-scrollbar]]:transition-opacity group-hover/sidebar:[&_[data-slot=scroll-area-scrollbar]]:opacity-100" type="always">
                     {/* Create Link */}
-                    <SidebarGroup className="pt-4">
+                    <SidebarGroup className="pt-6">
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 <SidebarMenuItem>
                                     <SidebarMenuButton
                                         asChild
                                         isActive={url === '/create'}
-                                        className="h-11 px-4 text-base font-semibold bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg shadow-primary/10 transition-all hover:scale-[1.02] active:scale-[0.98] rounded-xl mb-4"
+                                        className="h-14 px-5 text-lg font-black bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)] transition-all hover:scale-[1.05] active:scale-[0.95] rounded-2xl mb-6 group-data-[collapsible=icon]:h-12 group-data-[collapsible=icon]:px-0"
                                     >
                                         <Link href="/create">
-                                            <Paintbrush className="h-5 w-5" />
-                                            <span>{t('Create')}</span>
+                                            <Paintbrush className="h-6 w-6" />
+                                            <span>{t('Launch AI')}</span>
                                         </Link>
                                     </SidebarMenuButton>
                                 </SidebarMenuItem>
@@ -173,29 +176,29 @@ export function AppSidebar({ user }: AppSidebarProps) {
                     <Collapsible defaultOpen className="group/collapsible">
                         <SidebarGroup>
                             <CollapsibleTrigger asChild>
-                                <SidebarGroupLabel className="cursor-pointer hover:bg-accent rounded-md px-2 py-1.5 flex items-center justify-between">
-                                    <span>{t('Projects')}</span>
-                                    <ChevronDown className="h-4 w-4 transition-transform group-data-[state=closed]/collapsible:rotate-[-90deg]" />
+                                <SidebarGroupLabel className="cursor-pointer hover:bg-primary/5 rounded-xl px-4 py-2 flex items-center justify-between text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">
+                                    <span>{t('Workspace')}</span>
+                                    <ChevronDown className="h-3 w-3 transition-transform group-data-[state=closed]/collapsible:rotate-[-90deg]" />
                                 </SidebarGroupLabel>
                             </CollapsibleTrigger>
-                            <CollapsibleContent>
+                            <CollapsibleContent className="px-2">
                                 <SidebarGroupContent>
-                                    <SidebarMenu>
-                                        {/* Recent Projects Collapsible */}
+                                    <SidebarMenu className="gap-1">
+                                        {/* Recent Projects - More minimal */}
                                         {recentProjects && recentProjects.length > 0 && (
                                             <Collapsible open={recentOpen} onOpenChange={setRecentOpen}>
                                                 <SidebarMenuItem>
                                                     <CollapsibleTrigger asChild>
-                                                        <SidebarMenuButton className="group/recent">
+                                                        <SidebarMenuButton className="group/recent h-10 px-4 rounded-xl hover:bg-primary/5">
                                                             <div className="relative h-4 w-4">
-                                                                <Clock className="absolute h-4 w-4 opacity-100 group-hover/recent:opacity-0 transition-opacity" />
+                                                                <Clock className="absolute h-4 w-4 opacity-100 group-hover/recent:opacity-0 transition-opacity text-primary/60" />
                                                                 <ChevronDown className="absolute h-4 w-4 opacity-0 group-hover/recent:opacity-100 transition-opacity" />
                                                             </div>
-                                                            <span>{t('Recent')}</span>
+                                                            <span className="font-bold text-sm">{t('Recent')}</span>
                                                         </SidebarMenuButton>
                                                     </CollapsibleTrigger>
                                                     <CollapsibleContent>
-                                                        <div className="ml-4 mt-1 space-y-0.5">
+                                                        <div className="ml-6 mt-1 mb-2 space-y-1 border-s border-primary/10">
                                                             {recentProjects.map((project) => {
                                                                 const displayName = project.name.length > 25
                                                                     ? project.name.slice(0, 25) + '...'
@@ -204,10 +207,10 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                                     <div key={project.id} className="px-2">
                                                                         <Link
                                                                             href={`/project/${project.id}`}
-                                                                            className="flex items-center h-8 px-2 text-sm text-muted-foreground hover:text-foreground hover:bg-accent rounded-md transition-colors overflow-hidden"
+                                                                            className="flex items-center h-8 px-3 text-xs font-medium text-muted-foreground/70 hover:text-primary hover:bg-primary/5 rounded-lg transition-all"
                                                                             title={project.name}
                                                                         >
-                                                                            <span>{displayName}</span>
+                                                                            <span className="truncate">{displayName}</span>
                                                                         </Link>
                                                                     </div>
                                                                 );
@@ -222,15 +225,15 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                 <SidebarMenuButton
                                                     asChild
                                                     isActive={isActive(item.href)}
-                                                    className={`h-10 px-3 transition-all rounded-lg group ${
+                                                    className={`h-11 px-4 transition-all rounded-xl group ${
                                                         isActive(item.href)
-                                                            ? 'bg-primary/10 text-primary font-bold shadow-sm'
-                                                            : 'hover:bg-accent/50 text-muted-foreground hover:text-foreground'
+                                                            ? 'bg-primary/10 text-primary font-black shadow-[inset_0_0_20px_rgba(var(--primary-rgb),0.1)]'
+                                                            : 'hover:bg-primary/5 text-muted-foreground/80 hover:text-foreground'
                                                     }`}
                                                 >
                                                     <Link href={item.href}>
-                                                        <item.icon className={`h-4.5 w-4.5 ${isActive(item.href) ? 'text-primary' : 'text-muted-foreground/70 group-hover:text-foreground'}`} />
-                                                        <span className="ms-3">{t(item.titleKey)}</span>
+                                                        <item.icon className={`h-5 w-5 ${isActive(item.href) ? 'text-primary' : 'text-muted-foreground/50 group-hover:text-primary transition-colors'}`} />
+                                                        <span className="ms-3 font-bold tracking-tight">{t(item.titleKey)}</span>
                                                     </Link>
                                                 </SidebarMenuButton>
                                             </SidebarMenuItem>
@@ -241,28 +244,33 @@ export function AppSidebar({ user }: AppSidebarProps) {
                         </SidebarGroup>
                     </Collapsible>
 
-                    {/* Administration Section - Only visible to admins */}
+                    {/* Administration Section */}
                     {user.role === 'admin' && (
                         <Collapsible defaultOpen className="group/collapsible">
                             <SidebarGroup>
                                 <CollapsibleTrigger asChild>
-                                    <SidebarGroupLabel className="cursor-pointer hover:bg-accent rounded-md px-2 py-1.5 flex items-center justify-between">
+                                    <SidebarGroupLabel className="cursor-pointer hover:bg-primary/5 rounded-xl px-4 py-2 flex items-center justify-between text-[10px] uppercase font-black tracking-widest text-muted-foreground/60">
                                         <span>{t('Administration')}</span>
-                                        <ChevronDown className="h-4 w-4 transition-transform group-data-[state=closed]/collapsible:rotate-[-90deg]" />
+                                        <ChevronDown className="h-3 w-3 transition-transform group-data-[state=closed]/collapsible:rotate-[-90deg]" />
                                     </SidebarGroupLabel>
                                 </CollapsibleTrigger>
-                                <CollapsibleContent>
+                                <CollapsibleContent className="px-2">
                                     <SidebarGroupContent>
-                                        <SidebarMenu>
+                                        <SidebarMenu className="gap-0.5">
                                             {adminItems.map((item) => (
                                                 <SidebarMenuItem key={item.titleKey}>
                                                     <SidebarMenuButton
                                                         asChild
                                                         isActive={isActive(item.href)}
+                                                        className={`h-9 px-4 transition-all rounded-lg group ${
+                                                            isActive(item.href)
+                                                                ? 'bg-primary/10 text-primary font-bold'
+                                                                : 'hover:bg-primary/5 text-muted-foreground/70 hover:text-foreground'
+                                                        }`}
                                                     >
                                                         <Link href={item.href}>
-                                                            <item.icon className="h-4 w-4" />
-                                                            <span>{t(item.titleKey)}</span>
+                                                            <item.icon className={`h-4 w-4 ${isActive(item.href) ? 'text-primary' : 'text-muted-foreground/40'}`} />
+                                                            <span className="ms-3 text-xs font-bold">{t(item.titleKey)}</span>
                                                         </Link>
                                                     </SidebarMenuButton>
                                                 </SidebarMenuItem>
@@ -277,27 +285,31 @@ export function AppSidebar({ user }: AppSidebarProps) {
                 </div>
             </SidebarContent>
 
-            <SidebarFooter className="border-t p-4 space-y-2">
+            <SidebarFooter className="p-6 space-y-3 relative z-10">
                 <Button
                     variant="outline"
-                    className="w-full justify-start h-auto py-2 border-dashed hover:border-solid hover:bg-accent/50 overflow-hidden"
+                    className="w-full justify-start h-auto py-3 px-4 rounded-2xl border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition-all group overflow-hidden"
                     size="sm"
                     onClick={() => setShareDialogOpen(true)}
                 >
-                    <Gift className="h-4 w-4 me-2 shrink-0 text-primary" />
+                    <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center me-3 group-hover:scale-110 transition-transform">
+                        <Gift className="h-5 w-5 text-primary" />
+                    </div>
                     <div className="flex flex-col items-start overflow-hidden">
-                        <span className="truncate max-w-full">{t('Invite Friends')}</span>
-                        <span className="text-xs font-normal text-muted-foreground truncate max-w-full">{t('Earn credits for referrals')}</span>
+                        <span className="font-bold text-sm tracking-tight">{t('Earn Rewards')}</span>
+                        <span className="text-[10px] font-medium text-muted-foreground/70">{t('Refer Friends')}</span>
                     </div>
                 </Button>
                 <ShareDialog open={shareDialogOpen} onOpenChange={setShareDialogOpen} />
                 {hasUpgradablePlans && (
-                    <Button asChild className="w-full justify-start h-auto py-2 overflow-hidden" size="sm">
+                    <Button asChild className="w-full justify-start h-auto py-3 px-4 rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all overflow-hidden" size="sm">
                         <Link href="/billing/plans">
-                            <Sparkles className="h-4 w-4 me-2 shrink-0" />
+                            <div className="h-9 w-9 rounded-xl bg-white/20 flex items-center justify-center me-3">
+                                <Sparkles className="h-5 w-5" />
+                            </div>
                             <div className="flex flex-col items-start overflow-hidden">
-                                <span className="truncate max-w-full">{t('Upgrade your Plan')}</span>
-                                <span className="text-xs font-normal opacity-70 truncate max-w-full">{t('Unlock more benefits')}</span>
+                                <span className="font-black text-sm tracking-tight">{t('Elite Access')}</span>
+                                <span className="text-[10px] font-bold opacity-80 uppercase tracking-widest">{t('Upgrade Now')}</span>
                             </div>
                         </Link>
                     </Button>

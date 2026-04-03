@@ -89,6 +89,28 @@ function useTypingAnimation(texts: string[], typingSpeed = 50, pauseDuration = 2
     return displayText;
 }
 
+function TypingText({ texts }: { texts: string[] }) {
+    const displayText = useTypingAnimation(texts);
+    return <span>{displayText}</span>;
+}
+
+function ScrambleText({ text, replayRef }: { text: string; replayRef: React.MutableRefObject<(() => void) | null> }) {
+    const { ref, replay } = useScramble({
+        text: text,
+        speed: 0.8,
+        tick: 1,
+        step: 1,
+        scramble: 4,
+        seed: 2,
+    });
+
+    useEffect(() => {
+        replayRef.current = replay;
+    }, [replay, replayRef]);
+
+    return <span ref={ref} />;
+}
+
 export function HeroSection({
     auth,
     initialSuggestions,
@@ -110,6 +132,7 @@ export function HeroSection({
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const isInitialMount = useRef(true);
     const prevLocale = useRef(locale);
+    const replayScrambleRef = useRef<(() => void) | null>(null);
 
     // Update state when props change (e.g., after language switch)
     useEffect(() => {
@@ -126,29 +149,18 @@ export function HeroSection({
     // Compute disabled state for logged-in users
     const isDisabled = !!(auth.user && (!isPusherConfigured || !canCreateProject));
 
-    // Scramble animation for headline
-    const { ref: headlineRef, replay: replayScramble } = useScramble({
-        text: headline,
-        speed: 0.8,
-        tick: 1,
-        step: 1,
-        scramble: 4,
-        seed: 2,
-    });
-
-    const animatedPlaceholder = useTypingAnimation(typingPrompts);
     const showAnimatedPlaceholder = !prompt && !isFocused && !isDisabled;
 
     // Replay scramble animation on Inertia navigation (handles same-page navigation)
     useEffect(() => {
         const removeListener = router.on('finish', (event) => {
-            if (event.detail.visit.url.pathname === '/') {
-                replayScramble();
+            if (event.detail.visit.url.pathname === '/' && replayScrambleRef.current) {
+                replayScrambleRef.current();
             }
         });
 
         return () => removeListener();
-    }, [replayScramble]);
+    }, []);
 
     // Replay scramble animation when locale changes (skip initial mount)
     useEffect(() => {
@@ -157,11 +169,11 @@ export function HeroSection({
             return;
         }
         // Only replay if locale actually changed
-        if (prevLocale.current !== locale) {
+        if (prevLocale.current !== locale && replayScrambleRef.current) {
             prevLocale.current = locale;
-            replayScramble();
+            replayScrambleRef.current();
         }
-    }, [locale, replayScramble]);
+    }, [locale]);
 
     // Fetch AI-powered content after page loads (only suggestions and typing prompts)
     useEffect(() => {
@@ -209,171 +221,145 @@ export function HeroSection({
     };
 
     return (
-        <section className="relative min-h-screen flex flex-col items-center pt-44 pb-32 sm:pb-40 bg-background overflow-hidden">
-            {/* Specialized Tech Grid Background */}
-            <div className="absolute inset-0 bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)] pointer-events-none" />
-            <GradientBackground />
+        <section className="relative min-h-[110vh] flex flex-col items-center justify-center bg-[#0a0a0a] overflow-hidden">
+            {/* Dynamic Noise Mesh Background */}
+            <div className="absolute inset-0 opacity-20 pointer-events-none">
+                <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] brightness-50 contrast-150" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 via-transparent to-primary/10 animate-pulse" />
+            </div>
 
-            <div className="relative z-10 w-full max-w-5xl mx-auto px-4 text-center">
-                {/* Headline with scramble animation */}
-                <h1
-                    ref={headlineRef}
-                    className="text-4xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70 leading-[1.05]"
-                />
+            {/* Specialized HUD Grid */}
+            <div className="absolute inset-0 bg-[linear-gradient(to_right,#ffffff05_1px,transparent_1px),linear-gradient(to_bottom,#ffffff05_1px,transparent_1px)] bg-[size:60px_60px] pointer-events-none" />
+            
+            {/* Vertical HUD Status Line */}
+            <div className="absolute left-8 top-1/2 -translate-y-1/2 h-2/3 w-px bg-gradient-to-b from-transparent via-primary/30 to-transparent hidden xl:block">
+                <div className="absolute top-0 -left-1 text-[10px] font-black uppercase tracking-[0.5em] text-primary/40 -rotate-90 origin-top-left translate-y-[-100%] translate-x-3">
+                    System.initialize(webby_core)
+                </div>
+                <div className="absolute bottom-0 -left-1 text-[10px] font-black uppercase tracking-[0.5em] text-primary/40 -rotate-90 origin-bottom-left translate-x-3">
+                    Status.operational(100%)
+                </div>
+            </div>
 
-                {/* Subtitle */}
-                <p className="text-lg sm:text-xl md:text-2xl text-muted-foreground/90 mb-12 max-w-3xl mx-auto leading-relaxed">
-                    {subtitle}
-                </p>
+            <div className="relative z-10 w-full max-w-[1400px] mx-auto px-6 lg:px-12 grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
+                {/* Left Side - Command Center (60%) */}
+                <div className="lg:col-span-7 text-start flex flex-col space-y-10">
+                    <div className="space-y-4">
+                        <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-[10px] font-black uppercase tracking-[0.3em] text-primary animate-fade-in">
+                            <span className="relative flex h-2 w-2">
+                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                                <span className="relative inline-flex rounded-full h-2 w-2 bg-primary"></span>
+                            </span>
+                            v4.0 Protocol Active
+                        </div>
+                        <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tighter bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 leading-[0.9] animate-fade-in translate-z-0">
+                            <ScrambleText text={headline} replayRef={replayScrambleRef} />
+                        </h1>
+                    </div>
 
-                {/* Cannot create project warning (for logged-in users) */}
-                {auth.user && !isPusherConfigured && (
-                    <Alert variant="destructive" className="max-w-2xl mb-8 mx-auto text-center">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>
-                            {t('Real-time features are not configured. Please contact support.')}
-                        </AlertDescription>
-                    </Alert>
-                )}
+                    <p className="text-lg md:text-xl text-neutral-400 max-w-2xl leading-relaxed font-medium animate-fade-in animation-delay-1000 translate-z-0">
+                        {subtitle}
+                    </p>
 
-                {auth.user && !canCreateProject && isPusherConfigured && (
-                    <Alert variant="destructive" className="max-w-2xl mb-8 mx-auto text-center">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>
-                            {cannotCreateReason}{' '}
-                            <Link href="/billing/plans" className="underline font-semibold text-primary">
-                                {t('View Plans')}
-                            </Link>
-                        </AlertDescription>
-                    </Alert>
-                )}
-
-                {/* Prompt Input - Command Center Style */}
-                <div className="max-w-4xl mx-auto mb-24">
-                    <form onSubmit={handleSubmit} className="relative">
-                        <div className="relative bg-card/60 backdrop-blur-xl rounded-[3rem] shadow-[0_0_50px_-12px_rgba(var(--primary-rgb),0.3)] border border-primary/20 overflow-hidden hover:border-primary/40 transition-all duration-700 group ring-4 ring-primary/5">
-                            <div className="relative">
-                                <textarea
-                                    ref={textareaRef}
-                                    value={prompt}
-                                    onChange={(e) => setPrompt(e.target.value)}
-                                    onFocus={() => setIsFocused(true)}
-                                    onBlur={() => setIsFocused(false)}
-                                    onKeyDown={handleKeyDown}
-                                    placeholder={!showAnimatedPlaceholder ? t('I want to build...') : ""}
-                                    disabled={isDisabled}
-                                    className="w-full px-10 py-10 text-lg sm:text-xl lg:text-2xl resize-none focus:outline-none focus:ring-0 border-0 min-h-[160px] bg-transparent relative z-10 text-center disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-muted-foreground/40"
-                                    rows={1}
-                                />
-                                {/* Animated placeholder overlay */}
-                                {showAnimatedPlaceholder && (
-                                    <div
-                                        className="absolute inset-0 px-10 py-10 pointer-events-none text-muted-foreground/40 text-lg sm:text-xl lg:text-2xl text-center"
-                                        onClick={() => textareaRef.current?.focus()}
-                                    >
-                                        {animatedPlaceholder}
-                                        <span className="inline-block w-0.5 h-7 bg-primary/60 ms-0.5 animate-pulse align-middle" />
+                    {/* HUD-Style Command Input */}
+                    <div className="animate-fade-in animation-delay-2000">
+                        <form onSubmit={handleSubmit} className="relative group max-w-xl">
+                            <div className="relative rounded-3xl border border-white/10 bg-white/[0.05] backdrop-blur-md shadow-2xl transition-all duration-700 group-focus-within:border-primary/50 group-focus-within:shadow-[0_0_50px_rgba(var(--primary-rgb),0.3)] group-focus-within:-translate-y-1 will-change-transform translate-z-0">
+                                <div className="p-1 flex items-center">
+                                    <div className="flex-1 relative flex items-center min-h-[5rem]">
+                                        <textarea
+                                            ref={textareaRef}
+                                            value={prompt}
+                                            onChange={(e) => setPrompt(e.target.value)}
+                                            onFocus={() => setIsFocused(true)}
+                                            onBlur={() => setIsFocused(false)}
+                                            onKeyDown={handleKeyDown}
+                                            placeholder={!showAnimatedPlaceholder ? t('I want to build...') : ""}
+                                            disabled={isDisabled}
+                                            className="w-full px-8 py-8 text-lg font-bold tracking-tight resize-none focus:outline-none focus:ring-0 border-0 bg-transparent text-white disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-white/20 leading-snug"
+                                            rows={1}
+                                        />
+                                        {showAnimatedPlaceholder && (
+                                            <div className="absolute left-8 pointer-events-none text-lg font-bold tracking-tight text-white/20">
+                                                <TypingText texts={typingPrompts} />
+                                            </div>
+                                        )}
                                     </div>
-                                )}
-                            </div>
-                            <div className="flex items-center justify-between gap-4 px-8 py-5 bg-muted/40 border-t border-border/50">
-                                <div className="hidden sm:flex items-center gap-3 text-xs text-muted-foreground/70 transition-opacity group-focus-within:opacity-100 opacity-60">
-                                    <span>{t('Launch with')}</span>
-                                    <kbd className="px-2 py-1 bg-background rounded-md border border-border/50 text-[10px] uppercase font-black text-primary/80">
-                                        ⌘ Enter
-                                    </kbd>
-                                </div>
-                                <div className="flex items-center gap-2 ms-auto">
                                     <Button
                                         type="submit"
                                         disabled={!prompt.trim() || isDisabled}
-                                        className="shrink-0 h-14 px-12 rounded-full transition-all hover:scale-[1.02] hover:shadow-2xl active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground font-black shadow-xl shadow-primary/20"
+                                        className="h-16 w-16 rounded-2xl m-1 transition-all hover:scale-[1.05] bg-primary text-primary-foreground shadow-2xl shadow-primary/20 shrink-0"
                                     >
-                                        <span className="text-lg">
-                                            {auth.user ? t('Launch Engine') : t('Start Building')}
-                                        </span>
-                                        {isRtl ? (
-                                            <ArrowLeft className="h-6 w-6 me-3 group-hover:-translate-x-1 transition-transform" />
-                                        ) : (
-                                            <ArrowRight className="h-6 w-6 ms-3 group-hover:translate-x-1 transition-transform" />
-                                        )}
+                                        {isRtl ? <ArrowLeft className="h-8 w-8" /> : <ArrowRight className="h-8 w-8" />}
                                     </Button>
                                 </div>
                             </div>
-                        </div>
-                    </form>
-
-                    {/* Suggestions - Centered Marquee */}
-                    <div className="mt-14 overflow-hidden max-w-3xl mx-auto relative px-12">
-                        <div className="absolute start-0 top-0 bottom-0 w-24 bg-gradient-to-r from-background via-background/80 to-transparent z-10 pointer-events-none" />
-                        <div className="absolute end-0 top-0 bottom-0 w-24 bg-gradient-to-l from-background via-background/80 to-transparent z-10 pointer-events-none" />
-                        <div className={`flex gap-6 hover:[animation-play-state:paused] ${isRtl ? 'animate-marquee-rtl' : 'animate-marquee'}`}>
-                            {[...suggestions, ...suggestions].map((suggestion, index) => (
-                                <button
-                                    key={`${suggestion}-${index}`}
-                                    onClick={() => handleSuggestionClick(suggestion)}
-                                    disabled={isDisabled}
-                                    className="text-sm font-bold px-6 py-3 rounded-full bg-card/60 backdrop-blur-md hover:bg-primary hover:text-primary-foreground hover:border-primary border border-primary/10 text-muted-foreground transition-all shadow-lg whitespace-nowrap shrink-0 disabled:opacity-50"
-                                >
-                                    {suggestion}
-                                </button>
-                            ))}
-                        </div>
+                            
+                            {/* Suggestions HUD strip */}
+                            <div className="mt-6 flex flex-wrap gap-3">
+                                {suggestions.slice(0, 3).map((suggestion) => (
+                                    <button
+                                        key={suggestion}
+                                        onClick={() => handleSuggestionClick(suggestion)}
+                                        className="text-[10px] font-black uppercase tracking-[0.2em] px-4 py-2 rounded-lg border border-white/5 bg-white/5 text-white/40 hover:text-primary hover:border-primary/30 transition-all"
+                                    >
+                                        {suggestion}
+                                    </button>
+                                ))}
+                            </div>
+                        </form>
                     </div>
                 </div>
 
-                {/* Integrated Product Showcase Frame - Overlapping Hero bottom with Parallax */}
-                <Parallax 
-                    className="relative w-full max-w-6xl mx-auto mt-12 mb-[-15%] group perspective-1000"
-                    speed={-0.05}
-                >
-                    <div className="relative bg-card/80 backdrop-blur-xl rounded-[2.5rem] border border-primary/20 shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.2)] overflow-hidden transition-all duration-700 hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.3)] hover:-translate-y-4">
-                        {/* Browser Top Bar */}
-                        <div className="p-4 bg-muted/40 flex items-center justify-between border-b border-border/50">
-                            <div className="flex gap-2">
-                                <div className="w-3 h-3 rounded-full bg-destructive/40" />
-                                <div className="w-3 h-3 rounded-full bg-amber-500/40" />
-                                <div className="w-3 h-3 rounded-full bg-primary/40" />
-                            </div>
-                            <div className="px-4 py-1 rounded-lg bg-background/50 border border-border/50 text-[10px] text-muted-foreground font-black tracking-widest uppercase">
-                                yourproject.webby.app
-                            </div>
-                            <div className="w-8" />
-                        </div>
-                        {/* Mock Content */}
-                        <div className="aspect-[16/9] bg-background/30 p-8">
-                            <div className="grid grid-cols-12 gap-8 h-full">
-                                <div className="col-span-3 space-y-6">
-                                    <div className="h-40 bg-primary/5 rounded-3xl border border-primary/5 animate-pulse" />
-                                    <div className="space-y-2">
-                                        <div className="h-4 w-full bg-muted rounded-full" />
-                                        <div className="h-4 w-2/3 bg-muted rounded-full" />
-                                    </div>
+                {/* Right Side - Interactive Digital Twin (40%) */}
+                <div className="lg:col-span-5 relative hidden lg:block animate-fade-in animation-delay-3000">
+                    <Parallax speed={-0.08}>
+                        <div className="relative aspect-square translate-z-0">
+                            {/* Central Orbiting Orb */}
+                            <div className="absolute inset-0 bg-primary/10 blur-[60px] rounded-full animate-pulse-soft will-change-opacity translate-z-0" />
+                            
+                            {/* Code Floating Window */}
+                            <div className="absolute top-0 right-0 w-64 p-6 rounded-3xl border border-white/10 bg-white/10 backdrop-blur-md shadow-2xl animate-float will-change-transform translate-z-0">
+                                <div className="flex gap-1.5 mb-4">
+                                    <div className="w-2 h-2 rounded-full bg-red-500/40" />
+                                    <div className="w-2 h-2 rounded-full bg-yellow-500/40" />
+                                    <div className="w-2 h-2 rounded-full bg-green-500/40" />
                                 </div>
-                                <div className="col-span-9 space-y-8">
-                                    <div className="h-16 w-1/2 bg-primary/10 rounded-2xl" />
-                                    <div className="grid grid-cols-2 gap-8">
-                                        <div className="h-64 bg-card/40 rounded-3xl border border-primary/10" />
-                                        <div className="h-64 bg-card/40 rounded-3xl border border-primary/10" />
-                                    </div>
+                                <div className="space-y-2">
+                                    <div className="h-2 w-full bg-primary/20 rounded-full" />
+                                    <div className="h-2 w-2/3 bg-white/10 rounded-full" />
+                                    <div className="h-2 w-4/5 bg-white/10 rounded-full" />
                                 </div>
                             </div>
+
+                            {/* UI Preview Window */}
+                            <div className="absolute bottom-12 left-0 w-80 p-1.5 rounded-[2.5rem] border border-white/10 bg-white/10 backdrop-blur-md shadow-[0_50px_100px_rgba(0,0,0,0.5)] rotate-[-4deg] animate-float animation-delay-2000 will-change-transform translate-z-0">
+                                <div className="rounded-[2rem] overflow-hidden aspect-[4/3] bg-[#1d1d1d] relative">
+                                    <div className="absolute inset-0 bg-gradient-to-tr from-primary/10 to-transparent" />
+                                    <div className="p-6 space-y-4">
+                                        <div className="h-8 w-1/2 bg-white/10 rounded-xl" />
+                                        <div className="grid grid-cols-2 gap-3">
+                                            <div className="h-24 bg-white/5 rounded-2xl border border-white/5" />
+                                            <div className="h-24 bg-white/5 rounded-2xl border border-white/5" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Circuit Lines Ornaments */}
+                            <svg className="absolute inset-0 w-full h-full opacity-10" viewBox="0 0 400 400">
+                                <path d="M 50 100 L 350 100 M 350 100 L 350 300 M 50 300 L 350 300" stroke="currentColor" fill="none" strokeWidth="1" className="text-primary" strokeDasharray="10 10" />
+                                <circle cx="50" cy="100" r="4" fill="currentColor" className="text-primary" />
+                                <circle cx="350" cy="300" r="4" fill="currentColor" className="text-primary" />
+                            </svg>
                         </div>
-                    </div>
-                    {/* Floating Ornaments with Enhanced Parallax */}
-                    <Parallax 
-                        className="absolute -top-12 -right-12 w-32 h-32 bg-primary/20 blur-3xl rounded-full"
-                        speed={0.15}
-                    />
-                    <Parallax 
-                        className="absolute -bottom-12 -left-12 w-48 h-48 bg-primary/10 blur-3xl rounded-full"
-                        speed={0.25}
-                    />
-                </Parallax>
+                    </Parallax>
+                </div>
             </div>
 
-                {/* Trusted by strip */}
-                <div className="pt-44 border-t border-primary/5">
+            {/* Bottom Trusted By - Minimal Strip */}
+            <div className="absolute bottom-0 left-0 w-full p-8 border-t border-white/5 bg-gradient-to-t from-black to-transparent">
+                <div className="max-w-7xl mx-auto opacity-40 hover:opacity-100 transition-opacity duration-700">
                     {trustedBy?.enabled !== false && (
                         <TrustedBy
                             content={trustedBy?.content}
@@ -381,6 +367,7 @@ export function HeroSection({
                         />
                     )}
                 </div>
-            </section>
-        );
-    }
+            </div>
+        </section>
+    );
+}

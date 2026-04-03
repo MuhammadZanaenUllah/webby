@@ -23,12 +23,12 @@ interface TrustedByProps {
 
 function CompanyBadge({ company }: { company: LogoItem }) {
     return (
-        <div className="flex items-center gap-2 grayscale opacity-50 hover:grayscale-0 hover:opacity-100 transition-all duration-300 shrink-0 cursor-default group">
+        <div className="flex items-center gap-2 grayscale dark:grayscale-0 opacity-40 dark:opacity-60 hover:grayscale-0 hover:opacity-100 transition-all duration-200 shrink-0 cursor-default group">
             {company.image_url ? (
                 <img
                     src={company.image_url}
                     alt={company.name}
-                    className="h-5 sm:h-7 w-auto max-w-[100px] sm:max-w-[120px] object-contain"
+                    className="h-5 sm:h-7 w-auto max-w-[100px] sm:max-w-[120px] object-contain dark:invert dark:brightness-150 transition-all duration-200"
                 />
             ) : (
                 <>

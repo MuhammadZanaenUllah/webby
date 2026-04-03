@@ -34,6 +34,7 @@ interface PlansPageProps extends PageProps {
     paymentGateways: PaymentGateway[];
     currentPlanId: number | null;
     referralCreditBalance: number;
+    selectedPlanId: number | null;
 }
 
 export default function Plans({
@@ -41,6 +42,7 @@ export default function Plans({
     paymentGateways,
     currentPlanId,
     referralCreditBalance,
+    selectedPlanId,
 }: PlansPageProps) {
     const { auth, flash } = usePage<PlansPageProps & { flash: { bankTransfer?: BankTransferData } }>().props;
     const { t, locale } = useTranslation();
@@ -63,6 +65,17 @@ export default function Plans({
             setIsProcessing(false);
         }
     }, [flash?.bankTransfer]);
+
+    // Auto-select plan if passed via URL
+    useEffect(() => {
+        if (selectedPlanId && plans.length > 0) {
+            const planToSelect = plans.find(p => p.id === selectedPlanId);
+            if (planToSelect && planToSelect.id !== currentPlanId) {
+                setSelectedPlan(planToSelect);
+                setIsGatewayModalOpen(true);
+            }
+        }
+    }, [selectedPlanId, plans, currentPlanId]);
 
     const copyInstructions = async () => {
         if (!bankTransferData?.instructions) return;

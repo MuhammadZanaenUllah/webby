@@ -1,5 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { Head, usePage } from '@inertiajs/react';
+import { GradientBackground } from '@/components/Dashboard/GradientBackground';
+import { CircuitLines } from '@/components/Landing/CircuitLines';
 import { useTranslation } from '@/contexts/LanguageContext';
 import { toast } from 'sonner';
 import { Toaster } from '@/components/ui/sonner';
@@ -22,9 +24,11 @@ import {
     ScrollToTop,
 } from '@/components/Landing';
 import { Parallax } from '@/components/ui/Parallax';
+import { cn } from '@/lib/utils';
 
 // Section data structure from the backend
 interface SectionData {
+    id?: number;
     type: string;
     is_enabled: boolean;
     settings: Record<string, unknown>;
@@ -255,27 +259,34 @@ export default function Landing({
             <Toaster />
             {!isPreview && <DemoIframeBlocker />}
             <Navbar auth={auth} canLogin={canLogin} canRegister={canRegister} enabledSectionTypes={enabledSectionTypes} />
-            <main className="relative overflow-hidden">
-                {/* Global Background Parallax Ornaments */}
-                <div className="absolute inset-0 pointer-events-none overflow-hidden z-0">
-                    <Parallax 
-                        className="absolute top-[15%] -left-64 w-[500px] h-[500px] bg-primary/5 blur-[120px] rounded-full"
-                        speed={-0.05}
-                    />
-                    <Parallax 
-                        className="absolute top-[45%] -right-64 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full"
-                        speed={0.08}
-                    />
-                    <Parallax 
-                        className="absolute top-[75%] -left-64 w-[400px] h-[400px] bg-primary/5 blur-[120px] rounded-full"
-                        speed={-0.04}
-                    />
+            <main className="relative bg-[#0a0a0a]">
+                {/* Render all sections with Stacking Logic */}
+                <div className="relative">
+                    {enabledSections.map((section, index) => (
+                        <div 
+                            key={section.id || section.type} 
+                            className="relative w-full overflow-hidden"
+                            style={{ 
+                                zIndex: 10 + index,
+                                transform: "translateZ(0)",
+                                contain: "content"
+                            }}
+                        >
+                            {renderSection(section, index)}
+                            {/* Circuit Line Connector to next section */}
+                            {index < enabledSections.length - 1 && (
+                                <CircuitLines 
+                                    className="absolute bottom-0 left-12 h-32 z-[11]" 
+                                    direction="down"
+                                />
+                            )}
+                        </div>
+                    ))}
                 </div>
-
-                {/* Render all sections in their database order */}
-                {enabledSections.map((section, index) => renderSection(section, index))}
             </main>
-            <Footer />
+            <div className="relative z-[100]">
+                <Footer />
+            </div>
             <ScrollToTop />
         </>
     );

@@ -53,59 +53,49 @@ export function FinalCTA({
     };
 
     return (
-        <section className="py-24 lg:py-32 relative overflow-hidden bg-background border-t border-primary/5">
-            <Parallax 
-                className="absolute inset-0 bg-primary/[0.02] [mask-image:radial-gradient(100%_100%_at_50%_0%,#000_0%,transparent_100%)] pointer-events-none" 
-                speed={-0.08}
-            />
-            
-            {/* Decorative Ornaments */}
-            <Parallax 
-                className="absolute top-0 right-0 w-96 h-96 bg-primary/5 blur-3xl rounded-full -mr-48 -mt-48"
-                speed={0.12}
-            />
-            <Parallax 
-                className="absolute bottom-0 left-0 w-96 h-96 bg-primary/5 blur-3xl rounded-full -ml-48 -mb-48"
-                speed={0.15}
-            />
+        <section className="py-24 lg:py-48 relative overflow-hidden bg-background">
+            {/* Ambient Background Glows */}
+            <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/5 blur-[150px] rounded-full -mr-64 -mt-64 pointer-events-none" />
+            <div className="absolute bottom-0 left-0 w-[600px] h-[600px] bg-primary/10 blur-[150px] rounded-full -ml-64 -mb-64 pointer-events-none" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-4xl h-96 bg-primary/5 blur-[120px] rounded-full pointer-events-none" />
 
-            <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+            <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
                 {/* Headline */}
-                <h2 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight mb-6">
+                <h2 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50 animate-fade-in uppercase">
                     {title}
                 </h2>
 
                 {/* Subtitle */}
-                <p className="text-lg md:text-xl text-muted-foreground/90 mb-10 max-w-2xl mx-auto leading-relaxed">
+                <p className="text-lg md:text-2xl text-muted-foreground/70 mb-16 max-w-2xl mx-auto leading-relaxed font-medium animate-fade-in animation-delay-1000">
                     {subtitle}
                 </p>
 
                 {/* Cannot create project warning (for logged-in users) */}
                 {auth.user && !isPusherConfigured && (
-                    <Alert variant="destructive" className="max-w-2xl mx-auto mb-4 text-left">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>
+                    <Alert variant="destructive" className="max-w-2xl mx-auto mb-8 text-left border-destructive/20 glass-morphism">
+                        <AlertCircle className="h-5 w-5" />
+                        <AlertDescription className="font-bold">
                             {t('Real-time features are not configured. Please contact support.')}
                         </AlertDescription>
                     </Alert>
                 )}
 
                 {auth.user && !canCreateProject && isPusherConfigured && (
-                    <Alert variant="destructive" className="max-w-2xl mx-auto mb-4 text-left">
-                        <AlertCircle className="h-4 w-4" />
-                        <AlertDescription>
+                    <Alert variant="destructive" className="max-w-2xl mx-auto mb-8 text-left border-destructive/20 glass-morphism">
+                        <AlertCircle className="h-5 w-5" />
+                        <AlertDescription className="font-bold">
                             {cannotCreateReason}{' '}
-                            <Link href="/billing/plans" className="underline font-semibold">
+                            <Link href="/billing/plans" className="underline font-black hover:text-primary transition-colors">
                                 {t('View Plans')}
                             </Link>
                         </AlertDescription>
                     </Alert>
                 )}
 
-                {/* Prompt Input */}
-                <div className="max-w-3xl mx-auto">
-                    <form onSubmit={handleSubmit} className="relative">
-                        <div className="relative bg-card rounded-3xl sm:rounded-[2rem] shadow-2xl border border-primary/10 overflow-hidden hover:border-primary/20 transition-all duration-500 group">
+                {/* Prompt Input Area - High-End Command Center Style */}
+                <div className="max-w-4xl mx-auto animate-fade-in animation-delay-2000">
+                    <form onSubmit={handleSubmit} className="relative group">
+                        <div className="relative rounded-[3rem] border border-primary/20 glass-morphism shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.25)] overflow-hidden transition-all duration-700 hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.35)] hover:-translate-y-2 group-focus-within:border-primary/50 group-focus-within:shadow-[0_0_80px_rgba(var(--primary-rgb),0.2)]">
                             <textarea
                                 ref={textareaRef}
                                 value={prompt}
@@ -113,30 +103,30 @@ export function FinalCTA({
                                 onKeyDown={handleKeyDown}
                                 placeholder={t('Describe what you want to build...')}
                                 disabled={isDisabled}
-                                className="w-full px-6 sm:px-10 py-6 sm:py-8 text-base sm:text-lg lg:text-xl resize-none focus:outline-none focus:ring-0 border-0 min-h-[120px] bg-transparent text-start disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-muted-foreground/60"
+                                className="w-full px-8 sm:px-12 py-10 sm:py-12 text-lg sm:text-2xl lg:text-3xl font-bold tracking-tight resize-none focus:outline-none focus:ring-0 border-0 min-h-[160px] bg-transparent text-start disabled:opacity-50 disabled:cursor-not-allowed placeholder:text-muted-foreground/30 leading-snug"
                                 rows={2}
                             />
-                            <div className="flex items-center justify-between gap-2 px-6 sm:px-10 py-4 sm:py-6 bg-muted/30 border-t border-border/50">
-                                <div className="hidden sm:flex items-center gap-2 text-sm text-muted-foreground/80 transition-opacity group-focus-within:opacity-100">
-                                    <span>{t('Press')}</span>
-                                    <kbd className="px-2 py-0.5 bg-background rounded-md border border-border/50 text-[10px] uppercase font-medium">
-                                        ⌘ Enter
-                                    </kbd>
-                                    <span>{t('to deploy')}</span>
+                            <div className="flex flex-col sm:flex-row items-center justify-between gap-6 px-8 sm:px-12 py-8 bg-primary/5 border-t border-primary/10">
+                                <div className="flex items-center gap-4 text-xs font-black uppercase tracking-[0.2em] text-muted-foreground/50">
+                                    <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-background/50 border border-primary/10">
+                                        <kbd className="font-mono">⌘</kbd>
+                                        <kbd className="font-mono">ENTER</kbd>
+                                    </div>
+                                    <span>{t('to deploy instantly')}</span>
                                 </div>
-                                <div className="flex items-center gap-2 ms-auto">
+                                <div className="flex items-center gap-4 w-full sm:w-auto">
                                     <Button
                                         type="submit"
                                         disabled={!prompt.trim() || isDisabled}
-                                        className="shrink-0 h-10 sm:h-12 px-6 sm:px-8 rounded-full transition-all hover:scale-[1.05] hover:shadow-lg active:scale-95 bg-primary hover:bg-primary/90 text-primary-foreground font-bold shadow-md shadow-primary/20"
+                                        className="w-full sm:w-auto px-10 py-8 rounded-2xl transition-all duration-300 hover:scale-[1.05] hover:shadow-[0_0_30px_rgba(var(--primary-rgb),0.4)] active:scale-95 bg-primary text-primary-foreground font-black text-lg tracking-tight shadow-2xl shadow-primary/20"
                                     >
-                                        <span className="text-sm sm:text-base">
-                                            {auth.user ? t('Launch project') : t('Get started now')}
+                                        <span>
+                                            {auth.user ? t('Begin Construction') : t('Enter the Future')}
                                         </span>
                                         {isRtl ? (
-                                            <ArrowLeft className="h-4 w-4 me-2 group-hover:-translate-x-1 transition-transform" />
+                                            <ArrowLeft className="h-5 w-5 me-3 transition-transform group-hover:-translate-x-1" />
                                         ) : (
-                                            <ArrowRight className="h-4 w-4 ms-2 group-hover:translate-x-1 transition-transform" />
+                                            <ArrowRight className="h-5 w-5 ms-3 transition-transform group-hover:translate-x-1" />
                                         )}
                                     </Button>
                                 </div>
@@ -146,9 +136,11 @@ export function FinalCTA({
                 </div>
 
                 {/* Trust Note */}
-                <p className="mt-6 text-sm text-muted-foreground">
-                    {t('Start building today')}
-                </p>
+                <div className="mt-12 flex items-center justify-center gap-3 text-xs font-black uppercase tracking-[0.3em] text-muted-foreground/40 animate-fade-in animation-delay-3000">
+                    <div className="h-px w-8 bg-muted-foreground/20" />
+                    {t('Join the elite builders club')}
+                    <div className="h-px w-8 bg-muted-foreground/20" />
+                </div>
             </div>
         </section>
     );

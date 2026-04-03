@@ -6,6 +6,7 @@
         "build": "tsc && vite build",
         "dev": "vite",
         "dev:all": "concurrently \"npm run dev\" \"php artisan serve --port=8001\" \"php artisan reverb:start --host=0.0.0.0 --port=8002\" \"php artisan queue:work\" \"cd ../Builder/src && ./dist/webby-builder-macos-amd64 --key='123456' --port=8846\"",
+        "start:all": "concurrently \"npm run start\" \"php artisan serve --port=8001\" \"php artisan reverb:start --host=0.0.0.0 --port=8002\" \"php artisan queue:work\" \"cd ../Builder/src && ./dist/webby-builder-macos-amd64 --key='123456' --port=8846\"",
         "start": "php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=8001",
         "migrate": "php artisan migrate:fresh --seed",
         "test": "vitest",

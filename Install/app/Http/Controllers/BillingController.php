@@ -66,7 +66,7 @@ class BillingController extends Controller
     /**
      * Display the plans page.
      */
-    public function plans(): InertiaResponse
+    public function plans(Request $request): InertiaResponse
     {
         $user = Auth::user();
 
@@ -81,11 +81,15 @@ class BillingController extends Controller
         // Get current plan ID if user has active subscription
         $currentPlanId = $user->activeSubscription?->plan_id;
 
+        // Get selected plan ID from request query
+        $selectedPlanId = $request->query('plan');
+
         return Inertia::render('Billing/Plans', [
             'plans' => $plans,
             'paymentGateways' => $paymentGateways,
             'currentPlanId' => $currentPlanId,
             'referralCreditBalance' => (float) $user->referral_credit_balance,
+            'selectedPlanId' => $selectedPlanId ? (int) $selectedPlanId : null,
         ]);
     }
 

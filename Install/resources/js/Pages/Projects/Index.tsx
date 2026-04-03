@@ -1,4 +1,5 @@
 import { Head, Link, router, usePage } from '@inertiajs/react';
+import { cn } from '@/lib/utils';
 import { useState, useRef, useEffect, useCallback } from 'react';
 import { usePageLoading } from '@/hooks/usePageLoading';
 import { useTranslation } from '@/contexts/LanguageContext';
@@ -106,30 +107,45 @@ function ProjectCard({
     };
 
     return (
-        <div className="group relative">
-            <Link href={isTrash ? '#' : `/project/${project.id}`} className={isTrash ? 'pointer-events-none' : 'block'}>
-                <div className="aspect-[4/3] rounded-[1.5rem] border border-primary/5 bg-card/50 backdrop-blur-sm overflow-hidden mb-4 shadow-xl shadow-primary/5 group-hover:shadow-2xl group-hover:shadow-primary/10 group-hover:-translate-y-1 transition-all duration-500">
+        <div className="group relative flex flex-col h-full will-change-transform translate-z-0">
+            <Link href={isTrash ? '#' : `/project/${project.id}`} className={isTrash ? 'pointer-events-none flex-1' : 'block flex-1'}>
+                <div className="aspect-[16/10] rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-xl overflow-hidden mb-6 transition-all duration-700 ease-out relative group-hover:border-primary/40 group-hover:bg-white/[0.05] group-hover:-translate-y-2 shadow-2xl">
                     {thumbnailUrl ? (
                         <div className="relative w-full h-full overflow-hidden">
                             <img
                                 src={thumbnailUrl}
                                 alt={project.name}
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                                className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 opacity-60 group-hover:opacity-100"
                             />
-                            <div className="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                         </div>
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-muted/30 relative">
-                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_70%)] opacity-[0.03]" />
-                            <Folder className="h-14 w-14 text-primary/20 transition-transform duration-500 group-hover:scale-110 group-hover:text-primary/30" />
+                        <div className="w-full h-full flex items-center justify-center bg-white/[0.02] relative">
+                            <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_70%)] opacity-[0.02] group-hover:opacity-[0.05] transition-opacity" />
+                            <Folder className="h-16 w-16 text-white/5 transition-all duration-700 group-hover:scale-110 group-hover:text-primary/20 group-hover:rotate-6" />
                         </div>
                     )}
+                    
+                    {/* HUD Ornaments */}
+                    <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-black/40 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", project.build_status === 'completed' ? "bg-primary" : "bg-neutral-500")} />
+                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/60">{project.build_status}</span>
+                    </div>
+
+                    <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 z-20">
+                        <div className="text-[9px] font-mono font-black text-white/40 uppercase tracking-[0.3em]">
+                            Ref_P.{project.id.slice(0, 8)}
+                        </div>
+                        <Button size="sm" className="rounded-full bg-white text-black hover:bg-primary hover:text-white transition-all font-black text-[10px] uppercase tracking-widest px-4 py-1 h-8 shadow-2xl">
+                            {t('Access System')}
+                        </Button>
+                    </div>
                 </div>
             </Link>
 
             {/* Actions dropdown */}
             <TableActionMenu>
-                <TableActionMenuTrigger className="absolute top-2 end-2 opacity-0 group-hover:opacity-100 transition-opacity bg-background/80 hover:bg-background h-8 w-8 p-0" />
+                <TableActionMenuTrigger className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-white/5 hover:bg-primary hover:text-white backdrop-blur-md h-10 w-10 p-0 rounded-2xl border border-white/10 shadow-xl z-30" />
                 <TableActionMenuContent>
                     {isTrash ? (
                         <>
@@ -177,20 +193,17 @@ function ProjectCard({
                 </TableActionMenuContent>
             </TableActionMenu>
 
-            {/* Star indicator */}
-            {project.is_starred && !isTrash && (
-                <Star className="absolute top-2 start-2 h-4 w-4 text-yellow-500 fill-yellow-500" />
-            )}
-
-            <div>
-                <h3 className="font-heading font-semibold truncate group-hover:text-primary transition-colors text-base tracking-tight">
+            <div className="px-2">
+                <h3 className="text-lg font-black truncate text-white/90 group-hover:text-primary transition-colors tracking-tight mb-2">
                     {project.name}
                 </h3>
-                <p className="text-sm text-muted-foreground">
-                    {isTrash && project.deleted_at
-                        ? t('Deleted :time', { time: formatEditedTime(project.deleted_at).replace(t('Edited '), '') })
-                        : formatEditedTime(project.updated_at)}
-                </p>
+                <div className="flex items-center gap-3">
+                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-600">
+                        {isTrash && project.deleted_at
+                            ? t('Deleted :time', { time: formatEditedTime(project.deleted_at).replace(t('Edited '), '') })
+                            : formatEditedTime(project.updated_at)}
+                    </p>
+                </div>
             </div>
         </div>
     );
@@ -462,7 +475,7 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
             <TooltipProvider>
                 <SidebarProvider defaultOpen={true}>
                     <AppSidebar user={user} />
-                    <SidebarInset className="m-2 md:m-4 lg:m-6 xl:m-8 rounded-3xl md:rounded-[2.5rem] lg:rounded-[3rem] bg-card/40 backdrop-blur-3xl border border-primary/5 shadow-2xl overflow-hidden transition-all duration-500">
+                    <SidebarInset className="m-0 md:m-4 lg:m-6 rounded-none md:rounded-[3rem] bg-[#0a0a0a] border border-white/5 shadow-2xl overflow-hidden transition-all duration-500 will-change-transform translate-z-0">
                         <div className="flex flex-col h-full">
                             {/* Header - Integrated into the floating card */}
                             <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/20 backdrop-blur-md px-6 md:px-10">
@@ -522,13 +535,57 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
                                 ) : (
                                 <div className="max-w-7xl mx-auto">
                                     {/* Page Header */}
-                                    <div className="prose prose-sm dark:prose-invert mb-8">
-                                        <h1 className="text-3xl font-bold text-foreground tracking-tight font-heading">
-                                            {t('My Projects')}
-                                        </h1>
-                                        <p className="text-muted-foreground mt-2">
-                                            {t('Manage and organize all your creative work')}
-                                        </p>
+                                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 animate-fade-in">
+                                        <div className="prose prose-sm dark:prose-invert">
+                                            <h1 className="text-4xl font-black text-foreground tracking-tighter font-heading mb-0">
+                                                {t('My Projects')}
+                                            </h1>
+                                            <p className="text-muted-foreground/70 text-lg font-medium mt-1">
+                                                {t('Manage and organize all your creative work')}
+                                            </p>
+                                        </div>
+                                        
+                                        <Button asChild className="rounded-full px-8 h-12 font-bold shadow-xl shadow-primary/20 hover:scale-105 transition-transform">
+                                            <Link href="/create">
+                                                {t('Create New Project')}
+                                            </Link>
+                                        </Button>
+                                    </div>
+
+                                    {/* Stats Overview */}
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 animate-fade-in animation-delay-2000">
+                                        <div className="p-8 rounded-[2rem] border border-white/5 bg-white/[0.02] relative overflow-hidden group hover:border-primary/20 transition-colors">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 mb-2">{t('Total Projects')}</p>
+                                            <p className="text-4xl font-black text-white">{counts.all}</p>
+                                            <div className="absolute bottom-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                                <Folder className="h-12 w-12" />
+                                            </div>
+                                        </div>
+                                        <div className="p-8 rounded-[2rem] border border-white/5 bg-white/[0.02] relative overflow-hidden group hover:border-primary/20 transition-colors">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 mb-2">{t('Favorites')}</p>
+                                            <p className="text-4xl font-black text-primary">{counts.favorites}</p>
+                                            <div className="absolute bottom-0 right-0 p-4 opacity-5 group-hover:opacity-10 transition-opacity">
+                                                <Star className="h-12 w-12" />
+                                            </div>
+                                        </div>
+                                        {credits && (
+                                            <>
+                                                <div className="p-8 rounded-[2rem] border border-white/5 bg-white/[0.02] relative overflow-hidden group hover:border-primary/20 transition-colors">
+                                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 mb-2">{t('AI Credits')}</p>
+                                                    <p className="text-4xl font-black text-white">
+                                                        {credits.isUnlimited ? '∞' : credits.remaining}
+                                                    </p>
+                                                </div>
+                                                <div className="p-8 rounded-[2rem] border border-white/5 bg-white/[0.02] relative overflow-hidden group hover:border-primary/20 transition-colors">
+                                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] text-neutral-500 mb-2">{t('System Load')}</p>
+                                                    <div className="flex items-end gap-2">
+                                                        <p className="text-4xl font-black text-white">
+                                                            {credits.isUnlimited ? '∞' : Math.round(( (credits.monthlyLimit - credits.remaining) / credits.monthlyLimit) * 100)}%
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </>
+                                        )}
                                     </div>
 
                                     {/* Tabs */}

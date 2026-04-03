@@ -141,6 +141,26 @@ body {
   }
 }
 
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) rotate(var(--tw-rotate, 0deg));
+  }
+  50% {
+    transform: translateY(-20px) rotate(var(--tw-rotate, 0deg));
+  }
+}
+
+@keyframes pulse-soft {
+  0%, 100% {
+    opacity: 0.4;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 0.8;
+    transform: scale(1.05);
+  }
+}
+
 /* Custom utilities - use @utility directive in v4 */
 @utility shimmer-animation {
   background: linear-gradient(
@@ -181,7 +201,15 @@ body {
 }
 
 @utility animate-fade-in {
-  animation: fadeIn 0.2s ease-out;
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+@utility animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+@utility animate-pulse-soft {
+  animation: pulse-soft 4s ease-in-out infinite;
 }
 
 @utility animate-rainbow {
@@ -246,6 +274,31 @@ body {
 }
 .typing-dot:nth-child(3) {
   animation-delay: 0.4s;
+}
+
+@utility glass-morphism {
+  background: rgba(255, 255, 255, 0.03);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  box-shadow: 0 4px 24px -1px rgba(0, 0, 0, 0.2);
+  transform: translateZ(0);
+}
+
+@utility glass-morphism-light {
+  background: rgba(255, 255, 255, 0.6);
+  -webkit-backdrop-filter: blur(6px);
+  backdrop-filter: blur(6px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transform: translateZ(0);
+}
+
+@utility mesh-gradient {
+  background-color: var(--background);
+  background-image: 
+    radial-gradient(at 0% 0%, hsla(166, 100%, 44%, 0.1) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, hsla(166, 100%, 44%, 0.05) 0px, transparent 50%);
+  transform: translateZ(0);
 }
 
 /* Impersonation banner: offset fixed sidebar and sticky headers */

@@ -88,34 +88,41 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
     };
 
     return (
-        <section className="py-16 lg:py-24 bg-muted/30">
-            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section className="py-24 lg:py-40 bg-[#0a0a0a] relative overflow-hidden">
+            {/* Ambient Background Glow */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-7xl h-[600px] bg-primary/5 blur-[150px] rounded-full pointer-events-none" />
+
+            <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
-                <div className="text-center mb-16 relative z-10">
-                    <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/70">
+                <div className="text-center mb-20 animate-fade-in">
+                    <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50">
                         {title}
                     </h2>
-                    <p className="text-lg md:text-xl text-muted-foreground/80 max-w-3xl mx-auto leading-relaxed">
+                    <p className="text-lg md:text-xl text-muted-foreground/70 max-w-3xl mx-auto leading-relaxed font-medium">
                         {subtitle}
                     </p>
                 </div>
 
                 {/* Video Mode */}
                 {showcaseType === 'video' && videoUrl && (
-                    <div className="max-w-5xl mx-auto">
-                        <div className="rounded-xl border border-border bg-card shadow-2xl overflow-hidden">
+                    <div className="max-w-5xl mx-auto animate-fade-in animation-delay-2000">
+                        <div className="rounded-[3rem] border border-primary/20 glass-morphism shadow-2xl overflow-hidden group hover:border-primary/40 transition-all duration-700">
                             {/* Browser Header */}
-                            <div className="flex items-center gap-2 px-4 py-3 bg-muted/50 border-b border-border">
+                            <div className="flex items-center justify-between px-8 py-5 bg-primary/5 border-b border-primary/10">
                                 {/* Traffic Lights */}
-                                <div className="flex items-center gap-1.5">
-                                    <div className="w-3 h-3 rounded-full bg-red-500" />
-                                    <div className="w-3 h-3 rounded-full bg-yellow-500" />
-                                    <div className="w-3 h-3 rounded-full bg-green-500" />
+                                <div className="flex items-center gap-2">
+                                    <div className="w-3.5 h-3.5 rounded-full bg-red-500/40" />
+                                    <div className="w-3.5 h-3.5 rounded-full bg-yellow-500/40" />
+                                    <div className="w-3.5 h-3.5 rounded-full bg-green-500/40" />
                                 </div>
+                                <div className="px-6 py-1.5 rounded-xl bg-background/50 border border-primary/20 text-[11px] text-primary font-black tracking-widest uppercase">
+                                    {t('demo.webby.app')}
+                                </div>
+                                <div className="w-12" />
                             </div>
 
                             {/* Video Area */}
-                            <div className="relative aspect-video bg-background">
+                            <div className="relative aspect-video bg-black/20">
                                 {getYouTubeEmbedUrl(videoUrl) ? (
                                     <iframe
                                         src={getYouTubeEmbedUrl(videoUrl)!}
@@ -125,7 +132,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                                         allowFullScreen
                                     />
                                 ) : (
-                                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground">
+                                    <div className="absolute inset-0 flex items-center justify-center text-muted-foreground font-bold">
                                         {t('Invalid video URL')}
                                     </div>
                                 )}
@@ -137,73 +144,74 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                 {/* Screenshots Mode */}
                 {(showcaseType === 'screenshots' || !videoUrl) && (
                     <>
-                        {/* Tab Switcher */}
-                        <div className="flex justify-center mb-8">
-                            <Tabs value={activeView} onValueChange={setActiveView}>
-                                <TabsList className={cn(
-                                    "grid w-full max-w-sm",
-                                    tabs.length === 2 && "grid-cols-2",
-                                    tabs.length === 3 && "grid-cols-3",
-                                    tabs.length === 4 && "grid-cols-4",
-                                    tabs.length >= 5 && "grid-cols-5"
-                                )}>
-                                    {tabs.map((tab) => (
-                                        <TabsTrigger key={tab.value} value={tab.value}>
-                                            {tab.label}
-                                        </TabsTrigger>
-                                    ))}
-                                </TabsList>
-                            </Tabs>
+                        {/* Tab Switcher - More premium custom buttons */}
+                        <div className="flex justify-center mb-12 animate-fade-in animation-delay-2000">
+                            <div className="p-1.5 rounded-[1.5rem] glass-morphism border border-primary/20 flex gap-2">
+                                {tabs.map((tab) => (
+                                    <button
+                                        key={tab.value}
+                                        onClick={() => setActiveView(tab.value)}
+                                        className={cn(
+                                            "px-8 py-2.5 rounded-xl text-sm font-black transition-all duration-500 uppercase tracking-widest",
+                                            activeView === tab.value 
+                                                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105" 
+                                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
+                                        )}
+                                    >
+                                        {tab.label}
+                                    </button>
+                                ))}
+                            </div>
                         </div>
 
                         {/* Browser Frame with Premium 3D Feel */}
                         <Parallax 
-                            className="max-w-6xl mx-auto relative group perspective-1000"
+                            className="max-w-6xl mx-auto relative group perspective-1000 animate-fade-in animation-delay-3000"
                             speed={-0.03}
                         >
-                            <div className="relative rounded-[2.5rem] border border-primary/20 bg-card/60 backdrop-blur-md shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.15)] overflow-hidden transition-all duration-700 hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.25)] hover:-translate-y-2">
+                            <div className="relative rounded-[3rem] border border-primary/20 glass-morphism shadow-[0_50px_100px_-20px_rgba(var(--primary-rgb),0.25)] overflow-hidden transition-all duration-1000 group-hover:shadow-[0_80px_150px_-30px_rgba(var(--primary-rgb),0.35)] group-hover:-translate-y-4">
                                 {/* Browser Header - Matching Hero Mockup */}
-                                <div className="flex items-center justify-between px-6 py-4 bg-muted/40 border-b border-border/50">
+                                <div className="flex items-center justify-between px-8 py-5 bg-primary/5 border-b border-primary/20">
                                     {/* Traffic Lights */}
                                     <div className="flex items-center gap-2">
-                                        <div className="w-3.5 h-3.5 rounded-full bg-destructive/40" />
-                                        <div className="w-3.5 h-3.5 rounded-full bg-amber-500/40" />
-                                        <div className="w-3.5 h-3.5 rounded-full bg-primary/40" />
+                                        <div className="w-3.5 h-3.5 rounded-full bg-red-500/40" />
+                                        <div className="w-3.5 h-3.5 rounded-full bg-yellow-500/40" />
+                                        <div className="w-3.5 h-3.5 rounded-full bg-green-500/40" />
                                     </div>
-                                    <div className="px-6 py-1.5 rounded-xl bg-background/50 border border-border/50 text-[11px] text-muted-foreground font-black tracking-widest uppercase">
-                                        preview.webby.app
+                                    <div className="px-8 py-2 rounded-xl bg-background/50 border border-primary/20 text-[11px] text-primary font-black tracking-widest uppercase">
+                                        {activeView}.webby.app
                                     </div>
                                     <div className="w-12" />
                                 </div>
                                 
                                 {/* Screenshot Area */}
-                                <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-background/20 overflow-hidden">
+                                <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-black/10 overflow-hidden">
                                     {tabs.map((tab) => (
                                         <img
                                             key={tab.value}
                                             src={getScreenshotUrl(tab)}
                                             alt={`${tab.label} view`}
                                             className={cn(
-                                                'absolute inset-0 w-full h-full object-cover object-top transition-all duration-1000 scale-100',
-                                                activeView === tab.value ? 'opacity-100 scale-105' : 'opacity-0 scale-100'
+                                                'absolute inset-0 w-full h-full object-cover object-top transition-all duration-1000 ease-out',
+                                                activeView === tab.value ? 'opacity-100 scale-105 blur-0' : 'opacity-0 scale-100 blur-xl'
                                             )}
                                             loading="lazy"
                                         />
                                     ))}
                                     
                                     {/* Glass Overlay Ornament */}
-                                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-primary/5 via-transparent to-primary/5 opacity-50" />
+                                    <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-primary/10 via-transparent to-primary/10 opacity-30" />
                                 </div>
                             </div>
 
                             {/* Decorative Background Ornaments */}
                             <Parallax 
-                                className="absolute -top-20 -left-20 w-64 h-64 bg-primary/5 blur-3xl rounded-full -z-10"
-                                speed={0.05}
+                                className="absolute -top-24 -left-24 w-80 h-80 bg-primary/10 blur-[120px] rounded-full -z-10"
+                                speed={0.08}
                             />
                             <Parallax 
-                                className="absolute -bottom-20 -right-20 w-80 h-80 bg-primary/10 blur-3xl rounded-full -z-10"
-                                speed={0.1}
+                                className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/20 blur-[120px] rounded-full -z-10"
+                                speed={0.15}
                             />
                         </Parallax>
                     </>
