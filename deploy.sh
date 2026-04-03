@@ -9,7 +9,9 @@ echo "🚀 Starting Production Deployment..."
 
 # 1. Local check
 echo "Step 1: Pushing latest changes to GitHub..."
-git push origin $BRANCH
+git add .
+git commit -m "changes"
+git push
 
 # 2. Remote Deployment
 echo "Step 2: Connecting to $REMOTE_SERVER and pulling changes..."

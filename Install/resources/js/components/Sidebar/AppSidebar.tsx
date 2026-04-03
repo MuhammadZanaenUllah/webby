@@ -136,6 +136,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
             icon: LayoutDashboard,
         },
         { titleKey: "Users", href: "/admin/users", icon: Users },
+        { titleKey: "Projects", href: "/admin/projects", icon: FolderOpen },
         {
             titleKey: "Subscriptions",
             href: "/admin/subscriptions",

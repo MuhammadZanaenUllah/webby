@@ -1,9 +1,9 @@
-import { useState, useMemo } from 'react';
-import { useTheme } from '@/contexts/ThemeContext';
-import { useTranslation } from '@/contexts/LanguageContext';
-import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Parallax } from '@/components/ui/Parallax';
-import { cn } from '@/lib/utils';
+import { useState, useMemo } from "react";
+import { useTheme } from "@/contexts/ThemeContext";
+import { useTranslation } from "@/contexts/LanguageContext";
+import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Parallax } from "@/components/ui/Parallax";
+import { cn } from "@/lib/utils";
 
 interface ShowcaseTab {
     value: string;
@@ -16,55 +16,84 @@ interface ProductShowcaseProps {
     content?: Record<string, unknown>;
     items?: ShowcaseTab[];
     settings?: {
-        showcase_type?: 'video' | 'screenshots';
+        showcase_type?: "video" | "screenshots";
     };
 }
 
 // Default tabs with default screenshots - labels are translation keys
 const DEFAULT_TAB_VALUES = [
-    { value: 'preview', labelKey: 'Preview', screenshot_light: '/screenshots/preview-light.png', screenshot_dark: '/screenshots/preview-dark.png' },
-    { value: 'inspect', labelKey: 'Inspect', screenshot_light: '/screenshots/inspect-light.png', screenshot_dark: '/screenshots/inspect-dark.png' },
-    { value: 'code', labelKey: 'Code', screenshot_light: '/screenshots/code-light.png', screenshot_dark: '/screenshots/code-dark.png' },
+    {
+        value: "preview",
+        labelKey: "Preview",
+        screenshot_light: "/screenshots/preview-light.png",
+        screenshot_dark: "/screenshots/preview-dark.png",
+    },
+    {
+        value: "inspect",
+        labelKey: "Inspect",
+        screenshot_light: "/screenshots/inspect-light.png",
+        screenshot_dark: "/screenshots/inspect-dark.png",
+    },
+    {
+        value: "code",
+        labelKey: "Code",
+        screenshot_light: "/screenshots/code-light.png",
+        screenshot_dark: "/screenshots/code-dark.png",
+    },
 ];
 
-export function ProductShowcase({ content, items, settings }: ProductShowcaseProps = {}) {
+export function ProductShowcase({
+    content,
+    items,
+    settings,
+}: ProductShowcaseProps = {}) {
     const { resolvedTheme } = useTheme();
     const { t } = useTranslation();
-    const [activeView, setActiveView] = useState<string>('preview');
+    const [activeView, setActiveView] = useState<string>("preview");
 
     // Get content with defaults - DB content takes priority
-    const title = (content?.title as string) || t('See it in action');
-    const subtitle = (content?.subtitle as string) || t('A powerful development environment that lets you chat with AI, edit code, and manage projects all in one place.');
+    const title = (content?.title as string) || t("See it in action");
+    const subtitle =
+        (content?.subtitle as string) ||
+        t(
+            "A powerful development environment that lets you chat with AI, edit code, and manage projects all in one place.",
+        );
     const videoUrl = content?.video_url as string | undefined;
-    const showcaseType = settings?.showcase_type || 'screenshots';
+    const showcaseType = settings?.showcase_type || "screenshots";
 
     // Use database items if provided, otherwise fall back to translated defaults
     const tabs = useMemo(() => {
         if (items && items.length > 0) {
             // Map database items to tab format
-            return items.map(item => ({
-                value: item.value || item.label?.toLowerCase().replace(/\s+/g, '-') || 'tab',
-                label: item.label || 'Tab',
+            return items.map((item) => ({
+                value:
+                    item.value ||
+                    item.label?.toLowerCase().replace(/\s+/g, "-") ||
+                    "tab",
+                label: item.label || "Tab",
                 screenshot_light: item.screenshot_light || null,
                 screenshot_dark: item.screenshot_dark || null,
             }));
         }
         // Default tabs with translated labels
-        return DEFAULT_TAB_VALUES.map(tab => ({
+        return DEFAULT_TAB_VALUES.map((tab) => ({
             ...tab,
             label: t(tab.labelKey),
         }));
     }, [items, t]);
 
     // Set initial active view to first tab
-    const initialTab = tabs[0]?.value || 'preview';
-    if (activeView !== initialTab && !tabs.find(t => t.value === activeView)) {
+    const initialTab = tabs[0]?.value || "preview";
+    if (
+        activeView !== initialTab &&
+        !tabs.find((t) => t.value === activeView)
+    ) {
         setActiveView(initialTab);
     }
 
     // Get screenshot URL for a tab
     const getScreenshotUrl = (tab: ShowcaseTab) => {
-        const isDark = resolvedTheme === 'dark';
+        const isDark = resolvedTheme === "dark";
         // Use custom screenshots if provided, otherwise fall back to default paths
         if (isDark && tab.screenshot_dark) {
             return tab.screenshot_dark;
@@ -73,12 +102,13 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
             return tab.screenshot_light;
         }
         // Fallback to default screenshot paths
-        return `/screenshots/${tab.value}-${isDark ? 'dark' : 'light'}.png`;
+        return `/screenshots/${tab.value}-${isDark ? "dark" : "light"}.png`;
     };
 
     // Extract YouTube video ID from URL
     const getYouTubeEmbedUrl = (url: string) => {
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
+        const regExp =
+            /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);
         const videoId = match && match[2].length === 11 ? match[2] : null;
         if (videoId) {
@@ -94,7 +124,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
 
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                 {/* Section Header */}
-                <div className="text-center mb-20 animate-fade-in">
+                <div className="text-center mb-5 animate-fade-in">
                     <h2 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-8 bg-clip-text text-transparent bg-gradient-to-b from-foreground to-foreground/50">
                         {title}
                     </h2>
@@ -104,7 +134,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                 </div>
 
                 {/* Video Mode */}
-                {showcaseType === 'video' && videoUrl && (
+                {showcaseType === "video" && videoUrl && (
                     <div className="max-w-5xl mx-auto animate-fade-in animation-delay-2000">
                         <div className="rounded-[3rem] border border-primary/20 glass-morphism shadow-2xl overflow-hidden group hover:border-primary/40 transition-all duration-700">
                             {/* Browser Header */}
@@ -116,7 +146,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                                     <div className="w-3.5 h-3.5 rounded-full bg-green-500/40" />
                                 </div>
                                 <div className="px-6 py-1.5 rounded-xl bg-background/50 border border-primary/20 text-[11px] text-primary font-black tracking-widest uppercase">
-                                    {t('demo.webby.app')}
+                                    {t("demo.webby.app")}
                                 </div>
                                 <div className="w-12" />
                             </div>
@@ -133,7 +163,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                                     />
                                 ) : (
                                     <div className="absolute inset-0 flex items-center justify-center text-muted-foreground font-bold">
-                                        {t('Invalid video URL')}
+                                        {t("Invalid video URL")}
                                     </div>
                                 )}
                             </div>
@@ -142,7 +172,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                 )}
 
                 {/* Screenshots Mode */}
-                {(showcaseType === 'screenshots' || !videoUrl) && (
+                {(showcaseType === "screenshots" || !videoUrl) && (
                     <>
                         {/* Tab Switcher - More premium custom buttons */}
                         <div className="flex justify-center mb-12 animate-fade-in animation-delay-2000">
@@ -153,9 +183,9 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                                         onClick={() => setActiveView(tab.value)}
                                         className={cn(
                                             "px-8 py-2.5 rounded-xl text-sm font-black transition-all duration-500 uppercase tracking-widest",
-                                            activeView === tab.value 
-                                                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105" 
-                                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5"
+                                            activeView === tab.value
+                                                ? "bg-primary text-primary-foreground shadow-lg shadow-primary/20 scale-105"
+                                                : "text-muted-foreground hover:text-foreground hover:bg-primary/5",
                                         )}
                                     >
                                         {tab.label}
@@ -165,7 +195,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                         </div>
 
                         {/* Browser Frame with Premium 3D Feel */}
-                        <Parallax 
+                        <Parallax
                             className="max-w-6xl mx-auto relative group perspective-1000 animate-fade-in animation-delay-3000"
                             speed={-0.03}
                         >
@@ -183,7 +213,7 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                                     </div>
                                     <div className="w-12" />
                                 </div>
-                                
+
                                 {/* Screenshot Area */}
                                 <div className="relative aspect-[4/3] sm:aspect-[16/10] bg-black/10 overflow-hidden">
                                     {tabs.map((tab) => (
@@ -192,24 +222,26 @@ export function ProductShowcase({ content, items, settings }: ProductShowcasePro
                                             src={getScreenshotUrl(tab)}
                                             alt={`${tab.label} view`}
                                             className={cn(
-                                                'absolute inset-0 w-full h-full object-cover object-top transition-all duration-1000 ease-out',
-                                                activeView === tab.value ? 'opacity-100 scale-105 blur-0' : 'opacity-0 scale-100 blur-xl'
+                                                "absolute inset-0 w-full h-full object-cover object-top transition-all duration-1000 ease-out",
+                                                activeView === tab.value
+                                                    ? "opacity-100 scale-105 blur-0"
+                                                    : "opacity-0 scale-100 blur-xl",
                                             )}
                                             loading="lazy"
                                         />
                                     ))}
-                                    
+
                                     {/* Glass Overlay Ornament */}
                                     <div className="absolute inset-0 pointer-events-none bg-gradient-to-tr from-primary/10 via-transparent to-primary/10 opacity-30" />
                                 </div>
                             </div>
 
                             {/* Decorative Background Ornaments */}
-                            <Parallax 
+                            <Parallax
                                 className="absolute -top-24 -left-24 w-80 h-80 bg-primary/10 blur-[120px] rounded-full -z-10"
                                 speed={0.08}
                             />
-                            <Parallax 
+                            <Parallax
                                 className="absolute -bottom-24 -right-24 w-96 h-96 bg-primary/20 blur-[120px] rounded-full -z-10"
                                 speed={0.15}
                             />

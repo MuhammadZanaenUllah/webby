@@ -365,6 +365,12 @@ Route::middleware('installed')->group(function () {
         Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
         Route::post('users/{user}/impersonate', [ImpersonateController::class, 'start'])->name('admin.users.impersonate');
 
+        // Project Management
+        Route::get('projects', [\App\Http\Controllers\Admin\ProjectController::class, 'index'])->name('admin.projects.index');
+        Route::delete('projects/{project}', [\App\Http\Controllers\Admin\ProjectController::class, 'destroy'])->name('admin.projects.destroy');
+        Route::post('projects/{project}/restore', [\App\Http\Controllers\Admin\ProjectController::class, 'restore'])->withTrashed()->name('admin.projects.restore');
+        Route::delete('projects/{project}/force-delete', [\App\Http\Controllers\Admin\ProjectController::class, 'forceDelete'])->withTrashed()->name('admin.projects.force-delete');
+
         // Subscriptions
         Route::get('subscriptions', [AdminSubscriptionController::class, 'index'])->name('admin.subscriptions');
         Route::post('subscriptions', [AdminSubscriptionController::class, 'store'])->name('admin.subscriptions.store');
