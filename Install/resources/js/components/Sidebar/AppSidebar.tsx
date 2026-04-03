@@ -307,6 +307,9 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                 <SidebarMenuItem
                                                     key={item.titleKey}
                                                 >
+                                                    <SidebarMenuButton
+                                                        asChild
+                                                        isActive={isActive(item.href)}
                                                         className={`h-11 px-4 transition-all rounded-xl group ${
                                                             isActive(item.href)
                                                                 ? "bg-primary/10 text-primary font-black shadow-[inset_0_0_20px_rgba(var(--primary-rgb),0.1)]"
@@ -357,6 +360,9 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                     <SidebarMenuItem
                                                         key={item.titleKey}
                                                     >
+                                                        <SidebarMenuButton
+                                                            asChild
+                                                            isActive={isActive(item.href)}
                                                             className={`h-9 px-4 transition-all rounded-lg group ${
                                                                 isActive(
                                                                     item.href,
@@ -393,7 +399,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                 </div>
             </SidebarContent>
 
-            <SidebarFooter className="p-6 group-data-[collapsible=icon]:p-2 space-y-3 relative z-10 transition-all duration-300">
+            <SidebarFooter className="p-6 space-y-3 relative z-10 transition-all duration-300">
                 <Button
                     variant="outline"
                     className="w-full justify-start h-auto py-3 px-4 rounded-2xl border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition-all group overflow-hidden"
@@ -403,7 +409,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                     <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center me-3 group-hover:scale-110 transition-transform">
                         <Gift className="h-5 w-5 text-primary" />
                     </div>
-                    <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
+                    <div className="flex flex-col items-start overflow-hidden">
                         <span className="font-bold text-sm tracking-tight">
                             {t("Earn Rewards")}
                         </span>

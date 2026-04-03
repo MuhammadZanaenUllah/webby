@@ -33,7 +33,7 @@ ssh $REMOTE_SERVER << EOF
     cd Install
     
     echo "--- Installing PHP dependencies ---"
-    composer install --no-dev --optimize-autoloader
+    composer install --no-dev --optimize-autoloader --ignore-platform-reqs
     
     echo "--- Installing JS dependencies ---"
     npm install
