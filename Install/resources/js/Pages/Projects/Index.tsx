@@ -110,7 +110,7 @@ function ProjectCard({
     return (
         <div className="group relative flex flex-col h-full will-change-transform translate-z-0">
             <Link href={isTrash ? '#' : `/project/${project.id}`} className={isTrash ? 'pointer-events-none flex-1' : 'block flex-1'}>
-                <div className="aspect-[16/10] rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-xl overflow-hidden mb-6 transition-all duration-700 ease-out relative group-hover:border-primary/40 group-hover:bg-white/[0.05] group-hover:-translate-y-2 shadow-2xl">
+                <div className="aspect-[16/10] rounded-[2.5rem] border border-primary/10 bg-foreground/5 backdrop-blur-xl overflow-hidden mb-6 transition-all duration-700 ease-out relative group-hover:border-primary/40 group-hover:bg-foreground/10 group-hover:-translate-y-2 shadow-2xl">
                     {thumbnailUrl ? (
                         <div className="relative w-full h-full overflow-hidden">
                             <img
@@ -121,23 +121,23 @@ function ProjectCard({
                             <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent" />
                         </div>
                     ) : (
-                        <div className="w-full h-full flex items-center justify-center bg-white/[0.02] relative">
+                        <div className="w-full h-full flex items-center justify-center bg-foreground/5 relative">
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,var(--primary)_0%,transparent_70%)] opacity-[0.02] group-hover:opacity-[0.05] transition-opacity" />
-                            <Folder className="h-16 w-16 text-white/5 transition-all duration-700 group-hover:scale-110 group-hover:text-primary/20 group-hover:rotate-6" />
+                            <Folder className="h-16 w-16 text-foreground/20 transition-all duration-700 group-hover:scale-110 group-hover:text-primary/20 group-hover:rotate-6" />
                         </div>
                     )}
                     
                     {/* HUD Ornaments */}
-                    <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-black/40 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
+                    <div className="absolute top-6 left-6 flex items-center gap-2 px-3 py-1 rounded-full border border-primary/10 bg-background/80 backdrop-blur-md opacity-0 group-hover:opacity-100 transition-opacity">
                         <div className={cn("w-1.5 h-1.5 rounded-full animate-pulse", project.build_status === 'completed' ? "bg-primary" : "bg-neutral-500")} />
-                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white/60">{project.build_status}</span>
+                        <span className="text-[8px] font-black uppercase tracking-[0.2em] text-foreground/80">{project.build_status}</span>
                     </div>
 
                     <div className="absolute bottom-6 left-6 right-6 flex items-center justify-between opacity-0 group-hover:opacity-100 translate-y-2 group-hover:translate-y-0 transition-all duration-500 z-20">
-                        <div className="text-[9px] font-mono font-black text-white/40 uppercase tracking-[0.3em]">
+                        <div className="text-[9px] font-mono font-black text-foreground/60 uppercase tracking-[0.3em]">
                             Ref_P.{project.id.slice(0, 8)}
                         </div>
-                        <Button size="sm" className="rounded-full bg-white text-black hover:bg-primary hover:text-white transition-all font-black text-[10px] uppercase tracking-widest px-4 py-1 h-8 shadow-2xl">
+                        <Button size="sm" className="rounded-full bg-foreground text-background hover:bg-primary hover:text-primary-foreground transition-all font-black text-[10px] uppercase tracking-widest px-4 py-1 h-8 shadow-2xl">
                             {t('Access System')}
                         </Button>
                     </div>
@@ -146,7 +146,7 @@ function ProjectCard({
 
             {/* Actions dropdown */}
             <TableActionMenu>
-                <TableActionMenuTrigger className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-white/5 hover:bg-primary hover:text-white backdrop-blur-md h-10 w-10 p-0 rounded-2xl border border-white/10 shadow-xl z-30" />
+                <TableActionMenuTrigger className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-all duration-500 bg-foreground/5 hover:bg-primary hover:text-foreground backdrop-blur-md h-10 w-10 p-0 rounded-2xl border border-primary/20 shadow-xl z-30" />
                 <TableActionMenuContent>
                     {isTrash ? (
                         <>
@@ -195,7 +195,7 @@ function ProjectCard({
             </TableActionMenu>
 
             <div className="px-2">
-                <h3 className="text-lg font-black truncate text-white/90 group-hover:text-primary transition-colors tracking-tight mb-2">
+                <h3 className="text-lg font-black truncate text-foreground group-hover:text-primary transition-colors tracking-tight mb-2">
                     {project.name}
                 </h3>
                 <div className="flex items-center gap-3">
@@ -476,7 +476,7 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
             <TooltipProvider>
                 <SidebarProvider defaultOpen={true}>
                     <AppSidebar user={user} />
-                    <SidebarInset className="m-0 md:m-4 lg:m-6 rounded-none md:rounded-[3rem] bg-[#0a0a0a] border border-white/5 shadow-2xl overflow-hidden transition-all duration-500 will-change-transform translate-z-0">
+                    <SidebarInset className="m-0 md:m-4 lg:m-6 rounded-none md:rounded-[3rem] bg-background border border-primary/10 shadow-2xl overflow-hidden transition-all duration-500 will-change-transform translate-z-0">
                         <div className="flex flex-col h-full">
                             {/* Header - Integrated into the floating card */}
                             <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/20 backdrop-blur-md px-6 md:px-10">
@@ -555,50 +555,50 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
 
                                     {/* Stats Overview */}
                                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-12 animate-fade-in animation-delay-2000">
-                                        <div className="p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
+                                        <div className="p-8 rounded-[2.5rem] border border-primary/10 bg-foreground/5 backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
                                             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-500 mb-2 relative z-10">{t('Total Projects')}</p>
-                                            <p className="text-5xl font-black text-white tracking-tighter relative z-10">{counts.all}</p>
-                                            <div className="absolute top-6 right-6 p-3 rounded-2xl bg-white/[0.02] border border-white/5 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all duration-500">
+                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-2 relative z-10">{t('Total Projects')}</p>
+                                            <p className="text-5xl font-black text-foreground tracking-tighter relative z-10">{counts.all}</p>
+                                            <div className="absolute top-6 right-6 p-3 rounded-2xl bg-foreground/5 border border-primary/10 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all duration-500">
                                                 <Folder className="h-5 w-5" />
                                             </div>
                                             <div className="absolute -bottom-6 -right-6 h-24 w-24 bg-primary/5 blur-3xl rounded-full opacity-0 group-hover:opacity-100 transition-opacity" />
                                         </div>
 
-                                        <div className="p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
+                                        <div className="p-8 rounded-[2.5rem] border border-primary/10 bg-foreground/5 backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
                                             <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-500 mb-2 relative z-10">{t('Favorites')}</p>
+                                            <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-2 relative z-10">{t('Favorites')}</p>
                                             <div className="flex items-center gap-3 relative z-10">
                                                 <p className="text-5xl font-black text-primary tracking-tighter drop-shadow-[0_0_15px_rgba(var(--primary-rgb),0.3)]">{counts.favorites}</p>
-                                                <div className="h-6 w-[1px] bg-white/10" />
-                                                <span className="text-[10px] font-bold text-white/40 uppercase tracking-widest">{t('Starred')}</span>
+                                                <div className="h-6 w-[1px] bg-foreground/10" />
+                                                <span className="text-[10px] font-bold text-foreground/60 uppercase tracking-widest">{t('Starred')}</span>
                                             </div>
-                                            <div className="absolute top-6 right-6 p-3 rounded-2xl bg-white/[0.02] border border-white/5 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all duration-500">
+                                            <div className="absolute top-6 right-6 p-3 rounded-2xl bg-foreground/5 border border-primary/10 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all duration-500">
                                                 <Star className="h-5 w-5 fill-primary/20" />
                                             </div>
                                         </div>
 
                                         {credits && (
                                             <>
-                                                <div className="p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
+                                                <div className="p-8 rounded-[2.5rem] border border-primary/10 bg-foreground/5 backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
                                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-500 mb-2 relative z-10">{t('AI Credits')}</p>
-                                                    <p className="text-5xl font-black text-white tracking-tighter relative z-10">
+                                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-2 relative z-10">{t('AI Credits')}</p>
+                                                    <p className="text-5xl font-black text-foreground tracking-tighter relative z-10">
                                                         {credits.isUnlimited ? '∞' : credits.remaining.toLocaleString()}
                                                     </p>
-                                                    <div className="absolute top-6 right-6 p-3 rounded-2xl bg-white/[0.02] border border-white/5 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all duration-500">
+                                                    <div className="absolute top-6 right-6 p-3 rounded-2xl bg-foreground/5 border border-primary/10 opacity-40 group-hover:opacity-100 group-hover:text-primary transition-all duration-500">
                                                         <Sparkles className="h-5 w-5" />
                                                     </div>
                                                 </div>
 
-                                                <div className="p-8 rounded-[2.5rem] border border-white/5 bg-white/[0.02] backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
+                                                <div className="p-8 rounded-[2.5rem] border border-primary/10 bg-foreground/5 backdrop-blur-xl relative overflow-hidden group hover:border-primary/20 transition-all duration-500 hover:shadow-[0_0_50px_rgba(var(--primary-rgb),0.05)]">
                                                     <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
-                                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-neutral-500 mb-2 relative z-10">{t('System Capacity')}</p>
+                                                    <p className="text-[10px] font-black uppercase tracking-[0.3em] text-muted-foreground mb-2 relative z-10">{t('System Capacity')}</p>
                                                     <div className="flex items-center gap-4 relative z-10">
-                                                        <p className="text-5xl font-black text-white tracking-tighter">
+                                                        <p className="text-5xl font-black text-foreground tracking-tighter">
                                                             {credits.isUnlimited ? '∞' : Math.round(( (credits.monthlyLimit - credits.remaining) / credits.monthlyLimit) * 100)}%
                                                         </p>
-                                                        <div className="flex-1 h-2 bg-white/5 rounded-full overflow-hidden max-w-[80px]">
+                                                        <div className="flex-1 h-2 bg-foreground/5 rounded-full overflow-hidden max-w-[80px]">
                                                             <div 
                                                                 className="h-full bg-primary" 
                                                                 style={{ width: `${credits.isUnlimited ? 0 : Math.round(( (credits.monthlyLimit - credits.remaining) / credits.monthlyLimit) * 100)}%` }} 
@@ -747,23 +747,23 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
 
                                         {/* Empty state */}
                                         {projects.data.length === 0 && (
-                                            <div className="col-span-full py-32 flex flex-col items-center justify-center rounded-[3rem] border border-dashed border-white/5 bg-white/[0.01] animate-pulse-slow">
+                                            <div className="col-span-full py-32 flex flex-col items-center justify-center rounded-[3rem] border border-dashed border-primary/10 bg-foreground/5 animate-pulse-slow">
                                                 <div className="relative mb-8">
                                                     <div className="absolute inset-0 bg-primary/20 blur-3xl rounded-full" />
-                                                    <div className="relative h-24 w-24 rounded-full border border-white/10 bg-black/40 backdrop-blur-3xl flex items-center justify-center">
-                                                        <Folder className="h-10 w-10 text-white/5 group-hover:text-primary transition-colors" />
+                                                    <div className="relative h-24 w-24 rounded-full border border-primary/20 bg-background/80 backdrop-blur-3xl flex items-center justify-center">
+                                                        <Folder className="h-10 w-10 text-foreground/20 group-hover:text-primary transition-colors" />
                                                     </div>
                                                 </div>
-                                                <h3 className="text-xl font-black text-white/80 uppercase tracking-[0.4em] mb-3">
+                                                <h3 className="text-xl font-black text-foreground/90 uppercase tracking-[0.4em] mb-3">
                                                     {t('System Buffer Empty')}
                                                 </h3>
                                                 <p className="text-muted-foreground/60 max-w-xs text-center text-sm font-medium leading-relaxed">
                                                     {getEmptyMessage()}
                                                 </p>
-                                                <div className="mt-10 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-white/10">
-                                                    <div className="h-px w-8 bg-white/5" />
+                                                <div className="mt-10 flex items-center gap-4 text-[10px] font-black uppercase tracking-[0.2em] text-foreground/40">
+                                                    <div className="h-px w-8 bg-foreground/5" />
                                                     <span>Waiting for project initialization</span>
-                                                    <div className="h-px w-8 bg-white/5" />
+                                                    <div className="h-px w-8 bg-foreground/5" />
                                                 </div>
                                             </div>
                                         )}
