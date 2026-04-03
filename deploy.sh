@@ -27,17 +27,20 @@ ssh $REMOTE_SERVER << EOF
     git pull origin $BRANCH
 
     # Install dependencies
+    echo "--- Installing dependencies & Building assets ---"
+    cd Install
+    
     echo "--- Installing PHP dependencies ---"
-    # composer.json is in the root, but artisan is in Install/
     composer install --no-dev --optimize-autoloader
     
-    # Ensure builder binary is executable
-    chmod +x Builder/prebuilt/webby-builder-linux
-
-    echo "--- Installing JS dependencies & Building assets ---"
-    cd Install
+    echo "--- Installing JS dependencies ---"
     npm install
+    
+    echo "--- Building assets ---"
     npm run build
+    
+    # Ensure builder binary is executable (path adjusted for being inside Install/)
+    chmod +x ../Builder/prebuilt/webby-builder-linux
 
     # Database migrations (Artisan is in the Install directory)
     echo "--- Running database migrations ---"
