@@ -172,20 +172,19 @@ export function AppSidebar({ user }: AppSidebarProps) {
     return (
         <Sidebar
             variant="floating"
-            collapsible="icon"
-            className="group/sidebar border-none bg-transparent transition-all duration-300"
+            className="group/sidebar border-none bg-transparent"
         >
-            {/* Sidebar Overlay for Blur Effect - Responsive to collapsed state */}
-            <div className="absolute inset-4 group-data-[collapsible=icon]:inset-[4px_10px] rounded-[2.5rem] group-data-[collapsible=icon]:rounded-[1.5rem] glass-morphism border border-primary/10 shadow-2xl z-0 pointer-events-none transition-all duration-300" />
+            {/* Sidebar Overlay for Blur Effect */}
+            <div className="absolute inset-4 rounded-[2.5rem] glass-morphism border border-primary/10 shadow-2xl z-0 pointer-events-none" />
 
-            <SidebarHeader className="h-[80px] px-6 group-data-[collapsible=icon]:px-0 flex-row items-center border-b border-primary/5 mb-2 relative z-10 transition-all duration-300">
+            <SidebarHeader className="h-[80px] px-8 flex-row items-center border-b border-primary/5 mb-2 relative z-10">
                 <Link
                     href="/create"
                     className="flex items-center w-full justify-center transition-transform hover:scale-[1.02]"
                 >
                     <ApplicationLogo
-                        showText={state === "expanded"}
-                        size={state === "expanded" ? "lg" : "md"}
+                        showText={true}
+                        size="lg"
                     />
                 </Link>
             </SidebarHeader>
@@ -204,14 +203,14 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                         <SidebarMenuButton
                                             asChild
                                             isActive={url === "/create"}
-                                            className="h-14 px-5 text-lg font-black bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)] transition-all hover:scale-[1.05] active:scale-[0.95] rounded-2xl mb-6 group-data-[collapsible=icon]:!size-10 group-data-[collapsible=icon]:!p-0 group-data-[collapsible=icon]:mx-auto"
+                                            className="h-14 px-5 text-lg font-black bg-primary hover:bg-primary/90 text-primary-foreground shadow-[0_0_30px_rgba(var(--primary-rgb),0.3)] transition-all hover:scale-[1.05] active:scale-[0.95] rounded-2xl mb-6"
                                         >
                                             <Link
                                                 href="/create"
-                                                className="flex items-center justify-center w-full h-full"
+                                                className="flex items-center gap-4 w-full h-full"
                                             >
                                                 <Paintbrush className="h-6 w-6 shrink-0" />
-                                                <span className="truncate transition-all duration-300 group-data-[collapsible=icon]:hidden opacity-100">
+                                                <span className="truncate font-black">
                                                     {t("Launch AI")}
                                                 </span>
                                             </Link>
@@ -308,12 +307,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                 <SidebarMenuItem
                                                     key={item.titleKey}
                                                 >
-                                                    <SidebarMenuButton
-                                                        asChild
-                                                        isActive={isActive(
-                                                            item.href,
-                                                        )}
-                                                        className={`h-11 px-4 transition-all rounded-xl group group-data-[collapsible=icon]:!size-9 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!p-0 ${
+                                                        className={`h-11 px-4 transition-all rounded-xl group ${
                                                             isActive(item.href)
                                                                 ? "bg-primary/10 text-primary font-black shadow-[inset_0_0_20px_rgba(var(--primary-rgb),0.1)]"
                                                                 : "hover:bg-primary/5 text-muted-foreground/80 hover:text-foreground"
@@ -321,12 +315,14 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                     >
                                                         <Link
                                                             href={item.href}
-                                                            className="flex items-center justify-center w-full h-full"
+                                                            className="flex items-center w-full h-full"
                                                         >
-                                                            <item.icon
-                                                                className={`h-5 w-5 shrink-0 ${isActive(item.href) ? "text-primary" : "text-muted-foreground/50 group-hover:text-primary transition-colors"}`}
-                                                            />
-                                                            <span className="ms-3 font-bold tracking-tight truncate transition-all duration-300 group-data-[collapsible=icon]:hidden opacity-100">
+                                                            <div className="w-6 flex items-center justify-center">
+                                                                <item.icon
+                                                                    className={`h-5 w-5 shrink-0 ${isActive(item.href) ? "text-primary" : "text-muted-foreground/50 group-hover:text-primary transition-colors"}`}
+                                                                />
+                                                            </div>
+                                                            <span className="ms-3 font-bold tracking-tight truncate">
                                                                 {t(
                                                                     item.titleKey,
                                                                 )}
@@ -361,12 +357,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                     <SidebarMenuItem
                                                         key={item.titleKey}
                                                     >
-                                                        <SidebarMenuButton
-                                                            asChild
-                                                            isActive={isActive(
-                                                                item.href,
-                                                            )}
-                                                            className={`h-9 px-4 transition-all rounded-lg group group-data-[collapsible=icon]:!size-8 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:!p-0 ${
+                                                            className={`h-9 px-4 transition-all rounded-lg group ${
                                                                 isActive(
                                                                     item.href,
                                                                 )
@@ -376,12 +367,14 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                                         >
                                                             <Link
                                                                 href={item.href}
-                                                                className="flex items-center justify-center w-full h-full"
+                                                                className="flex items-center w-full h-full"
                                                             >
-                                                                <item.icon
-                                                                    className={`h-4 w-4 shrink-0 ${isActive(item.href) ? "text-primary" : "text-muted-foreground/40"}`}
-                                                                />
-                                                                <span className="ms-3 text-xs font-bold truncate transition-all duration-300 group-data-[collapsible=icon]:hidden opacity-100">
+                                                                <div className="w-5 flex items-center justify-center">
+                                                                    <item.icon
+                                                                        className={`h-4 w-4 shrink-0 ${isActive(item.href) ? "text-primary" : "text-muted-foreground/40"}`}
+                                                                    />
+                                                                </div>
+                                                                <span className="ms-3 text-xs font-bold truncate">
                                                                     {t(
                                                                         item.titleKey,
                                                                     )}
@@ -403,11 +396,11 @@ export function AppSidebar({ user }: AppSidebarProps) {
             <SidebarFooter className="p-6 group-data-[collapsible=icon]:p-2 space-y-3 relative z-10 transition-all duration-300">
                 <Button
                     variant="outline"
-                    className="w-full justify-start h-auto py-3 px-4 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:size-10 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:justify-center rounded-2xl border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition-all group overflow-hidden"
+                    className="w-full justify-start h-auto py-3 px-4 rounded-2xl border-primary/20 bg-primary/5 hover:bg-primary/10 hover:border-primary/40 transition-all group overflow-hidden"
                     size="sm"
                     onClick={() => setShareDialogOpen(true)}
                 >
-                    <div className="h-9 w-9 group-data-[collapsible=icon]:h-full group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:me-0 rounded-xl bg-primary/10 flex items-center justify-center me-3 group-hover:scale-110 transition-transform">
+                    <div className="h-9 w-9 rounded-xl bg-primary/10 flex items-center justify-center me-3 group-hover:scale-110 transition-transform">
                         <Gift className="h-5 w-5 text-primary" />
                     </div>
                     <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
@@ -426,14 +419,14 @@ export function AppSidebar({ user }: AppSidebarProps) {
                 {hasUpgradablePlans && (
                     <Button
                         asChild
-                        className="w-full justify-start h-auto py-3 px-4 group-data-[collapsible=icon]:p-0 group-data-[collapsible=icon]:size-10 group-data-[collapsible=icon]:mx-auto group-data-[collapsible=icon]:justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all overflow-hidden"
+                        className="w-full justify-start h-auto py-3 px-4 rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/20 hover:scale-[1.02] transition-all overflow-hidden"
                         size="sm"
                     >
                         <Link href="/billing/plans">
-                            <div className="h-9 w-9 group-data-[collapsible=icon]:h-full group-data-[collapsible=icon]:w-full group-data-[collapsible=icon]:me-0 rounded-xl bg-white/20 flex items-center justify-center me-3 group-data-[collapsible=icon]:me-0 transition-all">
+                            <div className="h-9 w-9 rounded-xl bg-white/20 flex items-center justify-center me-3 transition-all">
                                 <Sparkles className="h-5 w-5" />
                             </div>
-                            <div className="flex flex-col items-start overflow-hidden group-data-[collapsible=icon]:hidden">
+                            <div className="flex flex-col items-start overflow-hidden">
                                 <span className="font-black text-sm tracking-tight">
                                     {t("Elite Access")}
                                 </span>
