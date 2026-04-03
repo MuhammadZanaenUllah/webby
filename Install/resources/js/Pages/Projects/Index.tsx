@@ -481,8 +481,6 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
                             {/* Header - Integrated into the floating card */}
                             <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/20 backdrop-blur-md px-6 md:px-10">
                                 <div className="flex items-center gap-4">
-                                    <SidebarTrigger className="-ml-1" />
-                                    <div className="h-4 w-px bg-primary/10" />
                                     {credits && <GlobalCredits {...credits} />}
                                 </div>
 

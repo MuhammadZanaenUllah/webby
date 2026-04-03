@@ -172,6 +172,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
     return (
         <Sidebar
             variant="floating"
+            collapsible="none"
             className="group/sidebar border-none bg-transparent"
         >
             {/* Sidebar Overlay for Blur Effect */}

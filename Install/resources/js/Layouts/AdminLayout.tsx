@@ -87,7 +87,7 @@ export default function AdminLayout({ user, title, children }: AdminLayoutProps)
                             {/* Header */}
                             <header className="sticky top-0 z-50 flex h-[60px] items-center justify-between border-b bg-background px-4">
                                 <div className="flex items-center gap-2">
-                                    <SidebarTrigger />
+                                    
                                     {credits && <GlobalCredits {...credits} />}
                                 </div>
 

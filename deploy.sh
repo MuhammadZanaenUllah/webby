@@ -52,7 +52,11 @@ ssh $REMOTE_SERVER << EOF
     echo "--- Optimizing Laravel ---"
     php artisan optimize:clear
     php artisan optimize
+    # Fix storage symlink by removing if exists and recreating
+    rm -rf public/storage
     php artisan storage:link
+    # Ensure correct permissions for storage and cache
+    chmod -R 775 storage bootstrap/cache
     cd ..
 
     # Restart background services
