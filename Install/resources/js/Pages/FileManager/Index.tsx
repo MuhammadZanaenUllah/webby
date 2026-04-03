@@ -294,7 +294,6 @@ export default function FileManagerIndex({ auth, projects: initialProjects, stor
                                 {/* Header */}
                                 <header className="sticky top-0 z-50 flex h-[60px] items-center justify-between border-b bg-background/80 backdrop-blur-sm px-4">
                                     <div className="flex items-center gap-2">
-                                        <SidebarTrigger />
                                         {userCredits && <GlobalCredits {...userCredits} />}
                                     </div>
 
@@ -381,7 +380,6 @@ export default function FileManagerIndex({ auth, projects: initialProjects, stor
                             {/* Header */}
                             <header className="sticky top-0 z-50 flex h-[60px] items-center justify-between border-b bg-background/80 backdrop-blur-sm px-4">
                                 <div className="flex items-center gap-2">
-                                    <SidebarTrigger />
                                     {userCredits && <GlobalCredits {...userCredits} />}
                                 </div>
 

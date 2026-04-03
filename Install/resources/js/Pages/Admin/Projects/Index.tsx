@@ -251,8 +251,6 @@ export default function AdminProjectsIndex({ auth, projects, counts, activeTab, 
                         <div className="flex flex-col h-full">
                             <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/20 backdrop-blur-md px-6 md:px-10">
                                 <div className="flex items-center gap-4">
-                                    <SidebarTrigger className="-ml-1" />
-                                    <div className="h-4 w-px bg-primary/10" />
                                     <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20">
                                         <ShieldAlert className="h-3 w-3 text-primary animate-pulse" />
                                         <span className="text-[10px] font-black uppercase tracking-widest text-primary">{t('Admin Mode')}</span>
