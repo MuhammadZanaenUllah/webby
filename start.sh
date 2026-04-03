@@ -9,4 +9,5 @@
 # 5. Go Builder (AI Core)
 
 echo "Starting Webby Project..."
+# cd "$(dirname "$0")/Install" && npm run start:all
 cd "$(dirname "$0")/Install" && npm run dev:all
