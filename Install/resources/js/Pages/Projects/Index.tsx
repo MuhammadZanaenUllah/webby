@@ -469,7 +469,7 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
     };
 
     return (
-        <div className="flex min-h-screen bg-background relative overflow-hidden">
+        <div className="flex min-h-screen bg-muted/30 relative overflow-hidden">
             <Head title={t('My Projects')} />
             <GradientBackground />
 
@@ -477,9 +477,9 @@ export default function ProjectsIndex({ auth, projects, counts, activeTab, filte
                 <SidebarProvider defaultOpen={true}>
                     <AppSidebar user={user} />
                     <SidebarInset className="m-0 md:m-4 lg:m-6 rounded-none md:rounded-[3rem] bg-background border border-primary/10 shadow-2xl overflow-hidden transition-all duration-500 will-change-transform translate-z-0">
-                        <div className="flex flex-col h-full">
+                        <div className="flex flex-col h-full bg-background/50 backdrop-blur-sm">
                             {/* Header - Integrated into the floating card */}
-                            <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/20 backdrop-blur-md px-6 md:px-10">
+                            <header className="sticky top-0 z-40 flex h-[70px] items-center justify-between border-b border-primary/5 bg-background/60 backdrop-blur-md px-6 md:px-10">
                                 <div className="flex items-center gap-4">
                                     {credits && <GlobalCredits {...credits} />}
                                 </div>
