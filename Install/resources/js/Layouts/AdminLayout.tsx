@@ -80,10 +80,11 @@ export default function AdminLayout({ user, title, children }: AdminLayoutProps)
             <Head title={title} />
 
             <TooltipProvider>
-                <SidebarProvider>
+                <SidebarProvider className="relative overflow-hidden">
+                    <div className="absolute inset-0 grid-background-subtle pointer-events-none opacity-[0.03]" />
                     <AppSidebar user={user} />
-                    <SidebarInset>
-                        <div className="min-h-screen bg-muted/50">
+                    <SidebarInset className="bg-transparent relative">
+                        <div className="min-h-screen">
                             {/* Header */}
                             <header className="sticky top-0 z-50 flex h-[60px] items-center justify-between border-b bg-background px-4">
                                 <div className="flex items-center gap-2">

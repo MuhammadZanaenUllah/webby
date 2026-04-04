@@ -304,20 +304,21 @@ body {
     transform: translateZ(0);
 }
 
-@utility mesh-gradient {
-    background-color: var(--background);
-    background-image:
-        radial-gradient(
-            at 0% 0%,
-            hsla(166, 100%, 44%, 0.1) 0px,
-            transparent 50%
-        ),
-        radial-gradient(
-            at 100% 0%,
-            hsla(166, 100%, 44%, 0.05) 0px,
-            transparent 50%
-        );
-    transform: translateZ(0);
+@utility grid-background {
+    background-image: 
+        linear-gradient(to right, var(--border) 1px, transparent 1px),
+        linear-gradient(to bottom, var(--border) 1px, transparent 1px);
+    background-size: 40px 40px;
+    background-position: center center;
+}
+
+@utility grid-background-subtle {
+    background-image: 
+        linear-gradient(to right, var(--border) 0.5px, transparent 0.5px),
+        linear-gradient(to bottom, var(--border) 0.5px, transparent 0.5px);
+    background-size: 20px 20px;
+    background-position: center center;
+    opacity: 0.1;
 }
 
 /* Impersonation banner: offset fixed sidebar and sticky headers */

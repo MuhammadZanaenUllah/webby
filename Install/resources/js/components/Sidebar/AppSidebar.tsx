@@ -16,10 +16,10 @@ import {
     CollapsibleTrigger,
 } from "@/components/ui/collapsible";
 import {
-    FolderOpen, Files, Database, LayoutTemplate, ChevronDown,
+    FolderOpen, File, Database, LayoutTemplate, ChevronDown,
     LayoutDashboard, Users, CreditCard, Crown, Receipt, Package,
     Puzzle, Globe, Clock, Settings, Sparkles, Bot, Cpu,
-    Paintbrush, Gift, Layout,
+    Paintbrush, Gift, Layout, Pin,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ApplicationLogo from "@/components/ApplicationLogo";
@@ -75,7 +75,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
 
     const projectItems = [
         { titleKey: "All Projects", href: "/projects", icon: FolderOpen },
-        { titleKey: "File Manager", href: "/file-manager", icon: Files },
+        { titleKey: "File Manager", href: "/file-manager", icon: File },
         { titleKey: "Database", href: "/database", icon: Database },
         { titleKey: "Billing", href: "/billing", icon: CreditCard },
         { titleKey: "Settings", href: "/profile", icon: Settings },
@@ -107,24 +107,24 @@ export function AppSidebar({ user }: AppSidebarProps) {
     }) => {
         const active = isActive(href);
         return (
-            <SidebarMenuItem>
+            <SidebarMenuItem className="px-1.5">
                 <SidebarMenuButton
                     asChild
                     isActive={active}
                     className={`
-                        ${compact ? "h-8" : "h-9"} px-3 rounded-lg transition-colors duration-150
+                        ${compact ? "h-8" : "h-11"} px-3 rounded-2xl transition-all duration-200
                         ${active
-                            ? "bg-primary/10 text-primary"
-                            : "text-muted-foreground hover:bg-muted/50 hover:text-foreground"
+                            ? "bg-primary/10 text-primary shadow-sm"
+                            : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
                         }
                     `}
                 >
-                    <Link href={href} className="flex items-center gap-2.5 w-full">
-                        <Icon className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"} ${active ? "text-primary" : "text-muted-foreground/60"}`} />
-                        <span className={`${compact ? "text-xs" : "text-sm"} font-medium truncate ${active ? "font-semibold" : ""}`}>
+                    <Link href={href} className="flex items-center gap-3 w-full">
+                        <Icon className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4.5 w-4.5"} ${active ? "text-primary" : "text-muted-foreground/50"}`} />
+                        <span className={`${compact ? "text-[11px]" : "text-sm"} font-bold tracking-tight truncate ${active ? "text-primary" : ""}`}>
                             {label}
                         </span>
-                        {active && <div className="ms-auto w-1.5 h-1.5 rounded-full bg-primary shrink-0" />}
+                        {active && <div className="ms-auto w-1.5 h-1.5 rounded-full bg-primary shadow-sm shadow-primary/40 shrink-0" />}
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
@@ -132,8 +132,8 @@ export function AppSidebar({ user }: AppSidebarProps) {
     };
 
     const SectionHeader = ({ label, children }: { label: string; children?: React.ReactNode }) => (
-        <div className="flex items-center justify-between px-2 mb-1 mt-4">
-            <span className="text-[9px] font-black uppercase tracking-[0.15em] text-muted-foreground/40">
+        <div className="flex items-center justify-between px-4 mb-2 mt-6">
+            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/30">
                 {label}
             </span>
             {children}
@@ -147,9 +147,9 @@ export function AppSidebar({ user }: AppSidebarProps) {
             className="border-none bg-transparent"
         >
             {/* Logo */}
-            <SidebarHeader className="h-16 px-4 flex-row items-center border-b border-border/50 shrink-0">
+            <SidebarHeader className="h-20 px-6 flex-row items-center shrink-0">
                 <Link href="/create" className="flex items-center w-full hover:opacity-80 transition-opacity">
-                    <ApplicationLogo showText={true} size="lg" />
+                    <ApplicationLogo showText={false} size="lg" />
                 </Link>
             </SidebarHeader>
 
@@ -160,13 +160,15 @@ export function AppSidebar({ user }: AppSidebarProps) {
                         type="always"
                     >
                         {/* Launch AI */}
-                        <div className="px-1 pt-3 pb-1">
+                        <div className="px-2 pt-2 pb-4">
                             <Link
                                 href="/create"
-                                className="flex items-center gap-3 w-full h-11 px-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-md shadow-primary/20 hover:shadow-lg hover:shadow-primary/30 hover:brightness-105 active:scale-[0.98] transition-all"
+                                className="flex items-center gap-3 w-full h-12 px-4 rounded-2xl bg-primary text-primary-foreground font-bold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
                             >
-                                <Paintbrush className="h-4 w-4 shrink-0" />
-                                <span className="font-black">{t("Launch AI")}</span>
+                                <div className="h-8 w-8 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
+                                    <Pin className="h-4 w-4" />
+                                </div>
+                                <span className="font-black tracking-tight">{t("Launch AI")}</span>
                             </Link>
                         </div>
 
@@ -227,7 +229,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
                                     </button>
                                 </CollapsibleTrigger>
                                 <CollapsibleContent>
-                                    <SidebarMenu className="gap-0 px-1">
+                                    <SidebarMenu className="gap-0.5 px-1">
                                         {adminItems.map((item) => (
                                             <NavItem key={item.href} href={item.href} icon={item.icon} label={t(item.titleKey)} compact />
                                         ))}
