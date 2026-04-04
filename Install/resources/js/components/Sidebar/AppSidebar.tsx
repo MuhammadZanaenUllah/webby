@@ -107,24 +107,28 @@ export function AppSidebar({ user }: AppSidebarProps) {
     }) => {
         const active = isActive(href);
         return (
-            <SidebarMenuItem className="px-1.5">
+            <SidebarMenuItem className="px-2">
                 <SidebarMenuButton
                     asChild
                     isActive={active}
                     className={`
-                        ${compact ? "h-8" : "h-11"} px-3 rounded-2xl transition-all duration-200
+                        ${compact ? "h-8" : "h-10"} px-3 rounded-xl transition-all duration-200 relative group
                         ${active
-                            ? "bg-primary/10 text-primary shadow-sm"
-                            : "text-muted-foreground hover:bg-muted/40 hover:text-foreground"
+                            ? "bg-primary/5 text-primary"
+                            : "text-muted-foreground hover:bg-muted/30 hover:text-foreground"
                         }
                     `}
                 >
                     <Link href={href} className="flex items-center gap-3 w-full">
-                        <Icon className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4.5 w-4.5"} ${active ? "text-primary" : "text-muted-foreground/50"}`} />
-                        <span className={`${compact ? "text-[11px]" : "text-sm"} font-bold tracking-tight truncate ${active ? "text-primary" : ""}`}>
+                        <Icon className={`shrink-0 ${compact ? "h-3.5 w-3.5" : "h-4 w-4"} transition-colors ${active ? "text-primary" : "text-muted-foreground/40"}`} />
+                        <span className={`${compact ? "text-[11px]" : "text-sm"} font-semibold truncate ${active ? "text-primary" : ""}`}>
                             {label}
                         </span>
-                        {active && <div className="ms-auto w-1.5 h-1.5 rounded-full bg-primary shadow-sm shadow-primary/40 shrink-0" />}
+                        
+                        {/* Elegant Left Indicator */}
+                        {active && (
+                            <div className="absolute left-0 top-1/2 -translate-y-1/2 w-0.5 h-6 bg-primary rounded-full" />
+                        )}
                     </Link>
                 </SidebarMenuButton>
             </SidebarMenuItem>
@@ -132,8 +136,8 @@ export function AppSidebar({ user }: AppSidebarProps) {
     };
 
     const SectionHeader = ({ label, children }: { label: string; children?: React.ReactNode }) => (
-        <div className="flex items-center justify-between px-4 mb-2 mt-6">
-            <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground/30">
+        <div className="flex items-center justify-between px-5 mb-1 mt-6">
+            <span className="text-[10px] font-bold uppercase tracking-[0.1em] text-muted-foreground/20">
                 {label}
             </span>
             {children}
@@ -147,7 +151,7 @@ export function AppSidebar({ user }: AppSidebarProps) {
             className="border-none bg-transparent"
         >
             {/* Logo */}
-            <SidebarHeader className="h-20 px-6 flex-row items-center shrink-0">
+            <SidebarHeader className="h-18 px-6 flex-row items-center shrink-0">
                 <Link href="/create" className="flex items-center w-full hover:opacity-80 transition-opacity">
                     <ApplicationLogo showText={false} size="lg" />
                 </Link>
@@ -160,15 +164,13 @@ export function AppSidebar({ user }: AppSidebarProps) {
                         type="always"
                     >
                         {/* Launch AI */}
-                        <div className="px-2 pt-2 pb-4">
+                        <div className="px-4 pt-2 pb-4">
                             <Link
                                 href="/create"
-                                className="flex items-center gap-3 w-full h-12 px-4 rounded-2xl bg-primary text-primary-foreground font-bold text-sm shadow-lg shadow-primary/25 hover:shadow-xl hover:shadow-primary/35 hover:-translate-y-0.5 active:scale-[0.98] transition-all duration-300"
+                                className="flex items-center gap-3 w-full h-11 px-4 rounded-xl bg-primary text-primary-foreground font-bold text-sm shadow-sm hover:shadow-md hover:brightness-105 active:scale-[0.98] transition-all duration-200"
                             >
-                                <div className="h-8 w-8 rounded-xl bg-white/20 flex items-center justify-center shrink-0">
-                                    <Pin className="h-4 w-4" />
-                                </div>
-                                <span className="font-black tracking-tight">{t("Launch AI")}</span>
+                                <Pin className="h-4 w-4 shrink-0" />
+                                <span className="font-extrabold">{t("Launch AI")}</span>
                             </Link>
                         </div>
 
